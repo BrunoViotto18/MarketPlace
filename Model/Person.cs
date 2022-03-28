@@ -2,11 +2,10 @@
 
 public class Person
 {
-    private String name;
-    private int age;
-    private String document;
-    private String email;
-    private String phone;
-    private String login;
-
+    protected String name;
+    protected int age;
+    protected String document;
+    protected String email;
+    protected String phone;
+    protected String login;
 }
