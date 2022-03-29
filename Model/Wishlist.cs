@@ -5,13 +5,29 @@ public class Wishlist
     private Client client;
     List<Product> products; 
 
-    public void addProductToWIshList(Product product)
+    public Wishlist(Client client)
     {
-        products.Add(product);
+        this.products = new List<Product>();
+        this.client = client;
     }
-    public List<Product> getList()
+
+    public Client getClient()
+    {
+        return client;
+    }
+    public void setClient(Client client)
+    {
+        this.client = client;
+    }
+
+    public List<Product> getProducts()
     {
         return products;
+    }
+
+    public void addProductToWishList(Product product)
+    {
+        products.Add(product);
     }
 
     
