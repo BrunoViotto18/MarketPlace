@@ -2,6 +2,7 @@ namespace Model;
 
 public class Purchase
 {
+    // Atributos
     private DateTime date_purchase;
     private String payment; 
     private int number_confirmation;
@@ -9,13 +10,15 @@ public class Purchase
     private Client client;
     List<Product> products;
 
+    // Construtor
     public Purchase(Client client, Product product)
     {
         this.client = client;
-        this.products = new List<Product>();
-        this.products.Add(product);
+        // this.products = new List<Product>();
+        // this.products.Add(product);
     }
 
+    // GET & SET
     public DateTime getDatePurchase()
     {
         return date_purchase;

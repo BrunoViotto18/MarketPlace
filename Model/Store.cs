@@ -2,16 +2,20 @@ namespace Model;
 
 public class Store
 {
+    // Atributos
     private String nome;
     private String CNPJ;
     private Owner owner;
     private List<Purchase> purchases;
 
-    private Store()
+    // Construtor
+    private Store(Owner owner)
     {
-
+        this.owner = owner;
+        // this.purchases = new List<Purchase>();
     }
 
+    // GET & SET
     public String getNome()
     {
         return nome;
@@ -46,6 +50,7 @@ public class Store
 
     // Métodos
 
+    // Adiciona uma "Purchase"(Compra) para a loja
     public void addNewPurchase(Purchase purchase)
     {
         purchases.Add(purchase);
