@@ -8,4 +8,6 @@ public class Person
     protected String email;
     protected String phone;
     protected String login;
+
+    private Address address;
 }
