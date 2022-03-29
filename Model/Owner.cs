@@ -1,6 +1,6 @@
 ﻿namespace Model;
 
-public class Owner:Person
+public class Owner : Person
 {
     
 }
