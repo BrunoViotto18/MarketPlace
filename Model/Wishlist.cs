@@ -7,6 +7,13 @@ public class Wishlist
 
     public void addProductToWIshList(Product product)
     {
-
+        products.Add(product);
     }
+    public List<Product> getList()
+    {
+        return products;
+    }
+
+    
 }
+ 
