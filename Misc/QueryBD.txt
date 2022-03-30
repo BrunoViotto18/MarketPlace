@@ -1,0 +1,164 @@
+CREATE TABLE Address(
+	address_id int PRIMARY KEY identity(1,1),
+	street varchar(100),
+	city varchar(30),
+	state varchar(30),
+	country varchar(30),
+	post_code varchar (10)
+);
+
+CREATE TABLE Person(
+	person_id int PRIMARY KEY identity(1,1),
+	address_id int FOREIGN KEY REFERENCES Address(address_id) not null,
+	name varchar(100),
+	age int,
+	document varchar(14),
+	email varchar(100),
+	phone varchar(15),
+	login varchar(100)
+);
+
+CREATE TABLE Client(
+	client_id int PRIMARY KEY identity(1,1),
+	person_id int FOREIGN KEY REFERENCES Person(person_id) not null
+);
+CREATE TABLE Owner(
+	Owner_id int PRIMARY KEY identity(1,1),
+	person_id int FOREIGN KEY REFERENCES Person(person_id) not null
+);
+
+CREATE TABLE Store(
+	store_id int PRIMARY KEY identity(1,1),
+	owner_id int FOREIGN KEY REFERENCES Owner(owner_id) not null,
+	name varchar(100),
+	CNPJ varchar(14)
+);
+
+CREATE TABLE Product(
+	product_id int PRIMARY KEY identity(1,1),
+	name varchar(100),
+	unit_price decimal(9,3),
+	bar_code varchar(13)
+);
+
+CREATE TABLE Stocks(
+	stock_id int PRIMARY KEY identity(1,1),
+	store_id int FOREIGN KEY REFERENCES Store(store_id) not null,
+	product_id int FOREIGN KEY REFERENCES Product(product_id) not null,
+	quantity int
+);
+
+CREATE TABLE Purchase(
+	purchase_id int PRIMARY KEY identity(1,1),
+	store_id int FOREIGN KEY references Store(store_id) not null,
+	client_id int FOREIGN KEY references Client(client_id) not null,
+	date_purchase date,
+	payment varchar(100),
+	number_confirmation int,
+	number_nf varchar (150)
+	
+);
+
+CREATE TABLE Wishlist(
+	wishlist_id int PRIMARY KEY identity(1,1),
+	client_id int FOREIGN KEY REFERENCES client(client_id) not null,
+
+);
+
+CREATE TABLE WishlistProduct(
+	wishlist_product_id int PRIMARY KEY identity(1,1),
+	product_id int FOREIGN KEY REFERENCES Product(product_id) not null,
+	wishlist_id int FOREIGN KEY REFERENCES Wishlist(wishlist_id) not null,
+
+);
+
+CREATE TABLE ProductPurchased(
+	product_purchased_id int PRIMARY KEY identity(1,1),
+	product_id int FOREIGN KEY REFERENCES Product(product_id) not null,
+	purchase_id int FOREIGN KEY REFERENCES Purchase(purchase_id)not null,
+
+);
+
+
+/////////////////// Inserts
+
+insert into address(street,city,state,country,post_code)
+values ('P.O. Box 420, 2776 Purus. Rd.','Serangoon','Brussels Hoofdstedelijk Gewest','Turkey','3349'),
+  ('Ap #764-5404 At Av.','Southern Islands','Papua','Vietnam','3346'),
+  ('Ap #713-2347 Nam St.','Alkmaar','KwaZulu-Natal','South Africa','3151'),
+  ('207-6344 Luctus Rd.','Incheon','Rivne oblast','South Korea','585621'),
+  ('4536 Duis Rd.','Kirov','Cao Bằng','Indonesia','21259'),
+  ('Ap #772-4741 Nec, Ave','Galway','North Island','Australia','7423'),
+  ('1334 Quis, Ave','Olsztyn','Tasmania','Norway','12202'),
+  ('482-1600 Metus Av.','Buôn Ma Thuột','Pays de la Loire','Colombia','200284'),
+  ('Ap #899-4162 Purus, Rd.','Grimstad','Cajamarca','Philippines','4543'),
+  ('Ap #940-1902 Aenean Rd.','Tân An','Oost-Vlaanderen','Sweden','676869');
+
+INSERT INTO Person (address_id,name,age,document,email,phone,login) VALUES
+(1,'Kyra Chavez',26,'46687274458247','aliquam.nisl@icloud.net','81317345573','Adena Hyde'),
+(2,'Josiah Good',21,'87607655456888','praesent.luctus@icloud.org','49752145688','Liberty Thomas'),
+(3,'Ursula Joseph',64,'73515657371','dignissim@hotmail.couk','27842077737','Danielle Baird'),
+(4,'Chanda Maldonado',48,'76424605618494','augue@icloud.ca','18742215320','Kiara Mcdonald'),
+(5,'Vernon Roth',46,'75995221216517','ac@aol.ca','59963013544','Hamish Calderon'),
+(6,'Jelani Alford',33,'22425630545','odio.sagittis.semper@hotmail.edu','67430384457','Colton Robbins'),
+(7,'Jameson Blankenship',16,'55257766258','eu.eleifend@aol.couk','68368755445','Nigel Evans'),
+(8,'Mallory Kemp',56,'84664123221','diam.nunc.ullamcorper@protonmail.com','24556365478','Quamar Gray'),
+(9,'Camilla Noel',50,'56567991523251','proin.velit@google.ca','46437827428','Genevieve Howe'),
+(10,'Dara Sweeney',65,'85822686672236','magna.phasellus.dolor@aol.net','66743726540','Kyle Lamb');
+
+INSERT INTO Owner(person_id)
+VALUES
+  (6),
+  (7),
+  (8),
+  (9),
+  (10);
+
+INSERT INTO Client(Person_id) VALUES
+ (1),
+  (2),
+  (3),
+  (4),
+  (5);
+
+INSERT INTO PRODUCT(name, unit_price, bar_code) VALUES
+('JBL - Charge 4', 799.90 ,'5390177574144'),
+('Microfone Shure Beta58A', 3399.91 ,'3056244167841'),
+('Iphone 12 128gb', 4951.98,'4113163731345'),
+('Nikon D7500', 7958.99,'1411612274549'),
+('Smart TV AOC Roku LED 32',1199.99,'3693574628771'),
+('Paco Rabanne 1 Million', 395.15,'5513161919226'),
+('Processador Intel Core i5-10400',1079.36,'3573624711300'),
+('Controle Sem fio PS5 DualSense',395.91,'7886245023147'),
+('Aspirador de Pó Robô KaBuM! Smart 100',798.95,'5327158450714'),
+('Multifuncional Epson Ecotank De Tinta',1483.11,'3116694508248'),
+('Câmera GoPro HERO 10 Black',3469.90,'8151787684790'),
+('Drone Multilaser Falcon',1699.00,'7826339854459'),
+('Headset Gamer HyperX Cloud Stinger Pink',229.90,'5191877665746'),
+('Teclado Usb Básico Slim Preto', 36.90, '5123160515720'),
+('Mouse Sem Fio 2.4 Ghz 1200 DPI Preto', 34.90,'6828127526562'),
+('Violão Queens Preto D137516', 237.99,'5385238263760'),
+('Console PlayStation 5 - Sony PS5', 4499.90,'7643207794954'),
+('Tablet Samsung Galaxy S6 Lite', 2039.15,'2617535538546'),
+('Colchão Solteiro de Espuma D33', 422.00, '3730473352418'),
+('Ventilador de Mesa Mondial', 169.99, '5933695849872'),
+('Smartphone Motorola Moto E7', 764.10, '2655635246788'),
+('Geladeira/Refrigerador Brastemp', 3199.00, '9145204502026'),
+('Cooktop a Gás 1 Boca', 359.00, '1229396768098'),
+('Máquina de Lavar Brastemp 12Kg', 1698.99, '5868888159556'),
+('Conjunto de Pote de vidro Marinex - 6 Peças', 139.00, '2116843244675');
+
+INSERT INTO Wishlist(client_id) VALUES
+(1),
+(2),
+(3),
+(4),
+(5);
+
+INSERT INTO Store (owner_id,name,CNPJ)
+VALUES
+(1,'Mckay','15286337000187'),
+(2,'Chandler','99872278000181'),
+(3,'Rollins','67247824000127'),
+(4,'Hutchinson','41811808000194'),
+(5,'Snider','22705658000135');

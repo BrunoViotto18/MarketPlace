@@ -15,7 +15,8 @@ public class Stocks
     }
 
     // GET & SET
-    public Store GetStore(){
+    public Store GetStore()
+    {
         return store;
     }
     public void setStore(Store store)
@@ -23,19 +24,17 @@ public class Stocks
         this.store = store;
     }
 
-    public int GetQuantity(){
+    public int GetQuantity()
+    {
         return quantity;
     }
     public void SetQuantity(int quantity)
     {
-        if (quantity > 0)
-        {
-            this.quantity = quantity;
-            return;
-        }
+        this.quantity = quantity;
     }
 
-    public Product GetProduct(){
+    public Product GetProduct()
+    {
         return product;
     }
     public void setProduct(Product product)
