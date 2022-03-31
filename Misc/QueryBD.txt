@@ -162,3 +162,236 @@ VALUES
 (3,'Rollins','67247824000127'),
 (4,'Hutchinson','41811808000194'),
 (5,'Snider','22705658000135');
+
+INSERT INTO Stocks (store_id,product_id,quantity)
+VALUES
+  (1,1,1),
+  (2,2,3),
+  (3,3,7),
+  (4,4,4),
+  (5,5,3),
+  (1,6,5),
+  (2,7,3),
+  (3,8,7),
+  (4,9,7),
+  (5,10,6),
+  (1,11,7),
+  (2,12,7),
+  (3,13,1),
+  (4,14,5),
+  (5,15,6),
+  (1,16,1),
+  (2,17,1),
+  (3,18,5),
+  (4,19,6),
+  (5,20,5),
+  (1,21,6),
+  (2,22,3),
+  (3,23,1),
+  (4,24,6),
+  (5,25,1);
+
+INSERT INTO  WishlistProduct(product_id, wishlist_id )  
+ VALUES
+  (21,1),
+  (17,2),
+  (4,3),
+  (8,4),
+  (19,5),
+  (22,1),
+  (16,2),
+  (21,3),
+  (2,4),
+  (11,5);
+
+INSERT INTO Purchase(store_id, client_id, date_purchase, payment, number_confirmation, number_nf) VALUES
+(1,5,'08/09/2021','À Vista','15585','62151667224217325230961289807557150'),
+(1,3,'04/22/2021','Pix','37132','28162713747422669488405058307540416'),
+(1,2,'04/26/2021','Cartão de Crédito','29218','93143867704243975795337114863578668'),
+(2,4,'09/17/2021','Boleto','55711','34106415873083088752807942482634211'),
+(2,2,'08/30/2021','Pix','62612','58783275123142853531418584247384642'),
+(2,4,'08/21/2021','Pix','86671','26726736578543274016330363263843755'),
+(3,5,'10/12/2021','À Vista','23559','61124800311838425302369186501392555'),
+(3,4,'06/29/2021','Cartão de Crédito','68863','64418747867608246746927407424656928'),
+(3,3,'08/20/2021','Pix','97872','33738504473443397438721467904173032'),
+(4,3,'05/30/2021','À Vista','45766','53651877414478431964386775855663261'),
+(4,5,'08/19/2021','Boleto','56573','23718855617584465848651975825254632'),
+(4,2,'09/28/2021','Boleto','21334','32747277203229768838864387539681423'),
+(5,4,'11/16/2021','Pix','24956','76864915576813873319584474445346458'),
+(5,2,'03/04/2022','À Vista','22662','18855300633608652952748785135222204'),
+(5,2,'09/24/2021','Cartão de Crédito','28844','27230734397436264385262234340226273');
+
+INSERT INTO ProductPurchased(product_id, purchase_id) VALUES
+(1,1),
+(6,1),
+(22,2),
+(8,3),
+(18,3),
+(14,4),
+(5,5),
+(20,5),
+(1,6),
+(12,7),
+(22,7),
+(3,8),
+(4,9),
+(19,9),
+(10,10),
+(1,11),
+(6,11),
+(2,12),
+(23,13),
+(8,13),
+(24,14),
+(19,14),
+(15,15),
+(25,15),
+(5,15);
+
+
+// Seleciona as compras de uma determinada loja
+select name, purchase_id, number_confirmation,number_nf  from purchase  inner join store on store.store_id=purchase.store_id  where name = 'Mckay'
+
+// Seleciona as compras de um determinado produto
+select name, purchase_id from ProductPurchased inner join Product on Product.product_id=ProductPurchased.product_id where name = 'JBL - Charge 4'
+
+// Seleciona as compras de um determinado cliente
+SELECT per.name, pur.date_purchase, pur.payment, pur.number_confirmation, pur.number_nf FROM Purchase AS pur
+INNER JOIN Client AS c ON c.client_id = pur.client_id
+INNER JOIN Person AS per ON per.person_id = c.person_id
+WHERE c.client_id = 2
+
+// Seleciona as compras de um determinado cliente pelo CPF
+SELECT per.name, per.document, pur.date_purchase, pur.payment, pur.number_confirmation, pur.number_nf FROM Purchase AS pur
+INNER JOIN Client AS c ON c.client_id = pur.client_id
+INNER JOIN Person AS per ON per.person_id = c.person_id
+WHERE per.document = 75995221216517
+
+
+// Seleciona as vendas de um determinado dono de loja.
+SELECT per.name, s.name, pur.date_purchase, pur.payment, pur.number_confirmation, pur.number_nf FROM Owner as o
+INNER JOIN Person AS per ON per.person_id = o.person_id
+INNER JOIN Store AS s ON o.owner_id = s.owner_id
+INNER JOIN Purchase AS pur ON s.store_id = pur.store_id
+WHERE o.owner_id = 1
+
+- Selecionar a quantidade de determinado produto dos estoques de todas as lojas.
+SELECT SUM(stocks.quantity) FROM Stocks
+INNER JOIN Product AS p ON p.product_id = stocks.product_id
+WHERE p.name = 'Smartphone Motorola Moto E7'
+
+// Selecionar quais clientes têm em suas WishList um determinado produto pelo nome do produto.
+SELECT DISTINCT p.person_id, p.name FROM Person AS p
+RIGHT JOIN Client AS c ON c.person_id = p.person_id
+INNER JOIN WishlistProduct AS wp ON c.client_id = wp.wishlist_id
+INNER JOIN Product AS prod ON prod.product_id = wp.product_id
+WHERE prod.name = 'Smartphone Motorola Moto E7'
+
+// Selecionar quais clientes têm em seus históricos de compras determinado produto pelo nome do produto.
+SELECT  p.person_id, p.name,pr.name FROM Person AS p
+INNER JOIN Client AS c ON c.person_id = p.person_id
+INNER JOIN Purchase AS pu ON pu.client_id = c.client_id
+INNER JOIN ProductPurchased AS pp on pu.purchase_id=pp.purchase_id
+INNER JOIN Product as pr on pp.product_id=pr.product_id
+Where pr.name = 'JBL - Charge 4'
+
+
+
+// Apagar um cliente criado.
+DELETE ProductPurchased FROM Client AS c
+INNER JOIN Purchase AS p ON c.client_id = p.client_id
+INNER JOIN ProductPurchased AS pp ON pp.purchase_id = p.purchase_id
+WHERE c.client_id = 1;
+DELETE Purchase FROM Client AS c
+INNER JOIN Purchase AS p ON c.client_id = p.client_id
+WHERE c.client_id = 1;
+DELETE WishlistProduct FROM Client AS c
+INNER JOIN WishlistProduct AS wp ON wp.wishlist_id = c.client_id
+WHERE c.client_id = 1;
+DELETE Wishlist FROM Client AS c
+INNER JOIN Wishlist AS w ON w.wishlist_id = c.client_id
+WHERE c.client_id = 1;
+DELETE FROM Client
+WHERE client_id = 1;
+
+- Apagar um dono criado.
+DELETE ProductPurchased FROM Owner AS o
+INNER JOIN Store AS s ON o.owner_id = s.owner_id
+INNER JOIN Purchase AS p ON s.store_id = p.store_id
+INNER JOIN ProductPurchased AS pp ON pp.purchase_id = p.purchase_id
+WHERE o.owner_id = 1;
+Delete Purchase FROM Owner AS o
+INNER JOIN Store AS s ON o.owner_id = s.owner_id
+INNER JOIN Purchase AS p ON s.store_id = p.store_id
+WHERE o.owner_id = 1;
+Delete Stocks FROM Owner AS o
+INNER JOIN Store AS s ON o.owner_id = s.owner_id
+INNER JOIN Stocks AS st ON s.store_id = st.store_id
+WHERE o.owner_id = 1;
+Delete Store FROM Owner AS o
+INNER JOIN Store AS s ON o.owner_id = s.owner_id
+WHERE o.owner_id = 1;
+DELETE FROM Owner
+Where owner_id = 1
+
+-  Apagar uma loja criada.
+DELETE  from productpurchased where purchase_id in (select purchase_id from Purchase where Store_id = 5)
+DELETE FROM purchase where store_id = 5
+DELETE FROM STOCKS WHERE store_id=5
+
+
+
+-  Apagar uma wishlist criada.
+
+
+// Atualizar o método de pagamento de uma compra.
+UPDATE Purchase
+SET payment = 'Boleto'
+WHERE purchase_id = 1;
+
+// Atualizar o método de pagamento de todas compras de determinada loja onde o cliente que realizou a compra tenha idade entre 18 e 25 anos.
+UPDATE Purchase
+SET payment = 'Pix'
+FROM Purchase
+INNER JOIN Client AS c ON c.client_id = purchase.client_id
+INNER JOIN Person AS p ON c.person_id = p.person_id
+WHERE p.age >= 18 AND p.age <= 25;
+
+
+// Selecionar todas as compras que tenham como remetente determinado país.
+SELECT pur.date_purchase, pur.payment, pur.number_confirmation, pur.number_nf, a.country FROM Purchase AS pur
+INNER JOIN Store AS s ON pur.store_id = s.store_id
+INNER JOIN Owner AS o ON s.owner_id = o.owner_id
+INNER JOIN Person AS p ON o.person_id = p.person_id
+INNER JOIN Address AS a ON p.address_id = a.address_id
+WHERE a.country = 'Sweden'
+
+// Selecionar todas as compras que tenham como destinatário determinada cidade. 
+SELECT pur.date_purchase, pur.payment, pur.number_confirmation, pur.number_nf, a.city FROM Purchase AS pur
+INNER JOIN Client AS c ON pur.client_id = c.client_id
+INNER JOIN Person AS p ON c.person_id = p.person_id
+INNER JOIN Address as a ON p.address_id = a.address_id
+WHERE a.city = 'Southern Islands'
+
+// Selecionar a quantidade em estoque de determinado produto organizando por país onde se encontra. 
+select country,sum(quantity) from stocks as st
+INNER JOIN Store AS so ON so.store_id=st.store_id
+INNER JOIN Product as p on st.product_id=p.product_id
+INNER JOIN Owner as o ON o.Owner_id=so.owner_id
+INNER JOIN Person AS po ON po.person_id=o.Owner_id
+INNER JOIN Address AS ass on ass.address_id=po.address_id 
+WHERE p.name = 'Smartphone Motorola Moto E7'
+group by (country) 
+
+// Selecionar quantidade de clientes por países.
+select country,count(p.address_id)as qtde from person as p
+inner join client as c on c.person_id=p.person_id
+INNER JOIN Address AS ass on ass.address_id=p.address_id
+group by (country)
+
+// Selecionar quantidade de lojas por países.  
+select country,count(st.CNPJ)as qtde from person as p
+inner join owner as o on o.person_id=p.person_id
+inner join store as st on st.owner_id=o.Owner_id
+INNER JOIN Address AS ass on ass.address_id=p.address_id
+group by (country)
