@@ -3,13 +3,17 @@
 public class Owner : Person
 {
     // Atributos
-    private static Owner owner;
     private Guid uuid;
+
+    private static Owner owner;
+
+
     // Construtor
     private Owner(Address address) : base(address)
     {
 
     }
+
 
     // GET & SET
     public Address getAddress()
@@ -20,6 +24,7 @@ public class Owner : Person
     {
         this.address = address;
     }
+
 
     // Métodos
 

@@ -1,10 +1,13 @@
 namespace Model;
 
-public class WishList
+using Interfaces;
+
+public class WishList : IValidateDataObject<WishList>
 {
     // Atributos
     private Client client;
     List<Product> products; 
+
 
     // Construtor
     public WishList(Client client)
@@ -12,6 +15,7 @@ public class WishList
         this.products = new List<Product>();
         this.client = client;
     }
+
 
     // GET & SET
     public Client getClient()
@@ -28,12 +32,24 @@ public class WishList
         return products;
     }
 
+
     // Métodos
 
     // Adiciona um produto para a Wishlist
     public void addProductToWishList(Product product)
     {
         products.Add(product);
+    }
+
+    public Boolean validateObject()
+    {
+        if (client == null)
+            return false;
+
+        if (products == null)
+            return false;
+
+        return true;
     }
 }
  

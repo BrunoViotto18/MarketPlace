@@ -8,9 +8,10 @@ public class Purchase
     private DateTime date_purchase;
     private String number_confirmation;
     private String number_nf;
-    private PaymentEnum payment_type;
-    private PurchaseStatusEnum purchase_status;
+    private int payment_type;
+    private int purchase_status;
     public double purchase_value;
+
 
     // Dependências
     private Client client;
@@ -54,20 +55,20 @@ public class Purchase
 		this.number_nf = number_nf;
 	}
 
-	public PaymentEnum getPaymentType()
+	public int getPaymentType()
 	{
 		return payment_type;
 	}
-	public void setPaymentType(PaymentEnum payment_type)
+	public void setPaymentType(int payment_type)
 	{
 		this.payment_type = payment_type;
 	}
 
-	public PurchaseStatusEnum getPurchaseStatus()
+	public int getPurchaseStatus()
 	{
 		return purchase_status;
 	}
-	public void setPurchaseStatus(PurchaseStatusEnum purchase_status)
+	public void setPurchaseStatus(int purchase_status)
 	{
 		this.purchase_status = purchase_status;
 	}
@@ -85,6 +86,7 @@ public class Purchase
     {
         return products;
     }
+
 
     // Métodos
 

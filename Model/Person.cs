@@ -4,18 +4,21 @@ public class Person
 {
     // Atributos
     protected String name;
-    protected int age;
+    protected DateTime date_of_birth;
     protected String document;
     protected String email;
     protected String phone;
     protected String login;
+
     protected Address address;
+
 
     // Construtor
     protected Person(Address address)
     {
         this.address = address;
     }
+
 
     // GET & SET
     public String getName()
@@ -27,13 +30,13 @@ public class Person
         this.name = name;
     }
 
-    public int getAge()
+    public DateTime getAge()
     {
-        return age;
+        return date_of_birth;
     }
-    public void setAge(int age)
+    public void setAge(DateTime date_of_birth)
     {
-        this.age = age;
+        this.date_of_birth = date_of_birth;
     }
 
     public String getDocument()

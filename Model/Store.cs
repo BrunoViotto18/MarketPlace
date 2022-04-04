@@ -1,12 +1,16 @@
 namespace Model;
 
-public class Store
+using Interfaces;
+
+public class Store : IValidateDataObject<Store>
 {
     // Atributos
     private String name;
     private String CNPJ;
+
     private Owner owner;
     private List<Purchase> purchases;
+
 
     // Construtor
     public Store(Owner owner)
@@ -14,6 +18,7 @@ public class Store
         this.owner = owner;
         // this.purchases = new List<Purchase>();
     }
+
 
     // GET & SET
     public String getName()
@@ -47,10 +52,30 @@ public class Store
     {
         return purchases;
     }
+    
 
+    //Métodos
 
+    // Adiciona uma nova compra
     public void addNewPurchase(Purchase purchase)
     {
         purchases.Add(purchase);
+    }
+
+    public Boolean validateObject()
+    {
+        if (name == null)
+            return false;
+
+        if (CNPJ == null)
+            return false;
+
+        if (owner == null)
+            return false;
+
+        if (purchases == null)
+            return false;
+
+        return true;
     }
 }
