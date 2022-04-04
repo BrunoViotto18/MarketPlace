@@ -22,6 +22,7 @@ CREATE TABLE Client(
 	client_id int PRIMARY KEY identity(1,1),
 	person_id int FOREIGN KEY REFERENCES Person(person_id) not null
 );
+
 CREATE TABLE Owner(
 	Owner_id int PRIMARY KEY identity(1,1),
 	person_id int FOREIGN KEY REFERENCES Person(person_id) not null
@@ -56,31 +57,28 @@ CREATE TABLE Purchase(
 	payment varchar(100),
 	number_confirmation int,
 	number_nf varchar (150)
-	
 );
 
 CREATE TABLE Wishlist(
 	wishlist_id int PRIMARY KEY identity(1,1),
 	client_id int FOREIGN KEY REFERENCES client(client_id) not null,
-
 );
 
 CREATE TABLE WishlistProduct(
 	wishlist_product_id int PRIMARY KEY identity(1,1),
 	product_id int FOREIGN KEY REFERENCES Product(product_id) not null,
 	wishlist_id int FOREIGN KEY REFERENCES Wishlist(wishlist_id) not null,
-
 );
 
 CREATE TABLE ProductPurchased(
 	product_purchased_id int PRIMARY KEY identity(1,1),
 	product_id int FOREIGN KEY REFERENCES Product(product_id) not null,
 	purchase_id int FOREIGN KEY REFERENCES Purchase(purchase_id)not null,
-
 );
 
 
-/////////////////// Inserts
+
+// Inserts
 
 insert into address(street,city,state,country,post_code)
 values ('P.O. Box 420, 2776 Purus. Rd.','Serangoon','Brussels Hoofdstedelijk Gewest','Turkey','3349'),
@@ -249,6 +247,7 @@ INSERT INTO ProductPurchased(product_id, purchase_id) VALUES
 (5,15);
 
 
+
 // Seleciona as compras de uma determinada loja
 select name, purchase_id, number_confirmation,number_nf  from purchase  inner join store on store.store_id=purchase.store_id  where name = 'Mckay'
 
@@ -266,7 +265,6 @@ SELECT per.name, per.document, pur.date_purchase, pur.payment, pur.number_confir
 INNER JOIN Client AS c ON c.client_id = pur.client_id
 INNER JOIN Person AS per ON per.person_id = c.person_id
 WHERE per.document = 75995221216517
-
 
 // Seleciona as vendas de um determinado dono de loja.
 SELECT per.name, s.name, pur.date_purchase, pur.payment, pur.number_confirmation, pur.number_nf FROM Owner as o
@@ -335,13 +333,28 @@ DELETE FROM Owner
 Where owner_id = 1
 
 -  Apagar uma loja criada.
-DELETE  from productpurchased where purchase_id in (select purchase_id from Purchase where Store_id = 5)
-DELETE FROM purchase where store_id = 5
-DELETE FROM STOCKS WHERE store_id=5
-
-
+DELETE ProductPurchased FROM Owner AS o
+INNER JOIN Store AS s ON o.owner_id = s.owner_id
+INNER JOIN Purchase AS p ON s.store_id = p.store_id
+INNER JOIN ProductPurchased AS pp ON pp.purchase_id = p.purchase_id
+WHERE o.owner_id = 2;
+Delete Purchase FROM Owner AS o
+INNER JOIN Store AS s ON o.owner_id = s.owner_id
+INNER JOIN Purchase AS p ON s.store_id = p.store_id
+WHERE o.owner_id = 2;
+Delete Stocks FROM Owner AS o
+INNER JOIN Store AS s ON o.owner_id = s.owner_id
+INNER JOIN Stocks AS st ON s.store_id = st.store_id
+WHERE o.owner_id = 2;
+Delete Store FROM Owner AS o
+INNER JOIN Store AS s ON o.owner_id = s.owner_id
+WHERE o.owner_id = 2;
 
 -  Apagar uma wishlist criada.
+DELETE WishlistProduct FROM WishlistProduct as wp
+INNER JOIN Client as c ON c.client_id = wp.wishlist_id
+WHERE c.client_id = 2;
+
 
 
 // Atualizar o método de pagamento de uma compra.
@@ -356,6 +369,7 @@ FROM Purchase
 INNER JOIN Client AS c ON c.client_id = purchase.client_id
 INNER JOIN Person AS p ON c.person_id = p.person_id
 WHERE p.age >= 18 AND p.age <= 25;
+
 
 
 // Selecionar todas as compras que tenham como remetente determinado país.
