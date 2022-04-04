@@ -10,9 +10,13 @@ public class Address
     private String poste_code;
 
     // Construtor
-    public Address()
+    public Address(String street, String city, String state, String country, String poste_code)
     {
-
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.poste_code = poste_code;
     }
 
     // GET & SET
@@ -52,11 +56,11 @@ public class Address
         this.country = country;
     }
 
-    public String getPosteCode()
+    public String getPostalCode()
     {
         return poste_code;
     }
-    public void setPosteCode(String poste_code)
+    public void setPostalCode(String poste_code)
     {
         this.poste_code = poste_code;
     }

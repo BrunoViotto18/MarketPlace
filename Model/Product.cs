@@ -3,7 +3,7 @@ namespace Model;
 public class Product
 {
     // Atributos
-    private String nome;
+    private String name;
     private Double unit_price;
     private String bar_code;
 
@@ -14,16 +14,16 @@ public class Product
     }
 
     // GET & SET
-    public String getNome()
+    public String getName()
     {
-        return nome;
+        return name;
     }
-    public void setNome(String nome)
+    public void setName(String name)
     {
-        this.nome = nome;
+        this.name = name;
     }
 
-    public Double getUnitPrice()
+    public Double getUnitprice()
     {
         return unit_price;
     }

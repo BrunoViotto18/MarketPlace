@@ -4,9 +4,12 @@ public class Purchase
 {
     // Atributos
     private DateTime date_purchase;
-    private String payment; 
     private int number_confirmation;
     private String number_nf;
+    private String payment_type;
+    private PurchaseStatusEnum purchase_status;
+    public double purchase_value;
+    // Dependências
     private Client client;
     List<Product> products;
 
@@ -26,15 +29,6 @@ public class Purchase
     public void setDatePurchase(DateTime date_purchase)
     {
         this.date_purchase = date_purchase;
-    }
-
-    public String getPayment()
-    {
-        return payment;
-    }
-    public void setPayment(String payment)
-    {
-        this.payment = payment;
     }
 
     public int getNumberConfirmation()
@@ -59,4 +53,8 @@ public class Purchase
     {
         return products;
     }
+
+    // Métodos
+
+
 }

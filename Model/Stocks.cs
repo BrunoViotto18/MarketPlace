@@ -8,7 +8,7 @@ public class Stocks
     private Store store;
 
     // Construtor
-    private Stocks(Store store, Product product)
+    public Stocks(Store store, Product product)
     {
         this.store = store;
         this.product = product;

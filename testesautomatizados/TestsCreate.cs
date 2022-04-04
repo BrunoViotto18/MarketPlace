@@ -125,13 +125,13 @@ namespace testesAutomatizados
             testPurchase.setNumberConfirmation("0123456");
             testPurchase.setNumberNf("987654321");
             testPurchase.setPaymentType(Enums.PaymentEnum.initial);
-            testPurchase.setPurchaseStatus(Enums.PurcahseStatusEnum.awaitingPayment);
+            testPurchase.setPurchaseStatus(Enums.PurchaseStatusEnum.awaitingPayment);
             testPurchase.setProducts(products);
 
             Assert.That(testPurchase.getNumberConfirmation, Is.EqualTo("0123456"));
             Assert.That(testPurchase.getNumberNf, Is.EqualTo("987654321"));
             Assert.That(testPurchase.getPaymentType(), Is.EqualTo((int)Enums.PaymentEnum.initial));
-            Assert.That(testPurchase.getPurchaseStatus(), Is.EqualTo((int)Enums.PurcahseStatusEnum.awaitingPayment));
+            Assert.That(testPurchase.getPurchaseStatus(), Is.EqualTo((int)Enums.PurchaseStatusEnum.awaitingPayment));
             Assert.That(testPurchase.getProducts().Count, Is.EqualTo(3));
         }
 

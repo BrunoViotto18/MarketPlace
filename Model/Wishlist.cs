@@ -1,13 +1,13 @@
 namespace Model;
 
-public class Wishlist
+public class WishList
 {
     // Atributos
     private Client client;
     List<Product> products; 
 
     // Construtor
-    public Wishlist(Client client)
+    public WishList(Client client)
     {
         this.products = new List<Product>();
         this.client = client;
