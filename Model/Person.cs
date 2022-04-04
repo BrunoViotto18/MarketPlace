@@ -4,7 +4,7 @@ public class Person
 {
     // Atributos
     protected String name;
-    protected int age;
+    protected DateTime date_of_birth;
     protected String document;
     protected String email;
     protected String phone;
@@ -27,13 +27,13 @@ public class Person
         this.name = name;
     }
 
-    public int getAge()
+    public DateTime getDate_of_birth()
     {
-        return age;
+        return date_of_birth;
     }
-    public void setAge(int age)
+    public void setDate_of_birth(DateTime date_of_birth)
     {
-        this.age = age;
+        this.date_of_birth = date_of_birth;
     }
 
     public String getDocument()

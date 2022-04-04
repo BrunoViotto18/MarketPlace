@@ -1,10 +1,11 @@
 ﻿namespace Model;
+using Interfaces;
 
-public class Owner : Person
+public class Owner : Person, IValidateDataObject<Owner>
 {
     // Atributos
     private static Owner owner;
-    private Guid uuid;
+    private Guid uuid = Guid.NewGuid();
     // Construtor
     private Owner(Address address) : base(address)
     {
@@ -31,5 +32,30 @@ public class Owner : Person
             owner = new Owner(address);
         }
         return owner;
+    }
+
+    public Boolean validateObject(Owner obj){
+
+        if(this.address ==  null)
+            return false;
+
+        if(this.name == null)
+            return false;
+
+        if(this.login == null)
+            return false;
+
+        if(this.document == null)
+            return false;
+
+        if(this.phone == null)
+            return false;
+
+        if(this.email==null)
+            return false;
+
+        if(this.date_of_birth == default)
+            return false;
+        return true;
     }
 }

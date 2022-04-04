@@ -1,31 +1,39 @@
 namespace Model;
 
 using Enums;
-
-public class Purchase
+using Interfaces;
+public class Purchase : IValidateDataObject<Purchase>
 {
     // Atributos
     private DateTime date_purchase;
     private String number_confirmation;
     private String number_nf;
-    private PaymentEnum payment_type;
-    private PurchaseStatusEnum purchase_status;
+    private int payment_type;
+    private int purchase_status;
     public double purchase_value;
 
     // Dependências
     private Client client;
     List<Product> products;
 
+    	public Client getClient()
+	{
+		return client;
+	}
+    
+	public void setClient(Client client)
+	{
+		this.client = client;
+	}
 
-    // Construtor
-    public Purchase(Client client, Product product)
-    {
-        this.client = client;
-        // this.products = new List<Product>();
-        // this.products.Add(product);
-    }
-
-
+	public List<Product> getProducts()
+	{
+		return products;
+	}
+	public void setProducts(List<Product> products)
+	{
+		this.products = products;
+	}
 	// GET & SET
 	public DateTime getDatePurchase()
 	{
@@ -54,20 +62,20 @@ public class Purchase
 		this.number_nf = number_nf;
 	}
 
-	public PaymentEnum getPaymentType()
+	public int getPaymentType()
 	{
 		return payment_type;
 	}
-	public void setPaymentType(PaymentEnum payment_type)
+	public void setPaymentType(int payment_type)
 	{
 		this.payment_type = payment_type;
 	}
 
-	public PurchaseStatusEnum getPurchaseStatus()
+	public int getPurchaseStatus()
 	{
 		return purchase_status;
 	}
-	public void setPurchaseStatus(PurchaseStatusEnum purchase_status)
+	public void setPurchaseStatus(int purchase_status)
 	{
 		this.purchase_status = purchase_status;
 	}
@@ -81,15 +89,27 @@ public class Purchase
 		this.purchase_value = purchase_value;
 	}
 
-	public List<Product> getProducts()
-    {
-        return products;
-    }
 
     // Métodos
 
 	public void updateStatus()
     {
 		throw new NotImplementedException();
+    }
+
+    public Boolean validateObject(Purchase obj){
+        if(this.date_purchase == default)
+            return false; 
+        
+        if(this.number_confirmation == null)
+            return false;
+
+        if(this.number_nf == null)
+            return false;
+
+        if(this.purchase_value == 0)
+            return false;
+
+        return true;
     }
 }
