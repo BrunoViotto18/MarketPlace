@@ -10,8 +10,19 @@ public class Person
     protected String phone;
     protected String login;
     protected Address address;
+    protected int age;
 
     // Construtor
+
+    	public int getAge()
+	{
+		return age;
+	}
+	public void setAge(int age)
+	{
+		this.age = age;
+	}
+
     protected Person(Address address)
     {
         this.address = address;

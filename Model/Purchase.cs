@@ -20,7 +20,7 @@ public class Purchase : IValidateDataObject<Purchase>
 	{
 		return client;
 	}
-    
+
 	public void setClient(Client client)
 	{
 		this.client = client;
@@ -35,11 +35,11 @@ public class Purchase : IValidateDataObject<Purchase>
 		this.products = products;
 	}
 	// GET & SET
-	public DateTime getDatePurchase()
+	public DateTime getDataPurchase()
 	{
 		return date_purchase;
 	}
-	public void setDatePurchase(DateTime date_purchase)
+	public void setDataPurchase(DateTime date_purchase)
 	{
 		this.date_purchase = date_purchase;
 	}
@@ -66,18 +66,18 @@ public class Purchase : IValidateDataObject<Purchase>
 	{
 		return payment_type;
 	}
-	public void setPaymentType(int payment_type)
+	public void setPaymentType(PaymentEnum payment_type)
 	{
-		this.payment_type = payment_type;
+		this.payment_type = (int)payment_type;
 	}
 
 	public int getPurchaseStatus()
 	{
 		return purchase_status;
 	}
-	public void setPurchaseStatus(int purchase_status)
+	public void setPurchaseStatus(PurchaseStatusEnum purchase_status)
 	{
-		this.purchase_status = purchase_status;
+		this.purchase_status = (int)purchase_status;
 	}
 
 	public double getPurchaseValue()

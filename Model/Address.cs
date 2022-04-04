@@ -32,7 +32,7 @@ public class Address : IValidateDataObject<Address>
 
     public String getCity()
     {
-        return street;
+        return city;
     }
     public void setCity(String city)
     {
@@ -41,7 +41,7 @@ public class Address : IValidateDataObject<Address>
 
     public String getState()
     {
-        return street;
+        return state;
     }
     public void setState(String state)
     {
@@ -50,7 +50,7 @@ public class Address : IValidateDataObject<Address>
 
     public String getCountry()
     {
-        return street;
+        return country;
     }
     public void setCountry(String country)
     {
@@ -81,7 +81,7 @@ public class Address : IValidateDataObject<Address>
 
         if(this.poste_code == null)
             return false;
-            
+
         return true;
     }
 }
