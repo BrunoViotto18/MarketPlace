@@ -30,11 +30,11 @@ public class Person
         this.name = name;
     }
 
-    public DateTime getAge()
+    public DateTime getDate_of_birth()
     {
         return date_of_birth;
     }
-    public void setAge(DateTime date_of_birth)
+    public void setDate_of_birth(DateTime date_of_birth)
     {
         this.date_of_birth = date_of_birth;
     }

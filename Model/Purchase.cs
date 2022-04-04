@@ -1,8 +1,8 @@
 namespace Model;
 
 using Enums;
-
-public class Purchase
+using Interfaces;
+public class Purchase : IValidateDataObject<Purchase>
 {
     // Atributos
     private DateTime date_purchase;
@@ -17,16 +17,24 @@ public class Purchase
     private Client client;
     List<Product> products;
 
+    	public Client getClient()
+	{
+		return client;
+	}
+    
+	public void setClient(Client client)
+	{
+		this.client = client;
+	}
 
-    // Construtor
-    public Purchase(Client client, Product product)
-    {
-        this.client = client;
-        // this.products = new List<Product>();
-        // this.products.Add(product);
-    }
-
-
+	public List<Product> getProducts()
+	{
+		return products;
+	}
+	public void setProducts(List<Product> products)
+	{
+		this.products = products;
+	}
 	// GET & SET
 	public DateTime getDatePurchase()
 	{
@@ -82,10 +90,6 @@ public class Purchase
 		this.purchase_value = purchase_value;
 	}
 
-	public List<Product> getProducts()
-    {
-        return products;
-    }
 
 
     // Métodos
@@ -93,5 +97,21 @@ public class Purchase
 	public void updateStatus()
     {
 		throw new NotImplementedException();
+    }
+
+    public Boolean validateObject(Purchase obj){
+        if(this.date_purchase == default)
+            return false; 
+        
+        if(this.number_confirmation == null)
+            return false;
+
+        if(this.number_nf == null)
+            return false;
+
+        if(this.purchase_value == 0)
+            return false;
+
+        return true;
     }
 }
