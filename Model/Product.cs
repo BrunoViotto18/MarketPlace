@@ -37,4 +37,10 @@ public class Product
     {
         this.bar_code = bar_code;
     }
+
+    
+    
+    
 }
+
+
