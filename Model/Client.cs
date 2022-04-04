@@ -2,9 +2,18 @@ namespace Model;
 
 public class Client : Person
 {
-    private static Address address;
+    // Atributos
     private static Client instance;
 
+    // Construtor
+    public Client(Address address) : base(address)
+    {
+
+    }
+
+    // Métodos
+
+    // Retorna uma instância/objeto desta classe
     public static Client getInstance(Address address)
     {
         if(instance == null)
@@ -13,11 +22,4 @@ public class Client : Person
         }
         return instance;
     }
-    
-
-    private Client(Address address)
-    {
-        Client.address = address;
-    }
-
 }

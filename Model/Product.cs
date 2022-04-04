@@ -2,15 +2,18 @@ namespace Model;
 
 public class Product
 {
+    // Atributos
     private String nome;
     private Double unit_price;
     private String bar_code;
 
+    // Construtor
     public Product()
     {
 
     }
 
+    // GET & SET
     public String getNome()
     {
         return nome;
