@@ -1,17 +1,21 @@
 namespace Model;
+
 using Enums;
+
 public class Purchase
 {
     // Atributos
     private DateTime date_purchase;
-    private int number_confirmation;
+    private String number_confirmation;
     private String number_nf;
-    private String payment_type;
+    private PaymentEnum payment_type;
     private PurchaseStatusEnum purchase_status;
     public double purchase_value;
-    // Depend�ncias
+
+    // Dependências
     private Client client;
     List<Product> products;
+
 
     // Construtor
     public Purchase(Client client, Product product)
@@ -21,40 +25,71 @@ public class Purchase
         // this.products.Add(product);
     }
 
-    // GET & SET
-    public DateTime getDatePurchase()
-    {
-        return date_purchase;
-    }
-    public void setDatePurchase(DateTime date_purchase)
-    {
-        this.date_purchase = date_purchase;
-    }
 
-    public int getNumberConfirmation()
-    {
-        return number_confirmation;
-    }
-    public void setNumberConfirmation(int number_confirmation)
-    {
-        this.number_confirmation = number_confirmation;
-    }
+	// GET & SET
+	public DateTime getDatePurchase()
+	{
+		return date_purchase;
+	}
+	public void setDatePurchase(DateTime date_purchase)
+	{
+		this.date_purchase = date_purchase;
+	}
 
-    public String getNumberNF()
-    {
-        return number_nf;
-    }
-    public void setNumberNF(String number_nf)
-    {
-        this.number_nf = number_nf;
-    }
+	public String getNumberConfirmation()
+	{
+		return number_confirmation;
+	}
+	public void setNumberConfirmation(String number_confirmation)
+	{
+		this.number_confirmation = number_confirmation;
+	}
 
-    public List<Product> getProducts()
+	public String getNumberNf()
+	{
+		return number_nf;
+	}
+	public void setNumberNf(String number_nf)
+	{
+		this.number_nf = number_nf;
+	}
+
+	public PaymentEnum getPaymentType()
+	{
+		return payment_type;
+	}
+	public void setPaymentType(PaymentEnum payment_type)
+	{
+		this.payment_type = payment_type;
+	}
+
+	public PurchaseStatusEnum getPurchaseStatus()
+	{
+		return purchase_status;
+	}
+	public void setPurchaseStatus(PurchaseStatusEnum purchase_status)
+	{
+		this.purchase_status = purchase_status;
+	}
+
+	public double getPurchaseValue()
+	{
+		return purchase_value;
+	}
+	public void setPurchaseValue(double purchase_value)
+	{
+		this.purchase_value = purchase_value;
+	}
+
+	public List<Product> getProducts()
     {
         return products;
     }
 
-    // M�todos
+    // Métodos
 
-
+	public void updateStatus()
+    {
+		throw new NotImplementedException();
+    }
 }

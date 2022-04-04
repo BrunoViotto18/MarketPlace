@@ -11,6 +11,7 @@ public class Client : Person
 
     }
     
+
     // GET & SET
     public Address getAddress()
     {
@@ -20,6 +21,7 @@ public class Client : Person
     {
         this.address = address;
     }
+
 
     // M�todos
 
