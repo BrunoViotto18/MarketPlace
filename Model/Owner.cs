@@ -11,6 +11,16 @@ public class Owner : Person
 
     }
 
+    // GET & SET
+    public Address getAddress()
+    {
+        return address;
+    }
+    public void setAddress(Address address)
+    {
+        this.address = address;
+    }
+
     // Métodos
 
     // Retorna uma instância/objeto desta classe

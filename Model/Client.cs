@@ -10,6 +10,16 @@ public class Client : Person
     {
 
     }
+    
+    // GET & SET
+    public Address getAddress()
+    {
+        return address;
+    }
+    public void setAddress(Address address)
+    {
+        this.address = address;
+    }
 
     // M�todos
 

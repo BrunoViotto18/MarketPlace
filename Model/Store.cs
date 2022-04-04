@@ -3,26 +3,26 @@ namespace Model;
 public class Store
 {
     // Atributos
-    private String nome;
+    private String name;
     private String CNPJ;
     private Owner owner;
     private List<Purchase> purchases;
 
     // Construtor
-    private Store(Owner owner)
+    public Store(Owner owner)
     {
         this.owner = owner;
         // this.purchases = new List<Purchase>();
     }
 
     // GET & SET
-    public String getNome()
+    public String getName()
     {
-        return nome;
+        return name;
     }
-    public void setNome(String nome)
+    public void setName(String name)
     {
-        this.nome = nome;
+        this.name = name;
     }
 
     public String getCNPJ()
