@@ -5,12 +5,14 @@ public class Client : Person
     // Atributos
     private static Client instance;
 
+
     // Construtor
     public Client(Address address) : base(address)
     {
 
     }
     
+
     // GET & SET
     public Address getAddress()
     {
@@ -20,6 +22,7 @@ public class Client : Person
     {
         this.address = address;
     }
+
 
     // Métodos
 
