@@ -1,10 +1,15 @@
 namespace Model;
 
-public class Client : Person
+using Interfaces;
+
+public class Client : Person, IValidateDataObject<Client>
 {
     // Atributos
+    private Guid uuid = Guid.NewGuid();
+
     private static Client instance;
-    private Guid uuid;
+
+
     // Construtor
     public Client(Address address) : base(address)
     {
@@ -23,9 +28,9 @@ public class Client : Person
     }
 
 
-    // M�todos
+    // Métodos
 
-    // Retorna uma inst�ncia/objeto desta classe
+    // Retorna uma instância/objeto desta classe
     public static Client getInstance(Address address)
     {
         if(instance == null)
@@ -33,5 +38,31 @@ public class Client : Person
             instance = new Client(address);
         }
         return instance;
+    }
+
+    public Boolean validateObject(Client obj)
+    {
+        if (name == null)
+            return false;
+
+        if (date_of_birth == default)
+            return false;
+
+        if (document == null)
+            return false;
+
+        if (email == null)
+            return false;
+
+        if (phone == null)
+            return false;
+
+        if (login == null)
+            return false;
+
+        if (address == null)
+            return false;
+
+        return true;
     }
 }

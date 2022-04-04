@@ -1,17 +1,21 @@
 namespace Model;
 
-public class Product
+using Interfaces
+
+public class Product : IValidateDataObject<Product>
 {
     // Atributos
     private String name;
     private Double unit_price;
     private String bar_code;
 
+
     // Construtor
     public Product()
     {
 
     }
+
 
     // GET & SET
     public String getName()
@@ -41,9 +45,22 @@ public class Product
         this.bar_code = bar_code;
     }
 
-    
-    
-    
+
+    // Métodos
+
+    public Boolean validateObject()
+    {
+        if (name == null)
+            return false;
+
+        if (unit_price == default)
+            return false;
+
+        if (bar_code == null)
+            return false;
+
+        return true;
+    }
 }
 
 

@@ -5,12 +5,15 @@ public class Owner : Person, IValidateDataObject<Owner>
 {
     // Atributos
     private static Owner owner;
+
+
     private Guid uuid = Guid.NewGuid();
     // Construtor
     private Owner(Address address) : base(address)
     {
 
     }
+
 
     // GET & SET
     public Address getAddress()
@@ -21,6 +24,7 @@ public class Owner : Person, IValidateDataObject<Owner>
     {
         this.address = address;
     }
+
 
     // Métodos
 

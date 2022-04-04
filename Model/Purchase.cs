@@ -12,6 +12,7 @@ public class Purchase : IValidateDataObject<Purchase>
     private int purchase_status;
     public double purchase_value;
 
+
     // Dependências
     private Client client;
     List<Product> products;
@@ -88,6 +89,7 @@ public class Purchase : IValidateDataObject<Purchase>
 	{
 		this.purchase_value = purchase_value;
 	}
+
 
 
     // Métodos

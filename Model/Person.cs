@@ -9,8 +9,10 @@ public class Person
     protected String email;
     protected String phone;
     protected String login;
+
     protected Address address;
     protected int age;
+
 
     // Construtor
 
@@ -27,6 +29,7 @@ public class Person
     {
         this.address = address;
     }
+
 
     // GET & SET
     public String getName()

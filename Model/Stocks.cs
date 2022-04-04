@@ -1,11 +1,15 @@
 namespace Model;
 
-public class Stocks
+using Interfaces;
+
+public class Stocks : IValidateDataObject<Stocks>
 {
     // Atributos
     private int quantity;
+
     private Product product;
     private Store store;
+
 
     // Construtor
     public Stocks(Store store, Product product)
@@ -13,6 +17,7 @@ public class Stocks
         this.store = store;
         this.product = product;
     }
+
 
     // GET & SET
     public Store GetStore()
@@ -40,5 +45,22 @@ public class Stocks
     public void setProduct(Product product)
     {
         this.product = product;
+    }
+
+
+    // Métodos
+
+    public Boolean validateObject()
+    {
+        if (quantity == 0)
+            return false;
+
+        if (product == null)
+            return false;
+
+        if (store == null)
+            return false;
+
+        return true;
     }
 }
