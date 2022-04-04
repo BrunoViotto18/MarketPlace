@@ -4,7 +4,7 @@ public class Owner : Person
 {
     // Atributos
     private static Owner owner;
-
+    private Guid uuid;
     // Construtor
     private Owner(Address address) : base(address)
     {

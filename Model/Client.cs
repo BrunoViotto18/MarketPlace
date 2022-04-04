@@ -4,16 +4,16 @@ public class Client : Person
 {
     // Atributos
     private static Client instance;
-
+    private Guid uuid;
     // Construtor
     public Client(Address address) : base(address)
     {
 
     }
 
-    // Métodos
+    // Mï¿½todos
 
-    // Retorna uma instância/objeto desta classe
+    // Retorna uma instï¿½ncia/objeto desta classe
     public static Client getInstance(Address address)
     {
         if(instance == null)
