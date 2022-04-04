@@ -48,9 +48,9 @@ public class Stocks : IValidateDataObject<Stocks>
     }
 
 
-    // Métodos
+    // Mï¿½todos
 
-    public Boolean validateObject()
+    public Boolean validateObject(Stocks stocks)
     {
         if (quantity == 0)
             return false;

@@ -1,6 +1,6 @@
 namespace Model;
 
-using Interfaces
+using Interfaces;
 
 public class Product : IValidateDataObject<Product>
 {
@@ -46,9 +46,9 @@ public class Product : IValidateDataObject<Product>
     }
 
 
-    // Métodos
+    // Mï¿½todos
 
-    public Boolean validateObject()
+    public Boolean validateObject( Product product)
     {
         if (name == null)
             return false;

@@ -33,7 +33,7 @@ public class WishList : IValidateDataObject<WishList>
     }
 
 
-    // Métodos
+    // Mï¿½todos
 
     // Adiciona um produto para a Wishlist
     public void addProductToWishList(Product product)
@@ -41,7 +41,7 @@ public class WishList : IValidateDataObject<WishList>
         products.Add(product);
     }
 
-    public Boolean validateObject()
+    public Boolean validateObject(WishList wishlist)
     {
         if (client == null)
             return false;

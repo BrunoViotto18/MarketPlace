@@ -54,7 +54,7 @@ public class Store : IValidateDataObject<Store>
     }
     
 
-    //Métodos
+    //Mï¿½todos
 
     // Adiciona uma nova compra
     public void addNewPurchase(Purchase purchase)
@@ -62,7 +62,7 @@ public class Store : IValidateDataObject<Store>
         purchases.Add(purchase);
     }
 
-    public Boolean validateObject()
+    public Boolean validateObject(Store store)
     {
         if (name == null)
             return false;
