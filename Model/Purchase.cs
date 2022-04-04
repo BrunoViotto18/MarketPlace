@@ -1,5 +1,5 @@
 namespace Model;
-
+using Enums;
 public class Purchase
 {
     // Atributos
@@ -9,7 +9,7 @@ public class Purchase
     private String payment_type;
     private PurchaseStatusEnum purchase_status;
     public double purchase_value;
-    // Dependências
+    // Dependï¿½ncias
     private Client client;
     List<Product> products;
 
@@ -54,7 +54,7 @@ public class Purchase
         return products;
     }
 
-    // Métodos
+    // Mï¿½todos
 
 
 }

@@ -48,9 +48,7 @@ public class Store
         return purchases;
     }
 
-    // Métodos
 
-    // Adiciona uma "Purchase"(Compra) para a loja
     public void addNewPurchase(Purchase purchase)
     {
         purchases.Add(purchase);
