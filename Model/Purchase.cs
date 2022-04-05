@@ -2,6 +2,7 @@ namespace Model;
 
 using Enums;
 using Interfaces;
+
 public class Purchase : IValidateDataObject<Purchase>
 {
     // Atributos
@@ -12,29 +13,10 @@ public class Purchase : IValidateDataObject<Purchase>
     private int purchase_status;
     public double purchase_value;
 
-
-    // Dependências
     private Client client;
     List<Product> products;
 
-    	public Client getClient()
-	{
-		return client;
-	}
 
-	public void setClient(Client client)
-	{
-		this.client = client;
-	}
-
-	public List<Product> getProducts()
-	{
-		return products;
-	}
-	public void setProducts(List<Product> products)
-	{
-		this.products = products;
-	}
 	// GET & SET
 	public DateTime getDataPurchase()
 	{
@@ -89,7 +71,24 @@ public class Purchase : IValidateDataObject<Purchase>
 	{
 		this.purchase_value = purchase_value;
 	}
+	
+	public Client getClient()
+	{
+		return client;
+	}
+	public void setClient(Client client)
+	{
+		this.client = client;
+	}
 
+	public List<Product> getProducts()
+	{
+		return products;
+	}
+	public void setProducts(List<Product> products)
+	{
+		this.products = products;
+	}
 
 
     // Métodos

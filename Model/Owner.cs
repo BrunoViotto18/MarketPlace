@@ -4,10 +4,11 @@ using Interfaces;
 public class Owner : Person, IValidateDataObject<Owner>
 {
     // Atributos
+    private Guid uuid = Guid.NewGuid();
+    
     private static Owner owner;
 
 
-    private Guid uuid = Guid.NewGuid();
     // Construtor
     private Owner(Address address) : base(address)
     {
