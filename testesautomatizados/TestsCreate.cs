@@ -16,7 +16,7 @@ namespace testesAutomatizados
 
             Client testClient = Client.getInstance(adr);
             
-            testClient.setAge(25);
+            
             testClient.setEmail("joao@teste.com");
             testClient.setLogin("joao@teste.com");
             testClient.setName("João");
@@ -53,7 +53,7 @@ namespace testesAutomatizados
 
             Owner testOwner = Owner.getInstance(adr);
 
-            testOwner.setAge(25);
+            
             testOwner.setEmail("joao@teste.com");
             testOwner.setLogin("joao@teste.com");
             testOwner.setName("João");
@@ -167,7 +167,7 @@ namespace testesAutomatizados
 
             Owner testOwner = Owner.getInstance(adr);
 
-            testOwner.setAge(25);
+            
             testOwner.setEmail("joao@teste.com");
             testOwner.setLogin("joao@teste.com");
             testOwner.setName("João");
@@ -184,13 +184,5 @@ namespace testesAutomatizados
             Assert.That(store.getCNPJ(), Is.EqualTo("584.5258.4582/0001-60"));
         }
 
-        public List<Purchase> buildPurchaseList()
-        {
-
-            List<Purchase> purchases =  new List<Purchase>();
-
-
-            return purchases;
-        }
     }
 }
