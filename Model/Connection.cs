@@ -1,7 +1,7 @@
 namespace Model;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
-public MyDbContext CreateDbContext()
+public class Contexto : DbContext
 {
-     return new MyDbContext(connectionString);
+     
 }
