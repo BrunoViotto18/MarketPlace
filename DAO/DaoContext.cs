@@ -25,8 +25,63 @@ public class DaoContext : DbContext
 
         modelBuilder.Entity<Address>(entity =>
         {
-            entity.HasKey(e => e.AddressID);
+            entity.HasKey(e => e.id);
+            entity.Property(e => e.country);
+            entity.Property(e => e.state);
+            entity.Property(e => e.city);
+            entity.Property(e => e.postal_code);
         }
         );
+
+        modelBuilder.Entity<Owner>(entity => 
+        { 
+            entity.HasKey(e => e.id); 
+            entity.Property(e => e.email);
+            entity.Property(e => e.phone);
+            entity.Property(e => e.date_of_birth);
+            entity.Property(e => e.phone);
+            entity.Property(e => e.passwd);
+            entity.HasOne(e => e.address);
+            entity.Property(e => e.login);
+        }
+        );
+
+        modelBuilder.Entity<Client>(entity =>
+        {
+            entity.HasKey(e => e.id);
+            entity.Property(e => e.email);
+            entity.Property(e => e.phone);
+            entity.Property(e => e.date_of_birth);
+            entity.Property(e => e.phone);
+            entity.Property(e => e.passwd);
+            entity.HasOne(e => e.address);
+            entity.Property(e => e.login);
+        }
+        );
+
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.HasKey(e => e.id);
+            entity.Property(e => e.bar_code);
+            entity.Property(e => e.name);
+            entity.Property(e => e.unit_price);
+        }
+        );
+
+        modelBuilder.Entity<WishList>(entity =>
+        {
+            entity.HasOne(e => e.client);
+            entity.HasOne(e => e.product);
+        }
+        );
+
+        modelBuilder.Entity<Store>(entity =>
+        {
+            entity.Property(e => e.id);
+            entity.Property(e => e.CNPJ);
+            entity.Property(e => e.name);
+        }
+        );
+
     }
 }
