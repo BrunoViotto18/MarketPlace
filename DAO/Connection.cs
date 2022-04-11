@@ -1,6 +1,5 @@
 namespace Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer;
 
 
 public class Contexto : DbContext
