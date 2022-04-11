@@ -12,10 +12,9 @@ public class Stocks : IValidateDataObject<Stocks>
 
 
     // Construtor
-    public Stocks(Store store, Product product)
+    public Stocks()
     {
-        this.store = store;
-        this.product = product;
+
     }
 
 
@@ -33,7 +32,7 @@ public class Stocks : IValidateDataObject<Stocks>
     {
         return quantity;
     }
-    public void SetQuantity(int quantity)
+    public void setQuantity(int quantity)
     {
         this.quantity = quantity;
     }

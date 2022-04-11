@@ -15,16 +15,6 @@ public class Person
 
 
     // Construtor
-
-    	public int getAge()
-	{
-		return age;
-	}
-	public void setAge(int age)
-	{
-		this.age = age;
-	}
-
     protected Person(Address address)
     {
         this.address = address;
@@ -32,6 +22,15 @@ public class Person
 
 
     // GET & SET
+    public int getAge()
+    {
+        return age;
+    }
+    public void setAge(int age)
+    {
+        this.age = age;
+    }
+
     public String getName()
     {
         return name;

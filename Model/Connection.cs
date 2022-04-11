@@ -1,19 +1,27 @@
-namespace Model
+namespace Model;
+
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
 
-string myConnectionString = "Data Source=JVLPC0510\SQLSERVER;Initial Catalog=TrevisanDB;Integrated Security=True";
-MyDatabaseEntities entidades = new MyDatabaseEntities(myConnectionString);
+public class Contexto : DbContext
+{
+    public DbSet<Address> Address { get; set; }
+    public DbSet<Client> Client { get; set; }
+    public DbSet<Owner> Owner { get; set; }
+    public DbSet<Person> Person { get; set; }
+    public DbSet<Product> Product { get; set; }
+    public DbSet<Purchase> Purchase { get; set; }
+    public DbSet<Stocks> Stocks { get; set; }
+    public DbSet<Store> Store { get; set; }
+    public DbSet<WishList> WishList { get; set; }
 
-public partial class MyDatabaseEntities : DbContext
-{
-public MyDatabaseEntities(string connectionString)
-    : base(connectionString)
-{
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer("Data Source = JVLPC0524; Initial Catalog = marketplace; Integrated Security = True");
+    }
+
+    protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    {
+
+    }
 }
-
-protected override void OnModelCreating(DbModelBuilder modelBuilder)
-{
-    throw new UnintentionalCodeFirstException();
-}
-
-public virtual DbSet<MyTable> MyTable { get; set; }
