@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testesAutomatizados", "testesAutomatizados\testesAutomatizados.csproj", "{61BDE7FA-A079-4BA2-B8C1-F6B77506537D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAO", "DAO\DAO.csproj", "{A49484F2-4B78-4971-8A05-3B44FAEE0688}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{61BDE7FA-A079-4BA2-B8C1-F6B77506537D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61BDE7FA-A079-4BA2-B8C1-F6B77506537D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61BDE7FA-A079-4BA2-B8C1-F6B77506537D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A49484F2-4B78-4971-8A05-3B44FAEE0688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A49484F2-4B78-4971-8A05-3B44FAEE0688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A49484F2-4B78-4971-8A05-3B44FAEE0688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A49484F2-4B78-4971-8A05-3B44FAEE0688}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
