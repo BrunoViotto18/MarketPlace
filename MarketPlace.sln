@@ -1,27 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{B6F6C53E-AFC2-4754-91F7-70DC2E68E3C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{B6F6C53E-AFC2-4754-91F7-70DC2E68E3C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO", "DTO\DTO.csproj", "{A359DF14-2B38-4E0E-9462-CE4E20DFBEFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTO", "DTO\DTO.csproj", "{A359DF14-2B38-4E0E-9462-CE4E20DFBEFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enums", "Enums\Enums.csproj", "{CCD7E2EA-E862-4A62-AB9B-4E73018E6183}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enums", "Enums\Enums.csproj", "{CCD7E2EA-E862-4A62-AB9B-4E73018E6183}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{F38938CA-5E17-4A06-9AA0-718CF2FF6CE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interfaces", "Interfaces\Interfaces.csproj", "{F38938CA-5E17-4A06-9AA0-718CF2FF6CE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testesAutomatizados", "testesAutomatizados\testesAutomatizados.csproj", "{61BDE7FA-A079-4BA2-B8C1-F6B77506537D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testesAutomatizados", "testesAutomatizados\testesAutomatizados.csproj", "{61BDE7FA-A079-4BA2-B8C1-F6B77506537D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAO", "DAO\DAO.csproj", "{A49484F2-4B78-4971-8A05-3B44FAEE0688}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAO", "DAO\DAO.csproj", "{A49484F2-4B78-4971-8A05-3B44FAEE0688}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.csproj", "{89F6E394-5D0A-4AB3-AD62-609395F2242D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B6F6C53E-AFC2-4754-91F7-70DC2E68E3C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -48,5 +47,15 @@ Global
 		{A49484F2-4B78-4971-8A05-3B44FAEE0688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A49484F2-4B78-4971-8A05-3B44FAEE0688}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A49484F2-4B78-4971-8A05-3B44FAEE0688}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89F6E394-5D0A-4AB3-AD62-609395F2242D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89F6E394-5D0A-4AB3-AD62-609395F2242D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89F6E394-5D0A-4AB3-AD62-609395F2242D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89F6E394-5D0A-4AB3-AD62-609395F2242D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B96F3894-B87F-482D-AEFC-38F9012CFC00}
 	EndGlobalSection
 EndGlobal

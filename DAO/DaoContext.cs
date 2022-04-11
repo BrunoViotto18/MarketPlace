@@ -7,7 +7,6 @@ public class DaoContext : DbContext
     public DbSet<Address> Address { get; set; }
     public DbSet<Client> Client { get; set; }
     public DbSet<Owner> Owner { get; set; }
-    public DbSet<Person> Person { get; set; }
     public DbSet<Product> Product { get; set; }
     public DbSet<WishList> Purchase { get; set; }
     public DbSet<Stocks> Stocks { get; set; }
@@ -70,6 +69,7 @@ public class DaoContext : DbContext
 
         modelBuilder.Entity<WishList>(entity =>
         {
+            entity.HasNoKey();
             entity.HasOne(f => f.client);
             entity.HasOne(f => f.product);
         }
