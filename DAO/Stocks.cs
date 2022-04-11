@@ -6,4 +6,5 @@ public class Stocks
     public Double quantity;
 
     public Store store;
+    public Product product;
 }

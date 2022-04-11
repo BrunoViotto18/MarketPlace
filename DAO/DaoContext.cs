@@ -80,6 +80,30 @@ public class DaoContext : DbContext
             entity.Property(e => e.id);
             entity.Property(e => e.CNPJ);
             entity.Property(e => e.name);
+            entity.HasKey(e => e.id);
+        }
+        );
+
+        modelBuilder.Entity<Purchase>(entity =>
+        {
+            entity.HasKey(p => p.id);
+            entity.Property(e => e.number_confirmation);
+            entity.Property(e => e.number_nf);
+            entity.Property(e => e.payment_type);
+            entity.Property(e => e.purchase_status);
+            entity.Property(e => e.data_purchase);
+            entity.HasOne(f => f.client);
+            entity.HasOne(f => f.product);
+            entity.HasOne(f => f.store);
+        }
+        );
+
+        modelBuilder.Entity<Stocks>(entity =>
+        {
+            entity.HasKey(p => p.id);
+            entity.Property(e => e.quantity);
+            entity.HasOne(f => f.product);
+            entity.HasOne(f => f.store);
         }
         );
 
