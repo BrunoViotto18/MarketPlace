@@ -1,5 +1,6 @@
-namespace Model;
+namespace DAO;
 using Microsoft.EntityFrameworkCore;
+
 
 
 public class Contexto : DbContext
@@ -19,7 +20,7 @@ public class Contexto : DbContext
         optionsBuilder.UseSqlServer("Data Source = JVLPC0524; Initial Catalog = marketplace; Integrated Security = True");
     }
 
-    protected override void OnModelCreating(DbModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
     }
