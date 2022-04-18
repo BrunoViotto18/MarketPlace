@@ -1,8 +1,9 @@
 ﻿namespace Model;
 using DTO;
 using Interfaces;
+using DTO;
 
-public class Address : IValidateDataObject<Address>
+public class Address : IValidateDataObject<Address>, IDataController<AddressDTO, Address>
 {
     // Atributos
     private String street;

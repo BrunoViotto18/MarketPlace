@@ -1,11 +1,16 @@
 ﻿namespace Model;
+<<<<<<< HEAD
 using DTO;
-using Interfaces;
+=======
 
-public class Owner : Person, IValidateDataObject<Owner>
+>>>>>>> 9306d0bdc55449f65b13c25045a00c472da8d697
+using Interfaces;
+using DTO;
+
+public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDTO, Owner>
 {
     // Atributos
-    private Guid uuid = Guid.NewGuid();
+    private Guid uuid;
     
     private static Owner owner;
 
@@ -13,7 +18,7 @@ public class Owner : Person, IValidateDataObject<Owner>
     // Construtor
     private Owner(Address address) : base(address)
     {
-
+        uuid = Guid.NewGuid();
     }
 
 

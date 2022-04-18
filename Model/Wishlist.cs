@@ -1,8 +1,9 @@
 namespace Model;
 
 using Interfaces;
+using DTO;
 
-public class WishList : IValidateDataObject<WishList>
+public class WishList : IValidateDataObject<WishList>, IDataController<WishListDTO, WishList>
 {
     // Atributos
     private Client client;

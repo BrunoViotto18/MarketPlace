@@ -19,6 +19,7 @@ public class Person
     }
 
 
+    // GET & SET
     public String getName()
     {
         return name;
