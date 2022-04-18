@@ -1,5 +1,5 @@
 ﻿namespace Model;
-
+using DTO;
 using Interfaces;
 using DTO;
 
@@ -92,5 +92,10 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
             return false;
 
         return true;
+    }
+
+    public static Address convertDTOToModel(AddressDTO address)
+    {
+        return new Address(address.street,address.city,address.street, address.country, address.postal_code);
     }
 }

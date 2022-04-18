@@ -1,5 +1,5 @@
 namespace Model;
-
+using DTO;
 using Interfaces;
 using DTO;
 
@@ -78,5 +78,13 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
             return false;
 
         return true;
+    }
+
+    public static Store convertDTOToModel(StoreDTO store)
+    {
+        Store modelstore = new Store(Owner.convertDTOTOModel(store.owner));
+        modelstore.CNPJ = store.CNPJ;
+        modelstore.name = store.name;
+        return modelstore;
     }
 }
