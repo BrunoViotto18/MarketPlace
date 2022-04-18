@@ -7,7 +7,6 @@ public class DaoContext : DbContext
     public DbSet<Address> Address { get; set; }
     public DbSet<Client> Client { get; set; }
     public DbSet<Owner> Owner { get; set; }
-    public DbSet<Person> Person { get; set; }
     public DbSet<Product> Product { get; set; }
     public DbSet<WishList> Purchase { get; set; }
     public DbSet<Stocks> Stocks { get; set; }
@@ -25,10 +24,10 @@ public class DaoContext : DbContext
 
         modelBuilder.Entity<Address>(entity =>
         {
-            entity.HasKey(e => e.id);
-            entity.Property(e => e.country);
-            entity.Property(e => e.state);
+            entity.HasKey(p => p.id);
             entity.Property(e => e.city);
+            entity.Property(e => e.state);
+            entity.Property(e => e.country);
             entity.Property(e => e.postal_code);
             entity.Property(e => e.street);
         }
@@ -62,7 +61,8 @@ public class DaoContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.id);
+            entity.HasKey(p => p.id);
+            entity.Property(e => e.name);
             entity.Property(e => e.bar_code);
             entity.Property(e => e.name);
 
@@ -80,8 +80,7 @@ public class DaoContext : DbContext
         modelBuilder.Entity<Store>(entity =>
         {
             entity.Property(e => e.CNPJ);
-            entity.Property(e => e.name);
-            entity.HasKey(e => e.id);
+            entity.HasOne(f => f.owner);
         }
         );
 
@@ -108,6 +107,5 @@ public class DaoContext : DbContext
             entity.Property(e => e.unit_price);
         }
         );
-
     }
 }
