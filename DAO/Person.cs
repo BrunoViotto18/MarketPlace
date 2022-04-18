@@ -9,6 +9,7 @@ public class Person
     public string phone;
     public string login;
     public string passwd;
+    public String document;
 
     public Address address;
 }

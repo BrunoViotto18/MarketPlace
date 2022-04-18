@@ -2,6 +2,7 @@ namespace Model;
 
 using Interfaces;
 using DTO;
+using DAO;
 
 public class Client : Person, IValidateDataObject<Client>, IDataController<ClientDTO, Client>
 {
@@ -80,5 +81,41 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
         modelClient.passwd = client.passwd;
 
         return modelClient;
+    }
+    
+    public int save()
+    {
+        int id;
+
+        using (var context = new DaoContext())
+        {
+            var Client = new DAO.Client
+            {
+                name = this.name,
+                email = this.email,
+                date_of_birth = this.date_of_birth,
+                phone = this.phone,
+                login = this.login,
+                passwd = this.passwd,
+                document = this.document,
+                address = this.address
+            };
+        }
+    }
+
+    public ClientDTO convertModelToDTO()
+    {
+        ClientDTO dtoClient = new ClientDTO();
+
+        dtoClient.name = this.name;
+        dtoClient.date_of_birth = this.date_of_birth;
+        dtoClient.document = this.document;
+        dtoClient.email = this.email;
+        dtoClient.phone = this.phone;
+        dtoClient.login = this.login;
+        dtoClient.passwd = this.passwd;
+        dtoClient.address = this.address.convertModelToDTO();
+
+        return dtoClient;
     }
 }

@@ -60,6 +60,16 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
         return modelProduct;
     }
 
+    public ProductDTO convertModelToDTO()
+    {
+        ProductDTO dtoProduct = new ProductDTO();
+
+        dtoProduct.name = this.name;
+        dtoProduct.bar_code = this.bar_code;
+
+        return dtoProduct;
+    }
+
     public int save()
     {
         int id = 0;
