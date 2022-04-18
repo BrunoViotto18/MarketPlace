@@ -10,6 +10,7 @@ public class Person
     protected String phone;
     protected String login;
     protected String passwd;
+
     protected Address address;
 
 

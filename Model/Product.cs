@@ -37,7 +37,7 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
     }
 
 
-    // M�todos
+    // Métodos
 
     public Boolean validateObject( Product product)
     {
@@ -49,6 +49,14 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
 
         return true;
     }
+
+    public static Product convertDTOToModel(ProductDTO product)
+    {
+        Product modelProduct = new Product();
+
+        modelProduct.name = product.name;
+        modelProduct.bar_code = product.bar_code;
+
+        return modelProduct;
+    }
 }
-
-

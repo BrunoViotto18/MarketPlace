@@ -1,5 +1,5 @@
 namespace Model;
-using DTO;
+
 using Interfaces;
 using DTO;
 
@@ -82,9 +82,15 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
 
     public static Store convertDTOToModel(StoreDTO store)
     {
-        Store modelstore = new Store(Owner.convertDTOTOModel(store.owner));
-        modelstore.CNPJ = store.CNPJ;
-        modelstore.name = store.name;
-        return modelstore;
+        Store modelStore = new Store(Owner.convertDTOTOModel(store.owner));
+
+        modelStore.CNPJ = store.CNPJ;
+        modelStore.name = store.name;
+        List<Purchase> purchases = new List<Purchase>();
+        foreach (PurchaseDTO purch in store.purchases)
+            purchases.Add(Purchase.convertDTOToModel(purch));
+        modelStore.purchases = purchases;
+
+        return modelStore;
     }
 }

@@ -52,5 +52,17 @@ public class WishList : IValidateDataObject<WishList>, IDataController<WishListD
 
         return true;
     }
+
+    public static WishList convertDTOToModel(WishListDTO wishlist)
+    {
+        WishList modelWishlist = new WishList(Client.convertDTOToModel(wishlist.client));
+
+        List<Product> products = new List<Product>();
+        foreach (ProductDTO prod in wishlist.products)
+            products.Add(Product.convertDTOToModel(prod));
+        modelWishlist.products = products;
+
+        return modelWishlist;
+    }
 }
  

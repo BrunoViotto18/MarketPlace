@@ -18,6 +18,12 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
     List<Product> products;
 
 
+	public Purchase()
+    {
+
+    }
+
+
 	// GET & SET
 	public DateTime getDataPurchase()
 	{
@@ -113,5 +119,24 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
             return false;
 
         return true;
+    }
+
+	public static Purchase convertDTOToModel(PurchaseDTO purchase)
+    {
+		Purchase modelPurchase = new Purchase();
+
+		modelPurchase.date_purchase = purchase.data_purchase;
+		modelPurchase.number_confirmation = purchase.number_confirmation;
+		modelPurchase.number_nf = purchase.number_nf;
+		modelPurchase.payment_type = purchase.payment_type;
+		modelPurchase.purchase_status = purchase.purchase_status;
+		modelPurchase.purchase_value = purchase.purchase_value;
+		modelPurchase.client = Client.convertDTOToModel(purchase.client);
+		List<Product> products = new List<Product>();
+		foreach (ProductDTO prod in purchase.products)
+			products.Add(Product.convertDTOToModel(prod));
+		modelPurchase.products = products;
+
+		return modelPurchase;
     }
 }

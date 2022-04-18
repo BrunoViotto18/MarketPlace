@@ -73,4 +73,16 @@ public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, St
 
         return true;
     }
+
+    public static Stocks convertDTOToModel(StocksDTO stocks)
+    {
+        Stocks modelStocks = new Stocks();
+
+        modelStocks.quantity = stocks.quantity;
+        modelStocks.unit_price = stocks.unit_price;
+        modelStocks.product = Product.convertDTOToModel(stocks.product);
+        modelStocks.store = Store.convertDTOToModel(stocks.store);
+
+        return modelStocks;
+    }
 }
