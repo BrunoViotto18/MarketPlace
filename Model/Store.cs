@@ -93,4 +93,19 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
 
         return modelStore;
     }
+
+    public StoreDTO convertModelToDTO()
+    {
+        StoreDTO dtoStore = new StoreDTO();
+
+        dtoStore.name = this.name;
+        dtoStore.CNPJ = this.CNPJ;
+        dtoStore.owner = this.owner.convertModelToDTO();
+        List<PurchaseDTO> purchases = new List<PurchaseDTO>();
+        foreach (Purchase prod in this.purchases)
+            purchases.Add(prod.convertModelToDTO());
+        dtoStore.purchases = purchases;
+
+        return dtoStore;
+    }
 }

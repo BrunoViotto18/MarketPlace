@@ -64,5 +64,18 @@ public class WishList : IValidateDataObject<WishList>, IDataController<WishListD
 
         return modelWishlist;
     }
+
+    public WishListDTO convertModelToDTO()
+    {
+        WishListDTO dtoWishlist = new WishListDTO();
+
+        dtoWishlist.client = this.client.convertModelToDTO();
+        List<ProductDTO> products = new List<ProductDTO>();
+        foreach (Product prod in this.products)
+            products.Add(prod.convertModelToDTO());
+        dtoWishlist.products = products;
+
+        return dtoWishlist;
+    }
 }
  

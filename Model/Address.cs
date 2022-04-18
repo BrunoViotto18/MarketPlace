@@ -98,4 +98,17 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
     {
         return new Address(address.street, address.city, address.street, address.country, address.postal_code);
     }
+
+    public AddressDTO convertModelToDTO()
+    {
+        AddressDTO dtoAddress = new AddressDTO();
+
+        dtoAddress.street = this.street;
+        dtoAddress.state = this.state;
+        dtoAddress.city = this.city;
+        dtoAddress.country = this.country;
+        dtoAddress.postal_code = this.poste_code;
+
+        return dtoAddress;
+    }
 }

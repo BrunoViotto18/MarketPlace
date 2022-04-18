@@ -139,4 +139,23 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 
 		return modelPurchase;
     }
+
+	public PurchaseDTO convertModelToDTO()
+    {
+		PurchaseDTO dtoPurchase = new PurchaseDTO();
+
+		dtoPurchase.data_purchase = this.date_purchase;
+		dtoPurchase.purchase_value = this.purchase_value;
+		dtoPurchase.payment_type = this.payment_type;
+		dtoPurchase.purchase_status = this.purchase_status;
+		dtoPurchase.number_confirmation = this.number_confirmation;
+		dtoPurchase.number_nf = this.number_nf;
+		dtoPurchase.client = this.client.convertModelToDTO();
+		List<ProductDTO> products = new List<ProductDTO>();
+		foreach (Product prod in this.products)
+			products.Add(prod.convertModelToDTO());
+		dtoPurchase.products = products;
+
+		return dtoPurchase;
+    }
 }

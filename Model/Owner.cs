@@ -80,4 +80,20 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
 
         return modelOwner;
     }
+
+    public OwnerDTO convertModelToDTO()
+    {
+        OwnerDTO dtoClient = new OwnerDTO();
+
+        dtoClient.name = this.name;
+        dtoClient.date_of_birth = this.date_of_birth;
+        dtoClient.document = this.document;
+        dtoClient.email = this.email;
+        dtoClient.phone = this.phone;
+        dtoClient.login = this.login;
+        dtoClient.passwd = this.passwd;
+        dtoClient.address = this.address.convertModelToDTO();
+
+        return dtoClient;
+    }
 }
