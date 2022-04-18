@@ -1,5 +1,5 @@
 namespace Model;
-
+using DAO;
 using Interfaces;
 using DTO;
 
@@ -58,5 +58,26 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
         modelProduct.bar_code = product.bar_code;
 
         return modelProduct;
+    }
+
+    public int save()
+    {
+        int id = 0;
+
+        using (var context = new DaoContext())
+        {
+            var product = new DAO.Product
+            {
+                name = name,
+                bar_code = bar_code
+            };
+
+            context.Product.Add(product);
+
+            context.SaveChanges();
+
+            id = product.id;
+        }
+        return id;
     }
 }

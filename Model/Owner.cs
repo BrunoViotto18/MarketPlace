@@ -1,5 +1,5 @@
 ﻿namespace Model;
-
+using DAO;
 using Interfaces;
 using DTO;
 
@@ -7,7 +7,7 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
 {
     // Atributos
     private Guid uuid;
-    
+
     private static Owner owner;
 
 
@@ -41,27 +41,27 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
         return owner;
     }
 
-    public Boolean validateObject(Owner obj){
+    public Boolean validateObject(Owner obj) {
 
-        if(this.address ==  null)
+        if (this.address == null)
             return false;
 
-        if(this.name == null)
+        if (this.name == null)
             return false;
 
-        if(this.login == null)
+        if (this.login == null)
             return false;
 
-        if(this.document == null)
+        if (this.document == null)
             return false;
 
-        if(this.phone == null)
+        if (this.phone == null)
             return false;
 
-        if(this.email==null)
+        if (this.email == null)
             return false;
 
-        if(this.date_of_birth == default)
+        if (this.date_of_birth == default)
             return false;
         return true;
     }
@@ -77,7 +77,33 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
         modelOwner.document = owner.document;
         modelOwner.login = owner.login;
         modelOwner.passwd = owner.passwd;
-
+       
         return modelOwner;
+    }
+
+    public int save()
+    {
+        var id = 0;
+
+        using(var context = new DaoContext()){
+            var owner = new DAO.Owner()
+            {
+                name = this.name,
+                email = this.email,
+                date_of_birth = this.date_of_birth,
+                phone = this.phone,
+                login = this.login,
+                passwd = this.passwd
+                document = this.document;
+            };
+            
+            context.Owner.Add(owner);
+
+            context.SaveChanges();
+
+            id = owner.id;
+
+        }
+        return id;
     }
 }

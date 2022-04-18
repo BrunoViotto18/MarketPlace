@@ -1,5 +1,5 @@
 ﻿namespace Model;
-
+using DAO;
 using Interfaces;
 using DTO;
 
@@ -97,5 +97,41 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
     public static Address convertDTOToModel(AddressDTO address)
     {
         return new Address(address.street, address.city, address.street, address.country, address.postal_code);
+    }
+
+    public int save()
+    {
+        var id = 0;
+
+        using (var context = new DaoContext())
+        {
+            var address = new DAO.Address
+            {
+                street = this.street,
+                city = this.city,
+                state = this.state,
+                country = this.country,
+                postal_code = this.poste_code
+            };
+
+            context.Address.Add(address);
+
+            context.SaveChanges();
+
+            id = address.id;
+
+        }
+        return id;
+    }
+    public AddressDTO convertModelToDTO()
+    {
+        AddressDTO addressDTO = new AddressDTO();
+        addressDTO.street = this.street;    
+        addressDTO.state = this.state;
+        addressDTO.city = this.city;    
+        addressDTO.country = this.country;
+        addressDTO.postal_code = this.poste_code;
+
+        return addressDTO;
     }
 }

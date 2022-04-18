@@ -1,7 +1,7 @@
 namespace Model;
-
-using Interfaces;
 using DTO;
+using DAO;
+using Interfaces;
 
 public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store>
 {
@@ -82,15 +82,27 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
 
     public static Store convertDTOToModel(StoreDTO store)
     {
-        Store modelStore = new Store(Owner.convertDTOTOModel(store.owner));
+        Store modelstore = new Store(Owner.convertDTOTOModel(store.owner));
+        modelstore.CNPJ = store.CNPJ;
+        modelstore.name = store.name;
+        return modelstore;
+    }
 
-        modelStore.CNPJ = store.CNPJ;
-        modelStore.name = store.name;
-        List<Purchase> purchases = new List<Purchase>();
-        foreach (PurchaseDTO purch in store.purchases)
-            purchases.Add(Purchase.convertDTOToModel(purch));
-        modelStore.purchases = purchases;
+    public int save()
+    {
+        var id = 0;
+        using (var context = new DaoContext())
+        {
+            var store = new DAO.Store
+            {
+                name = this.name,
+                CNPJ = this.CNPJ
+            };
+            context.Store.Add(store);
 
-        return modelStore;
+            context.SaveChanges();
+            id = store.id;
+        }
+        return id;
     }
 }

@@ -1,5 +1,5 @@
 namespace Model;
-
+using DAO;
 using Interfaces;
 using DTO;
 
@@ -84,5 +84,17 @@ public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, St
         modelStocks.store = Store.convertDTOToModel(stocks.store);
 
         return modelStocks;
+    }
+
+    public int save()
+    {
+        int id = 0;
+
+        using (var context = new DaoContext())
+        {
+            var stocks =  new Stocks();
+        }
+
+        return id;
     }
 }

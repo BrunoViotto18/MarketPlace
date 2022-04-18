@@ -1,5 +1,5 @@
 namespace Model;
-
+using DAO;
 using Enums;
 using Interfaces;
 using DTO;
@@ -138,5 +138,29 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 		modelPurchase.products = products;
 
 		return modelPurchase;
+    }
+
+	public int save()
+    {
+		int id = 0;
+
+		using (var context = new DaoContext())
+        {
+
+			var purchase = new DAO.Purchase
+			{
+				number_confirmation = this.number_confirmation,
+				number_nf = this.number_nf,
+				payment_type = this.payment_type,
+				purchase_status = this.purchase_status,
+				date_purchase = this.date_purchase
+			};
+
+			context.Purchase.Add(purchase);
+			context.SaveChanges();
+
+			id = purchase.id;
+        }
+		return id;
     }
 }

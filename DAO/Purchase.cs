@@ -6,8 +6,8 @@ public class Purchase
     public string number_confirmation;
     public string number_nf;
     public int payment_type;
-    public string purchase_status;
-    public DateTime data_purchase;
+    public int purchase_status;
+    public DateTime date_purchase;
 
     public Client client;
     public Product product;
