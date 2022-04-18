@@ -1,5 +1,5 @@
 namespace Model;
-
+using DTO;
 using Interfaces;
 
 public class Store : IValidateDataObject<Store>
@@ -77,5 +77,11 @@ public class Store : IValidateDataObject<Store>
             return false;
 
         return true;
+    }
+
+    public static Store convertDTOToModel(StoreDTO store)
+    {
+
+        return new Store();
     }
 }

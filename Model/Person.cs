@@ -9,9 +9,7 @@ public class Person
     protected String email;
     protected String phone;
     protected String login;
-
     protected Address address;
-    protected int age;
 
 
     // Construtor
@@ -20,16 +18,6 @@ public class Person
         this.address = address;
     }
 
-
-    // GET & SET
-    public int getAge()
-    {
-        return age;
-    }
-    public void setAge(int age)
-    {
-        this.age = age;
-    }
 
     public String getName()
     {

@@ -2,7 +2,7 @@
 
 namespace Interfaces;
 
-public interface IDataController<T>
+public interface IDataController<T,O>
 {
     public T findById();
     public List<T> getAll();

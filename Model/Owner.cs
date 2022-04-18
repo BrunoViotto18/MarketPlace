@@ -1,4 +1,5 @@
 ﻿namespace Model;
+using DTO;
 using Interfaces;
 
 public class Owner : Person, IValidateDataObject<Owner>
@@ -62,5 +63,14 @@ public class Owner : Person, IValidateDataObject<Owner>
         if(this.date_of_birth == default)
             return false;
         return true;
+    }
+
+    public static Owner convertDTOTOModel(OwnerDTO owner)
+    {
+        Owner modelowner = new Owner(Address.convertDTOToModel(owner.address));
+        modelowner.email = owner.email;
+        modelowner.phone = owner.phone; 
+        modelowner.
+        return modelowner;
     }
 }
