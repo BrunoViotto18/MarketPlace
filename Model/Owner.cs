@@ -1,9 +1,5 @@
 ﻿namespace Model;
-<<<<<<< HEAD
 using DTO;
-=======
-
->>>>>>> 9306d0bdc55449f65b13c25045a00c472da8d697
 using Interfaces;
 using DTO;
 
@@ -73,9 +69,13 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
     public static Owner convertDTOTOModel(OwnerDTO owner)
     {
         Owner modelowner = new Owner(Address.convertDTOToModel(owner.address));
+        modelowner.name = owner.name;
         modelowner.email = owner.email;
-        modelowner.phone = owner.phone; 
-        modelowner.
+        modelowner.date_of_birth = owner.date_of_birth;
+        modelowner.phone = owner.phone;
+        modelowner.document = owner.document;
+        modelowner.login = owner.login;
+        modelowner.passwd = owner.passwd;
         return modelowner;
     }
 }

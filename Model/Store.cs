@@ -82,7 +82,9 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
 
     public static Store convertDTOToModel(StoreDTO store)
     {
-
-        return new Store();
+        Store modelstore = new Store(Owner.convertDTOTOModel(store.owner));
+        modelstore.CNPJ = store.CNPJ;
+        modelstore.name = store.name;
+        return modelstore;
     }
 }

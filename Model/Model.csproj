@@ -14,10 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DTO\DTO.csproj" />
-<<<<<<< HEAD
     <ProjectReference Include="..\DAO\DAO.csproj" />
-=======
->>>>>>> 9306d0bdc55449f65b13c25045a00c472da8d697
   </ItemGroup>
 
   <PropertyGroup>
