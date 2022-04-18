@@ -2,11 +2,10 @@ namespace Model;
 
 using Interfaces;
 
-public class Product : IValidateDataObject<Product>
+public class Product : IValidateDataObject<Product>, IDataController<Product>
 {
     // Atributos
     private String name;
-    private Double unit_price;
     private String bar_code;
 
 
@@ -27,15 +26,6 @@ public class Product : IValidateDataObject<Product>
         this.name = name;
     }
 
-    public Double getUnitprice()
-    {
-        return unit_price;
-    }
-    public void setUnitPrice(Double unit_price)
-    {
-        this.unit_price = unit_price;
-    }
-
     public String getBarCode()
     {
         return bar_code;
@@ -51,9 +41,6 @@ public class Product : IValidateDataObject<Product>
     public Boolean validateObject( Product product)
     {
         if (name == null)
-            return false;
-
-        if (unit_price == default)
             return false;
 
         if (bar_code == null)

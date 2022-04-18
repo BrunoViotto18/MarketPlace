@@ -1,7 +1,7 @@
 ﻿namespace Model;
 using Interfaces;
 
-public class Owner : Person, IValidateDataObject<Owner>
+public class Owner : Person, IValidateDataObject<Owner>, IDataController<Owner>
 {
     // Atributos
     private Guid uuid = Guid.NewGuid();

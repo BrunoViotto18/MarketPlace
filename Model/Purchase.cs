@@ -3,7 +3,7 @@ namespace Model;
 using Enums;
 using Interfaces;
 
-public class Purchase : IValidateDataObject<Purchase>
+public class Purchase : IValidateDataObject<Purchase>, IDataController<Purchase>
 {
     // Atributos
     private DateTime date_purchase;
@@ -11,7 +11,7 @@ public class Purchase : IValidateDataObject<Purchase>
     private String number_nf;
     private int payment_type;
     private int purchase_status;
-    public double purchase_value;
+    public Double purchase_value;
 
     private Client client;
     List<Product> products;

@@ -2,7 +2,7 @@ namespace Model;
 
 using Interfaces;
 
-public class Client : Person, IValidateDataObject<Client>
+public class Client : Person, IValidateDataObject<Client>, IDataController<Client>
 {
     // Atributos
     private Guid uuid = Guid.NewGuid();

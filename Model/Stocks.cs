@@ -2,10 +2,11 @@ namespace Model;
 
 using Interfaces;
 
-public class Stocks : IValidateDataObject<Stocks>
+public class Stocks : IValidateDataObject<Stocks>, IDataController<Stocks>
 {
     // Atributos
     private int quantity;
+    private Double unit_price;
 
     private Product product;
     private Store store;
@@ -19,7 +20,7 @@ public class Stocks : IValidateDataObject<Stocks>
 
 
     // GET & SET
-    public Store GetStore()
+    public Store getStore()
     {
         return store;
     }
@@ -28,7 +29,7 @@ public class Stocks : IValidateDataObject<Stocks>
         this.store = store;
     }
 
-    public int GetQuantity()
+    public int getQuantity()
     {
         return quantity;
     }
@@ -37,7 +38,16 @@ public class Stocks : IValidateDataObject<Stocks>
         this.quantity = quantity;
     }
 
-    public Product GetProduct()
+    public Double getUnitPrice()
+    {
+        return unit_price;
+    }
+    public void setUnitPrice(Double unit_price)
+    {
+        this.unit_price = unit_price;
+    }
+
+    public Product getProduct()
     {
         return product;
     }

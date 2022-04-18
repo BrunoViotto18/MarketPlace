@@ -2,7 +2,7 @@ namespace Model;
 
 using Interfaces;
 
-public class WishList : IValidateDataObject<WishList>
+public class WishList : IValidateDataObject<WishList>, IDataController<WishList>
 {
     // Atributos
     private Client client;

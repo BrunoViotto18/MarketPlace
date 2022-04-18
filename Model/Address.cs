@@ -2,7 +2,7 @@
 
 using Interfaces;
 
-public class Address : IValidateDataObject<Address>
+public class Address : IValidateDataObject<Address>, IDataController<Address>
 {
     // Atributos
     private String street;

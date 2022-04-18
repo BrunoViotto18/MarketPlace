@@ -2,7 +2,7 @@ namespace Model;
 
 using Interfaces;
 
-public class Store : IValidateDataObject<Store>
+public class Store : IValidateDataObject<Store>, IDataController<Store>
 {
     // Atributos
     private String name;
