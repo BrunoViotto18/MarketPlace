@@ -1,8 +1,9 @@
 namespace Model;
 
 using Interfaces;
+using DTO;
 
-public class Store : IValidateDataObject<Store>, IDataController<Store>
+public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store>
 {
     // Atributos
     private String name;

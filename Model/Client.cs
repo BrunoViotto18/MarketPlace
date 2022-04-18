@@ -1,11 +1,12 @@
 namespace Model;
 
 using Interfaces;
+using DTO;
 
-public class Client : Person, IValidateDataObject<Client>, IDataController<Client>
+public class Client : Person, IValidateDataObject<Client>, IDataController<ClientDTO, Client>
 {
     // Atributos
-    private Guid uuid = Guid.NewGuid();
+    private Guid uuid;
 
     private static Client instance;
 
@@ -13,7 +14,7 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
     // Construtor
     public Client(Address address) : base(address)
     {
-
+        this.uuid = Guid.NewGuid();
     }
     
 

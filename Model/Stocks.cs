@@ -1,8 +1,9 @@
 namespace Model;
 
 using Interfaces;
+using DTO;
 
-public class Stocks : IValidateDataObject<Stocks>, IDataController<Stocks>
+public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, Stocks>
 {
     // Atributos
     private int quantity;

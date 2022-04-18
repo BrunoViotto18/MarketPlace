@@ -1,8 +1,9 @@
 namespace Model;
 
 using Interfaces;
+using DTO;
 
-public class Product : IValidateDataObject<Product>, IDataController<Product>
+public class Product : IValidateDataObject<Product>, IDataController<ProductDTO, Product>
 {
     // Atributos
     private String name;

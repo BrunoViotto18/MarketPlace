@@ -2,8 +2,9 @@ namespace Model;
 
 using Enums;
 using Interfaces;
+using DTO;
 
-public class Purchase : IValidateDataObject<Purchase>, IDataController<Purchase>
+public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseDTO, Purchase>
 {
     // Atributos
     private DateTime date_purchase;
