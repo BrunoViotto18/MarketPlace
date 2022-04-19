@@ -89,7 +89,7 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
 
         using (var context = new DaoContext())
         {
-            var Client = new DAO.Client
+            var client = new DAO.Client
             {
                 name = this.name,
                 email = this.email,
@@ -98,9 +98,15 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
                 login = this.login,
                 passwd = this.passwd,
                 document = this.document
-                address = this.address
             };
+
+            context.Client.Add(client);
+            context.SaveChanges();
+
+            id = client.id;
         }
+
+        return id;
     }
 
     public ClientDTO convertModelToDTO()

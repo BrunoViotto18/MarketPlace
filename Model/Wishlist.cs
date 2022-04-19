@@ -66,21 +66,29 @@ public class WishList : IValidateDataObject<WishList>, IDataController<WishListD
         return modelWishlist;
     }
 
-    public int save()
+    public int save(int clientId, int productId)
     {
-        var id = 0;
+        int id;
+
         using (var context = new DaoContext())
         {
+            var clientDao = context.Client.Where(c => c.id == clientId).Single();
+            var productDao = context.Product.Where(p => p.id == productId).Single();
+
             var wishlist = new DAO.WishList
             {
-
+                client = clientDao,
+                product = productDao
             };
 
             context.WishList.Add(wishlist);
+            context.Entry(wishlist.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            context.Entry(wishlist.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
             context.SaveChanges();
 
             id = wishlist.id;
         }
+
         return id;
     }
 

@@ -88,21 +88,28 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
         return modelstore;
     }
 
-    public int save()
+    public int save(int ownerID)
     {
-        var id = 0;
+        int id;
+
         using (var context = new DaoContext())
         {
+            var ownerDao = context.Owner.Where(o => o.id == ownerID).Single();
+
             var store = new DAO.Store
             {
                 name = this.name,
-                CNPJ = this.CNPJ
+                CNPJ = this.CNPJ,
+                owner = ownerDao
             };
-            context.Store.Add(store);
 
+            context.Store.Add(store);
+            context.Entry(store.owner).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
             context.SaveChanges();
+
             id = store.id;
         }
+
         return id;
     }
 

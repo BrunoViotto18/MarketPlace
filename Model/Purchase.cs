@@ -89,7 +89,14 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 		this.client = client;
 	}
 
-
+	public Store getStore()
+	{
+		return store;
+	}
+	public void setStore(Store store)
+	{
+		this.store = store;
+	}
 
 	public List<Product> getProducts()
 	{
@@ -143,33 +150,36 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 		return modelPurchase;
     }
 
-	public int save()
+	public int save(int clientId, int storeId, int productId)
     {
-		int id = 0;
+		int id;
 
 		using (var context = new DaoContext())
-        {
-			var purchase = new DAO.Purchase
+		{
+			var clientDao = context.Client.Where(c => c.id == clientId).Single();
+			var storeDao = context.Store.Where(s => s.id == storeId).Single();
+			var productDao = context.Product.Where(p => p.id == productId).Single();
+
+			DAO.Purchase purchase = new DAO.Purchase
 			{
 				number_confirmation = this.number_confirmation,
 				number_nf = this.number_nf,
 				payment_type = this.payment_type,
 				purchase_status = this.purchase_status,
-				date_purchase = this.date_purchase
+				date_purchase = this.date_purchase,
+				purchase_value = this.purchase_value,
+				client = clientDao,
+				store = storeDao,
+				product = productDao
 			};
 
-			foreach (var prod in this.products)
-			{
-				DAO.Product product = new DAO.Product();
-				product.name = prod.getName();
-				product.bar_code = prod.getBarCode();
-				purchase.product = product;
+			context.Purchase.Add(purchase);
+			context.Entry(purchase.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+			context.Entry(purchase.store).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+			context.Entry(purchase.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+			context.SaveChanges();
 
-				context.Purchase.Add(purchase);
-				context.SaveChanges();
-
-				id = purchase.id;
-			}
+			id = purchase.id;
 		}
 
 		return id;

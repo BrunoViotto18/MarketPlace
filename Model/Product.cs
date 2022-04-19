@@ -62,7 +62,7 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
 
     public int save()
     {
-        int id = 0;
+        int id;
 
         using (var context = new DaoContext())
         {
@@ -77,6 +77,7 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
 
             id = product.id;
         }
+
         return id;
     }
 

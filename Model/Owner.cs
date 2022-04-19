@@ -83,9 +83,10 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
 
     public int save()
     {
-        var id = 0;
+        int id;
 
-        using(var context = new DaoContext()){
+        using(var context = new DaoContext())
+        {
             var owner = new DAO.Owner()
             {
                 name = this.name,

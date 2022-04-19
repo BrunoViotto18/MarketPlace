@@ -101,7 +101,7 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
 
     public int save()
     {
-        var id = 0;
+        int id;
 
         using (var context = new DaoContext())
         {
@@ -118,13 +118,15 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
             context.SaveChanges();
 
             id = address.id;
-
         }
+
         return id;
     }
+
     public AddressDTO convertModelToDTO()
     {
         AddressDTO addressDTO = new AddressDTO();
+
         addressDTO.street = this.street;    
         addressDTO.state = this.state;
         addressDTO.city = this.city;    
