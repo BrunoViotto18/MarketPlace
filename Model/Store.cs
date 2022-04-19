@@ -17,7 +17,6 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
     public Store(Owner owner)
     {
         this.owner = owner;
-        // this.purchases = new List<Purchase>();
     }
 
 
@@ -55,7 +54,7 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
     }
     
 
-    //M�todos
+    //Métodos
 
     // Adiciona uma nova compra
     public void addNewPurchase(Purchase purchase)

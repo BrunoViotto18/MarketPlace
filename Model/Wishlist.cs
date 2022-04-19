@@ -35,7 +35,7 @@ public class WishList : IValidateDataObject<WishList>, IDataController<WishListD
     }
 
 
-    // M�todos
+    // Métodos
 
     // Adiciona um produto para a Wishlist
     public void addProductToWishList(Product product)

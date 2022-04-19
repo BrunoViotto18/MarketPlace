@@ -105,6 +105,8 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
 
             id = client.id;
         }
+
+        return id;
     }
 
     public ClientDTO convertModelToDTO()
