@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Model;
 using DTO;
+using System;
 
 namespace testesAutomatizados
 {
@@ -65,11 +66,14 @@ namespace testesAutomatizados
 
             clientDTO.phone = "41999999999";
 
-            var clientModel = Client.converteDTOToModel(clientDTO);
+            var clientModel = Client.convertDTOToModel(clientDTO);
 
             if(clientModel.validateObject()){
-                id = clientModel.save();
+                    id = clientModel.save();
             }
+
+            Console.WriteLine($"{clientModel.getName()}, {clientModel.getEmail()}, {clientModel.getDate_of_birth()}, {clientModel.getPhone()}, {clientModel.getLogin()}, {clientModel.getPasswd()}, {clientModel.getDocument()}, ");
+            Console.WriteLine($"{clientModel.getAddress().getStreet()}, {clientModel.getAddress().getCity()}, {clientModel.getAddress().getState()}, {clientModel.getAddress().getCountry()}, {clientModel.getAddress().getPostalCode()}, ");
 
             Assert.That(id, Is.Not.EqualTo(0));
         }
@@ -106,7 +110,7 @@ namespace testesAutomatizados
 
             ownerDTO.phone = "41999999999";
 
-            var ownerModel = Owner.converteDTOToModel(ownerDTO);
+            var ownerModel = Owner.convertDTOToModel(ownerDTO);
 
             if(ownerModel.validateObject()){
                 id = ownerModel.save();

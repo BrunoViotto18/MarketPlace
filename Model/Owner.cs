@@ -3,7 +3,7 @@ using DAO;
 using Interfaces;
 using DTO;
 
-public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDTO, Owner>
+public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owner>
 {
     // Atributos
     private Guid uuid;
@@ -41,7 +41,7 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
         return owner;
     }
 
-    public Boolean validateObject(Owner obj) {
+    public Boolean validateObject() {
 
         if (this.address == null)
             return false;
@@ -63,10 +63,14 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
 
         if (this.date_of_birth == default)
             return false;
+
+        if (this.passwd == null)
+            return false;
+
         return true;
     }
 
-    public static Owner convertDTOTOModel(OwnerDTO owner)
+    public static Owner convertDTOToModel(OwnerDTO owner)
     {
         Owner modelOwner = new Owner(Address.convertDTOToModel(owner.address));
 
@@ -85,8 +89,17 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
     {
         int id;
 
-        using(var context = new DaoContext())
+        using (var context = new DaoContext())
         {
+            var addressDao = new DAO.Address
+            {
+                street = this.address.getStreet(),
+                city = this.address.getCity(),
+                state = this.address.getState(),
+                country = this.address.getCountry(),
+                postal_code = this.address.getPostalCode()
+            };
+
             var owner = new DAO.Owner()
             {
                 name = this.name,
@@ -95,7 +108,8 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
                 phone = this.phone,
                 login = this.login,
                 passwd = this.passwd,
-                document = this.document
+                document = this.document,
+                address = addressDao
             };
             
             context.Owner.Add(owner);

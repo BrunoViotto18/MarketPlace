@@ -4,7 +4,7 @@ using Enums;
 using Interfaces;
 using DTO;
 
-public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseDTO, Purchase>
+public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purchase>
 {
     // Atributos
     private DateTime date_purchase;
@@ -115,7 +115,7 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 		throw new NotImplementedException();
     }
 
-    public Boolean validateObject(Purchase obj){
+    public Boolean validateObject(){
         if(this.date_purchase == default)
             return false; 
         

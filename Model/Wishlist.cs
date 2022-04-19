@@ -4,7 +4,7 @@ using Interfaces;
 using DTO;
 using DAO;
 
-public class WishList : IValidateDataObject<WishList>, IDataController<WishListDTO, WishList>
+public class WishList : IValidateDataObject, IDataController<WishListDTO, WishList>
 {
     // Atributos
     private Client client;
@@ -43,12 +43,12 @@ public class WishList : IValidateDataObject<WishList>, IDataController<WishListD
         products.Add(product);
     }
 
-    public Boolean validateObject(WishList wishlist)
+    public Boolean validateObject()
     {
-        if (client == null)
+        if (this.client == null)
             return false;
 
-        if (products == null)
+        if (this.products == null)
             return false;
 
         return true;

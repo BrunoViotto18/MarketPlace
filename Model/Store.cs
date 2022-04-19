@@ -3,7 +3,7 @@ using DTO;
 using DAO;
 using Interfaces;
 
-public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store>
+public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 {
     // Atributos
     private String name;
@@ -62,18 +62,18 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
         purchases.Add(purchase);
     }
 
-    public Boolean validateObject(Store store)
+    public Boolean validateObject()
     {
-        if (name == null)
+        if (this.name == null)
             return false;
 
-        if (CNPJ == null)
+        if (this.CNPJ == null)
             return false;
 
-        if (owner == null)
+        if (this.owner == null)
             return false;
 
-        if (purchases == null)
+        if (this.purchases == null)
             return false;
 
         return true;
@@ -81,7 +81,7 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
 
     public static Store convertDTOToModel(StoreDTO store)
     {
-        Store modelstore = new Store(Owner.convertDTOTOModel(store.owner));
+        Store modelstore = new Store(Owner.convertDTOToModel(store.owner));
         modelstore.CNPJ = store.CNPJ;
         modelstore.name = store.name;
         return modelstore;

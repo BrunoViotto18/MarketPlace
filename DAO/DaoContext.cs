@@ -71,14 +71,15 @@ public class DaoContext : DbContext
 
         modelBuilder.Entity<WishList>(entity =>
         {
+            entity.HasKey(e => e.id);
             entity.HasOne(e => e.client);
             entity.HasOne(e => e.product);
-            entity.HasKey(e => e.id);
         }
         );
 
         modelBuilder.Entity<Store>(entity =>
         {
+            entity.HasKey(p => p.id);
             entity.Property(e => e.CNPJ);
             entity.HasOne(f => f.owner);
         }

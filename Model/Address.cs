@@ -3,7 +3,7 @@ using DAO;
 using Interfaces;
 using DTO;
 
-public class Address : IValidateDataObject<Address>, IDataController<AddressDTO, Address>
+public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 {
     // Atributos
     private String street;
@@ -74,9 +74,9 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
     // Métodos
 
     // Valida se um objeto tem todos os seus campos diferente de nulo
-    public Boolean validateObject(Address address)
+    public Boolean validateObject()
     {
-        if (street == null)
+        if (this.street == null)
             return false;
 
         if (this.city == null)

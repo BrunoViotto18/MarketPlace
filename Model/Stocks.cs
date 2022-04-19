@@ -4,7 +4,7 @@ using Interfaces;
 using DTO;
 using DAO;
 
-public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, Stocks>
+public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
 {
     // Atributos
     private int quantity;
@@ -61,15 +61,15 @@ public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, St
 
     // Métodos
 
-    public Boolean validateObject(Stocks stocks)
+    public Boolean validateObject()
     {
-        if (quantity == 0)
+        if (this.quantity == 0)
             return false;
 
-        if (product == null)
+        if (this.product == null)
             return false;
 
-        if (store == null)
+        if (this.store == null)
             return false;
 
         return true;
