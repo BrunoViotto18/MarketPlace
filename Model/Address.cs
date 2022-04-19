@@ -134,4 +134,26 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
 
         return addressDTO;
     }
+
+    public void delete()
+    {
+
+    }
+
+    public void update()
+    {
+
+    }
+
+    public AddressDTO findById()
+    {
+
+        return new AddressDTO();
+    }
+
+    public List<AddressDTO> getAll()
+    {
+        List<AddressDTO> addresses = new List<AddressDTO>();
+        return addresses;
+    }
 }

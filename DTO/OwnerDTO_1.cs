@@ -1,6 +1,6 @@
 ﻿namespace DTO;
 
-public class ClientDTO
+public class Client
 {
     public String name;
     public DateTime date_of_birth;

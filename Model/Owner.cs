@@ -80,12 +80,21 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
        
         return modelOwner;
     }
-
     public int save()
     {
         var id = 0;
 
-        using(var context = new DaoContext()){
+        using (var context = new DaoContext())
+        {
+            var address = new DAO.Address
+            {
+                street = this.address.getStreet(),
+                city = this.address.getCity(),
+                state = this.address.getState(),
+                country = this.address.getCountry(),
+                postal_code = this.address.getPostalCode()
+            };
+
             var owner = new DAO.Owner()
             {
                 name = this.name,
@@ -94,9 +103,10 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
                 phone = this.phone,
                 login = this.login,
                 passwd = this.passwd,
-                document = this.document
+                document = this.document,
+                address = address
             };
-            
+
             context.Owner.Add(owner);
 
             context.SaveChanges();
@@ -121,5 +131,27 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
         dtoClient.address = this.address.convertModelToDTO();
 
         return dtoClient;
+    }
+
+    public void delete()
+    {
+
+    }
+
+    public void update()
+    {
+
+    }
+
+    public OwnerDTO findById()
+    {
+
+        return new OwnerDTO();
+    }
+
+    public List<OwnerDTO> getAll()
+    {
+        List<OwnerDTO> client = new List<OwnerDTO>();
+        return client;
     }
 }

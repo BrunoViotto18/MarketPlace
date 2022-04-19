@@ -9,6 +9,6 @@ public class PurchaseDTO
     public String number_confirmation;
     public String number_nf;
 
-    public ClientDTO client;
+    public OwnerDTO client;
     public List<ProductDTO> products;
 }

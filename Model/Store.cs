@@ -93,6 +93,27 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
         var id = 0;
         using (var context = new DaoContext())
         {
+            var address = new DAO.Address
+            {
+                street = this.owner.getAddress().getStreet(),
+                city = this.owner.getAddress().getCity(),
+                state = this.owner.getAddress().getState(),
+                country = this.owner.getAddress().getCountry(),
+                postal_code = this.owner.getAddress().getPostalCode()
+            };
+
+            var owner = new DAO.Owner()
+            {
+                name = this.owner.getName(),
+                email = this.owner.getEmail(),
+                date_of_birth = this.owner.getDate_of_birth(),
+                phone = this.owner.getPhone(),
+                login = this.owner.getLogin(),
+                passwd = this.owner.getPassword(),
+                document = this.owner.getDocument(),
+                address = address
+            };
+
             var store = new DAO.Store
             {
                 name = this.name,
@@ -120,4 +141,27 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
 
         return dtoStore;
     }
+
+    public void delete()
+    {
+
+    }
+
+    public void update()
+    {
+
+    }
+
+    public StoreDTO findById()
+    {
+
+        return new StoreDTO();
+    }
+
+    public List<StoreDTO> getAll()
+    {
+        List<StoreDTO> stores = new List<StoreDTO>(); 
+        return stores;
+    }
+
 }

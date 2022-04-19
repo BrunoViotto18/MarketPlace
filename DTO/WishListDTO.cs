@@ -2,6 +2,6 @@
 
 public class WishListDTO
 {
-    public ClientDTO client;
+    public OwnerDTO client;
     public List<ProductDTO> products;
 }

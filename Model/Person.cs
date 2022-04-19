@@ -75,4 +75,11 @@ public class Person
     {
         this.login = login;
     }
+
+    public String getPassword()
+    {
+        return passwd;
+    }
+
+
 }
