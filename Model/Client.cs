@@ -97,8 +97,7 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
                 phone = this.phone,
                 login = this.login,
                 passwd = this.passwd,
-                document = this.document,
-                address = this.address
+                document = this.document
             };
         }
     }
