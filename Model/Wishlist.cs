@@ -2,6 +2,7 @@ namespace Model;
 
 using Interfaces;
 using DTO;
+using DAO;
 
 public class WishList : IValidateDataObject<WishList>, IDataController<WishListDTO, WishList>
 {
@@ -63,6 +64,24 @@ public class WishList : IValidateDataObject<WishList>, IDataController<WishListD
         modelWishlist.products = products;
 
         return modelWishlist;
+    }
+
+    public int save()
+    {
+        var id = 0;
+        using (var context = new DaoContext())
+        {
+            var wishlist = new DAO.WishList
+            {
+
+            };
+
+            context.WishList.Add(wishlist);
+            context.SaveChanges();
+
+            id = wishlist.id;
+        }
+        return id;
     }
 
     public WishListDTO convertModelToDTO()

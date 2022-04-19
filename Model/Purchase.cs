@@ -15,6 +15,7 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
     public Double purchase_value;
 
     private Client client;
+	private Store store;
     List<Product> products;
 
 
@@ -88,6 +89,8 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 		this.client = client;
 	}
 
+
+
 	public List<Product> getProducts()
 	{
 		return products;
@@ -149,7 +152,6 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 
 		using (var context = new DaoContext())
         {
-
 			var purchase = new DAO.Purchase
 			{
 				number_confirmation = this.number_confirmation,
@@ -159,11 +161,20 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 				date_purchase = this.date_purchase
 			};
 
-			context.Purchase.Add(purchase);
-			context.SaveChanges();
+			foreach (var prod in this.products)
+			{
+				DAO.Product product = new DAO.Product();
+				product.name = prod.getName();
+				product.bar_code = prod.getBarCode();
+				purchase.product = product;
 
-			id = purchase.id;
-        }
+				context.Purchase.Add(purchase);
+				context.SaveChanges();
+
+				id = purchase.id;
+			}
+		}
+
 		return id;
     }
 

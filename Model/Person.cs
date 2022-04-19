@@ -76,10 +76,12 @@ public class Person
         this.login = login;
     }
 
-    public String getPassword()
+    public String getPasswd()
     {
         return passwd;
     }
-
-
+    public void setPasswd(String passwd)
+    {
+        this.passwd = passwd;
+    }
 }

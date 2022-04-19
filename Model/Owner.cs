@@ -108,7 +108,6 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
             };
 
             context.Owner.Add(owner);
-
             context.SaveChanges();
 
             id = owner.id;
