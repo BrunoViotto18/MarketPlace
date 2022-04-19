@@ -109,7 +109,7 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
                 date_of_birth = this.owner.getDate_of_birth(),
                 phone = this.owner.getPhone(),
                 login = this.owner.getLogin(),
-                passwd = this.owner.getPassword(),
+                passwd = this.owner.getPasswd(),
                 document = this.owner.getDocument(),
                 address = address
             };

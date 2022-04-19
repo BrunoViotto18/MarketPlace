@@ -120,4 +120,27 @@ public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, St
 
         return dtoStocks;
     }
+
+    public void delete()
+    {
+
+    }
+
+    public void update()
+    {
+
+    }
+
+    public StocksDTO findById()
+    {
+
+        return new StocksDTO();
+    }
+
+    public List<StocksDTO> getAll()
+    {
+        List<StocksDTO> stocks = new List<StocksDTO>();
+        return stocks;
+    }
+
 }

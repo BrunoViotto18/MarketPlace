@@ -91,7 +91,7 @@ public class DaoContext : DbContext
             entity.Property(e => e.number_nf);
             entity.Property(e => e.payment_type);
             entity.Property(e => e.purchase_status);
-            entity.Property(e => e.data_purchase);
+            entity.Property(e => e.date_purchase);
             entity.HasOne(f => f.client);
             entity.HasOne(f => f.product);
             entity.HasOne(f => f.store);

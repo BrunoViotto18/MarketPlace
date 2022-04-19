@@ -4,7 +4,7 @@ using Interfaces;
 using DTO;
 using DAO;
 
-public class Client : Person, IValidateDataObject<Client>, IDataController<OwnerDTO, Client>
+public class Client : Person, IValidateDataObject<Client>, IDataController<ClientDTO, Client>
 {
     // Atributos
     private Guid uuid;
@@ -68,7 +68,7 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Owner
         return true;
     }
 
-    public static Client convertDTOToModel(OwnerDTO client)
+    public static Client convertDTOToModel(ClientDTO client)
     {
         Client modelClient = new Client(Address.convertDTOToModel(client.address));
 
@@ -120,9 +120,9 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Owner
         return id;
     }
 
-    public OwnerDTO convertModelToDTO()
+    public ClientDTO convertModelToDTO()
     {
-        OwnerDTO dtoClient = new OwnerDTO();
+        ClientDTO dtoClient = new ClientDTO();
 
         dtoClient.name = this.name;
         dtoClient.date_of_birth = this.date_of_birth;
@@ -146,15 +146,17 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Owner
 
     }
 
-    public OwnerDTO findById()
+    public ClientDTO findById()
     {
 
-        return new OwnerDTO();
+        return new ClientDTO();
     }
 
-    public List<OwnerDTO> getAll()
+    public List<ClientDTO> getAll()
     {
-        List<OwnerDTO> client = new List<OwnerDTO>();
+        List<ClientDTO> client = new List<ClientDTO>();
         return client;
     }
+
+
 }

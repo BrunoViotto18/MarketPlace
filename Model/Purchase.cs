@@ -207,16 +207,16 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 
 	}
 
-	public ClientDTO findById()
+	public PurchaseDTO findById()
 	{
 
-		return new ClientDTO();
+		return new PurchaseDTO();
 	}
 
-	public List<ClientDTO> getAll()
+	public List<PurchaseDTO> getAll()
 	{
-		List<ClientDTO> client = new List<ClientDTO>();
-		return client;
+		List<PurchaseDTO> purchase= new List<PurchaseDTO>();
+		return purchase;
 	}
 
 }
