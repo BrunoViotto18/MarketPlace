@@ -127,4 +127,27 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
 
         return dtoStore;
     }
+
+    public void delete()
+    {
+
+    }
+
+    public void update()
+    {
+
+    }
+
+    public StoreDTO findById()
+    {
+
+        return new StoreDTO();
+    }
+
+    public List<StoreDTO> getAll()
+    {
+        List<StoreDTO> stores = new List<StoreDTO>(); 
+        return stores;
+    }
+
 }

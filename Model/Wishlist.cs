@@ -104,5 +104,27 @@ public class WishList : IValidateDataObject<WishList>, IDataController<WishListD
 
         return dtoWishlist;
     }
+
+    public void delete()
+    {
+
+    }
+
+    public void update()
+    {
+
+    }
+
+    public WishListDTO findById()
+    {
+
+        return new WishListDTO();
+    }
+
+    public List<WishListDTO> getAll()
+    {
+        List<WishListDTO> wishlist = new List<WishListDTO>();
+        return wishlist;
+    }
 }
  

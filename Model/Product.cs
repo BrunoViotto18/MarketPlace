@@ -90,4 +90,26 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
 
         return dtoProduct;
     }
+
+    public void delete()
+    {
+
+    }
+
+    public void update()
+    {
+
+    }
+
+    public ProductDTO findById()
+    {
+
+        return new ProductDTO();
+    }
+
+    public List<ProductDTO> getAll()
+    {
+        List<ProductDTO> prod = new List<ProductDTO>();
+        return prod;
+    }
 }

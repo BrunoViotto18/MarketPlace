@@ -82,7 +82,7 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
 
         return modelClient;
     }
-    
+
     public int save()
     {
         int id;
@@ -105,8 +105,6 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
 
             id = client.id;
         }
-
-        return id;
     }
 
     public ClientDTO convertModelToDTO()
@@ -124,4 +122,28 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
 
         return dtoClient;
     }
+
+    public void delete()
+    {
+
+    }
+
+    public void update()
+    {
+
+    }
+
+    public ClientDTO findById()
+    {
+
+        return new ClientDTO();
+    }
+
+    public List<ClientDTO> getAll()
+    {
+        List<ClientDTO> client = new List<ClientDTO>();
+        return client;
+    }
+
+
 }

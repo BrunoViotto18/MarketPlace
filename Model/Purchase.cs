@@ -142,9 +142,12 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 		modelPurchase.purchase_status = purchase.purchase_status;
 		modelPurchase.purchase_value = purchase.purchase_value;
 		modelPurchase.client = Client.convertDTOToModel(purchase.client);
+
 		List<Product> products = new List<Product>();
+
 		foreach (ProductDTO prod in purchase.products)
 			products.Add(Product.convertDTOToModel(prod));
+
 		modelPurchase.products = products;
 
 		return modelPurchase;
@@ -203,4 +206,27 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 
 		return dtoPurchase;
 	}
+
+	public void delete()
+	{
+
+	}
+
+	public void update()
+	{
+
+	}
+
+	public PurchaseDTO findById()
+	{
+
+		return new PurchaseDTO();
+	}
+
+	public List<PurchaseDTO> getAll()
+	{
+		List<PurchaseDTO> purchase= new List<PurchaseDTO>();
+		return purchase;
+	}
+
 }

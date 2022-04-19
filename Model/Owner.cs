@@ -122,4 +122,26 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
 
         return dtoClient;
     }
+
+    public void delete()
+    {
+
+    }
+
+    public void update()
+    {
+
+    }
+
+    public OwnerDTO findById()
+    {
+
+        return new OwnerDTO();
+    }
+
+    public List<OwnerDTO> getAll()
+    {
+        List<OwnerDTO> client = new List<OwnerDTO>();
+        return client;
+    }
 }

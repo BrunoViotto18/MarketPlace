@@ -1,4 +1,5 @@
 ﻿namespace Model;
+using DTO;
 
 public class Person
 {
@@ -84,4 +85,6 @@ public class Person
     {
         this.passwd = passwd;
     }
+
+
 }
