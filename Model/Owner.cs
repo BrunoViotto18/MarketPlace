@@ -93,8 +93,8 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
                 date_of_birth = this.date_of_birth,
                 phone = this.phone,
                 login = this.login,
-                passwd = this.passwd
-                document = this.document;
+                passwd = this.passwd,
+                document = this.document
             };
             
             context.Owner.Add(owner);
@@ -102,8 +102,24 @@ public class Owner : Person, IValidateDataObject<Owner>, IDataController<OwnerDT
             context.SaveChanges();
 
             id = owner.id;
-
         }
+
         return id;
+    }
+
+    public OwnerDTO convertModelToDTO()
+    {
+        OwnerDTO dtoClient = new OwnerDTO();
+
+        dtoClient.name = this.name;
+        dtoClient.date_of_birth = this.date_of_birth;
+        dtoClient.document = this.document;
+        dtoClient.email = this.email;
+        dtoClient.phone = this.phone;
+        dtoClient.login = this.login;
+        dtoClient.passwd = this.passwd;
+        dtoClient.address = this.address.convertModelToDTO();
+
+        return dtoClient;
     }
 }
