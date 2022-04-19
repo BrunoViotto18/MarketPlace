@@ -68,12 +68,11 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
         {
             var product = new DAO.Product
             {
-                name = name,
-                bar_code = bar_code
+                name = this.name,
+                bar_code = this.bar_code
             };
 
             context.Product.Add(product);
-
             context.SaveChanges();
 
             id = product.id;

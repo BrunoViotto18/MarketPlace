@@ -98,6 +98,7 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
                 login = this.login,
                 passwd = this.passwd,
                 document = this.document
+                address = this.address
             };
         }
     }

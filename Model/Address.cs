@@ -115,7 +115,6 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
             };
 
             context.Address.Add(address);
-
             context.SaveChanges();
 
             id = address.id;

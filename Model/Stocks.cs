@@ -1,7 +1,8 @@
 namespace Model;
-using DAO;
+
 using Interfaces;
 using DTO;
+using DAO;
 
 public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, Stocks>
 {
@@ -58,7 +59,7 @@ public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, St
     }
 
 
-    // M�todos
+    // Métodos
 
     public Boolean validateObject(Stocks stocks)
     {
@@ -92,7 +93,17 @@ public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, St
 
         using (var context = new DaoContext())
         {
-            var stocks =  new Stocks();
+            var product = new DAO.Product
+            {
+                name = this.product.getName(),
+                bar_code = this.product.getBarCode()
+            };
+
+            DAO.Stocks stocks = new DAO.Stocks
+            {
+                quantity = this.quantity,
+                unit_price = this.unit_price,
+            };
         }
 
         return id;
