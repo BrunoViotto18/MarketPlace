@@ -11,5 +11,5 @@ public class PurchaseDTO
 
     public StoreDTO store;
     public ClientDTO client;
-    public List<ProductDTO> productsDTO;
+    public List<ProductDTO> productsDTO = new List<ProductDTO>();
 }

@@ -73,15 +73,16 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
 
     public static Client convertDTOToModel(ClientDTO client)
     {
-        Client modelClient = new Client(Address.convertDTOToModel(client.address));
-
-        modelClient.name = client.name;
-        modelClient.email = client.email;
-        modelClient.date_of_birth = client.date_of_birth;
-        modelClient.phone = client.phone;
-        modelClient.document = client.document;
-        modelClient.login = client.login;
-        modelClient.passwd = client.passwd;
+        Client modelClient = new Client(Address.convertDTOToModel(client.address))
+        {
+            name = client.name,
+            email = client.email,
+            date_of_birth = client.date_of_birth,
+            phone = client.phone,
+            document = client.document,
+            login = client.login,
+            passwd = client.passwd
+        };
 
         return modelClient;
     }

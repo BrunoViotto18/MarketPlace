@@ -14,12 +14,12 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
 
     // Construtor
-    public Store(Owner owner)
+    private Store(Owner owner)
     {
         this.owner = owner;
     }
 
-
+    public Store() { }
     // GET & SET
     public String getName()
     {
@@ -70,30 +70,31 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         if (this.CNPJ == null)
             return false;
 
-        if (this.owner == null)
+        /*if (this.owner == null)
             return false;
 
         if (this.purchases == null)
-            return false;
+            return false;*/
 
         return true;
     }
 
     public static Store convertDTOToModel(StoreDTO store)
     {
-        Store modelstore = new Store(Owner.convertDTOToModel(store.owner));
+        // Store modelstore = new Store(Owner.convertDTOToModel(store.owner));
+        Store modelstore = new Store();
         modelstore.CNPJ = store.CNPJ;
         modelstore.name = store.name;
         return modelstore;
     }
 
-    public int save(int ownerID)
+    public int save(int ownerId)
     {
         int id;
 
         using (var context = new DAOContext())
         {
-            var ownerDao = context.Owner.Where(o => o.id == ownerID).Single();
+            var ownerDao = context.Owner.Where(o => o.id == ownerId).Single();
 
             var store = new DAO.Store
             {

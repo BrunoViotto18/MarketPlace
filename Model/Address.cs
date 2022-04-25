@@ -96,7 +96,15 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 
     public static Address convertDTOToModel(AddressDTO address)
     {
-        return new Address(address.street, address.city, address.street, address.country, address.postal_code);
+        var modelAddress = new Address(
+            address.street,
+            address.city,
+            address.state,
+            address.country,
+            address.postal_code
+        );
+
+        return modelAddress;
     }
 
     public int save()

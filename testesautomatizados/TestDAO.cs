@@ -627,7 +627,20 @@ namespace testesAutomatizados
 
             storeDTO1.name = "Loja 98";
 
-            storeDTO1.CNPJ = "52647825458";      
+            storeDTO1.CNPJ = "52647825458";
+
+
+            var addressDTO5 = new AddressDTO();
+
+            addressDTO5.street = "rua cliente 1";
+
+            addressDTO5.state = "estado cliente 1";
+
+            addressDTO5.city = "cidade cliente 1";
+
+            addressDTO5.country = "pais cliente 1";
+
+            addressDTO5.postal_code = "12cliente5";
 
             var clientDTO5 = new ClientDTO();
 
@@ -642,6 +655,8 @@ namespace testesAutomatizados
             clientDTO5.phone = "41999999999";
 
             clientDTO5.document = "753256842";
+
+            clientDTO5.address = addressDTO5;
             
             clientDTO5.date_of_birth = new DateTime(2002, 5, 1, 8, 30, 30);
 
