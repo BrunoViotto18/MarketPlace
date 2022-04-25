@@ -1,6 +1,6 @@
 ﻿using DAO;
 
-using var context = new DaoContext();
+using var context = new DAOContext();
 context.Database.EnsureCreated();
 
 //context.Address.Add(new Address

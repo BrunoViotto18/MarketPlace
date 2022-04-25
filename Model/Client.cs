@@ -90,7 +90,7 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
     {
         int id;
 
-        using (var context = new DaoContext())
+        using (var context = new DAOContext())
         {
             var addressDao = new DAO.Address
             {

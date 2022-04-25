@@ -136,7 +136,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		Purchase modelPurchase = new Purchase();
 
 		modelPurchase.date_purchase = purchase.data_purchase;
-		modelPurchase.number_confirmation = purchase.number_confirmation;
+		modelPurchase.number_confirmation = purchase.confirmation_number;
 		modelPurchase.number_nf = purchase.number_nf;
 		modelPurchase.payment_type = purchase.payment_type;
 		modelPurchase.purchase_status = purchase.purchase_status;
@@ -144,8 +144,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		modelPurchase.client = Client.convertDTOToModel(purchase.client);
 
 		List<Product> products = new List<Product>();
-
-		foreach (ProductDTO prod in purchase.products)
+		foreach (ProductDTO prod in purchase.productsDTO)
 			products.Add(Product.convertDTOToModel(prod));
 
 		modelPurchase.products = products;
@@ -153,15 +152,14 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		return modelPurchase;
     }
 
-	public int save(int clientId, int storeId, int productId)
+	public int save()
     {
 		int id;
 
-		using (var context = new DaoContext())
+		using (var context = new DAOContext())
 		{
-			var clientDao = context.Client.Where(c => c.id == clientId).Single();
-			var storeDao = context.Store.Where(s => s.id == storeId).Single();
-			var productDao = context.Product.Where(p => p.id == productId).Single();
+			var clientDao = context.Client.Where(c => c.document == this.client.getDocument()).Single();
+			var storeDao = context.Store.Where(s => s.CNPJ == this.store.getCNPJ()).Single();
 
 			DAO.Purchase purchase = new DAO.Purchase
 			{
@@ -172,15 +170,20 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 				date_purchase = this.date_purchase,
 				purchase_value = this.purchase_value,
 				client = clientDao,
-				store = storeDao,
-				product = productDao
+				store = storeDao
 			};
 
-			context.Purchase.Add(purchase);
-			context.Entry(purchase.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-			context.Entry(purchase.store).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-			context.Entry(purchase.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-			context.SaveChanges();
+			foreach (Product prod in this.products)
+            {
+				var productDao = context.Product.Where(p => p.bar_code == prod.getBarCode()).Single();
+				purchase.product = productDao;
+
+				context.Purchase.Add(purchase);
+				context.Entry(purchase.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+				context.Entry(purchase.store).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+				context.Entry(purchase.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+				context.SaveChanges();
+			}
 
 			id = purchase.id;
 		}
@@ -196,13 +199,14 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		dtoPurchase.purchase_value = this.purchase_value;
 		dtoPurchase.payment_type = this.payment_type;
 		dtoPurchase.purchase_status = this.purchase_status;
-		dtoPurchase.number_confirmation = this.number_confirmation;
+		dtoPurchase.confirmation_number = this.number_confirmation;
 		dtoPurchase.number_nf = this.number_nf;
+		dtoPurchase.store = this.store.convertModelToDTO();
 		dtoPurchase.client = this.client.convertModelToDTO();
 		List<ProductDTO> products = new List<ProductDTO>();
 		foreach (Product prod in this.products)
 			products.Add(prod.convertModelToDTO());
-		dtoPurchase.products = products;
+		dtoPurchase.productsDTO = products;
 
 		return dtoPurchase;
 	}

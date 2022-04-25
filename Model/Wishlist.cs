@@ -8,14 +8,18 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 {
     // Atributos
     private Client client;
-    List<Product> products; 
+    List<Product> products = new List<Product>(); 
 
 
     // Construtor
-    public WishList(Client client)
+    private WishList(Client client)
     {
-        this.products = new List<Product>();
         this.client = client;
+    }
+
+    public WishList()
+    {
+
     }
 
 
@@ -66,13 +70,13 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         return modelWishlist;
     }
 
-    public int save(int clientId, int productId)
+    public int save(string document, int productId)
     {
         int id;
 
-        using (var context = new DaoContext())
+        using (var context = new DAOContext())
         {
-            var clientDao = context.Client.Where(c => c.id == clientId).Single();
+            var clientDao = context.Client.Where(c => c.document == document).Single();
             var productDao = context.Product.Where(p => p.id == productId).Single();
 
             var wishlist = new DAO.WishList

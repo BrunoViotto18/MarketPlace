@@ -89,7 +89,7 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
     {
         int id;
 
-        using (var context = new DaoContext())
+        using (var context = new DAOContext())
         {
             var addressDao = new DAO.Address
             {

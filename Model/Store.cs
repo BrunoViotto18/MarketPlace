@@ -91,7 +91,7 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
     {
         int id;
 
-        using (var context = new DaoContext())
+        using (var context = new DAOContext())
         {
             var ownerDao = context.Owner.Where(o => o.id == ownerID).Single();
 

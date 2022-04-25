@@ -87,19 +87,19 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         return modelStocks;
     }
 
-    public int save(int storeId, int productId)
+    public int save(int storeId, int productId, int quantity, double unit_price)
     {
         int id;
 
-        using (var context = new DaoContext())
+        using (var context = new DAOContext())
         {
             var storeDao = context.Store.Where(s => s.id == storeId).Single();
             var productDao = context.Product.Where(p => p.id == productId).Single();
 
             DAO.Stocks stocks = new DAO.Stocks
             {
-                quantity = this.quantity,
-                unit_price = this.unit_price,
+                quantity = quantity,
+                unit_price = unit_price,
                 product = productDao,
                 store = storeDao
             };

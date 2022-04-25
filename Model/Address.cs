@@ -103,7 +103,7 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
     {
         int id;
 
-        using (var context = new DaoContext())
+        using (var context = new DAOContext())
         {
             var address = new DAO.Address
             {

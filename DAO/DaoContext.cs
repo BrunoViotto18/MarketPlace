@@ -2,7 +2,7 @@ namespace DAO;
 using Microsoft.EntityFrameworkCore;
 
 
-public class DaoContext : DbContext
+public class DAOContext : DbContext
 {
     public DbSet<Address> Address { get; set; }
     public DbSet<Client> Client { get; set; }
