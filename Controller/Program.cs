@@ -16,7 +16,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 app.UseAuthorization();
 
