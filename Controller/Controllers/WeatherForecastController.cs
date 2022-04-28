@@ -1,23 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
+using DTO;
 
 namespace Controller.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class PurchaseController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
+    public void getClientPurchase(int clientID)
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    private readonly ILogger<WeatherForecastController> _logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
-    {
-        _logger = logger;
+        
     }
 
+    public void getStorePurchase(int storeID)
+    {
+
+    }
+
+    public void makePurchase(PurchaseDTO purchase)
+    {
+
+    }
+
+    /*
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get()
     {
@@ -29,4 +34,5 @@ public class WeatherForecastController : ControllerBase
         })
         .ToArray();
     }
+    */
 }
