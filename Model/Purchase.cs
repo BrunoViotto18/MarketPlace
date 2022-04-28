@@ -3,8 +3,9 @@ using DAO;
 using Enums;
 using Interfaces;
 using DTO;
+using System.Globalization;
 
-public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseDTO, Purchase>
+public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purchase>
 {
     // Atributos
     private DateTime date_purchase;
@@ -89,7 +90,14 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 		this.client = client;
 	}
 
-
+	public Store getStore()
+	{
+		return store;
+	}
+	public void setStore(Store store)
+	{
+		this.store = store;
+	}
 
 	public List<Product> getProducts()
 	{
@@ -108,7 +116,7 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 		throw new NotImplementedException();
     }
 
-    public Boolean validateObject(Purchase obj){
+    public Boolean validateObject(){
         if(this.date_purchase == default)
             return false; 
         
@@ -126,19 +134,20 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 
 	public static Purchase convertDTOToModel(PurchaseDTO purchase)
     {
-		Purchase modelPurchase = new Purchase();
-
-		modelPurchase.date_purchase = purchase.data_purchase;
-		modelPurchase.number_confirmation = purchase.number_confirmation;
-		modelPurchase.number_nf = purchase.number_nf;
-		modelPurchase.payment_type = purchase.payment_type;
-		modelPurchase.purchase_status = purchase.purchase_status;
-		modelPurchase.purchase_value = purchase.purchase_value;
-		modelPurchase.client = Client.convertDTOToModel(purchase.client);
+		Purchase modelPurchase = new Purchase
+		{
+			date_purchase = purchase.data_purchase,
+			number_confirmation = purchase.confirmation_number,
+			number_nf = purchase.number_nf,
+			payment_type = purchase.payment_type,
+			purchase_status = purchase.purchase_status,
+			purchase_value = purchase.purchase_value,
+			client = Client.convertDTOToModel(purchase.client),
+			store = Store.convertDTOToModel(purchase.store)
+		};
 
 		List<Product> products = new List<Product>();
-
-		foreach (ProductDTO prod in purchase.products)
+		foreach (ProductDTO prod in purchase.productsDTO)
 			products.Add(Product.convertDTOToModel(prod));
 
 		modelPurchase.products = products;
@@ -148,31 +157,44 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 
 	public int save()
     {
-		int id = 0;
+		int id;
 
-		using (var context = new DaoContext())
-        {
-			var purchase = new DAO.Purchase
+		using (var context = new DAOContext())
+		{
+			//var clientDao = context.Client.FirstOrDefault(c => c.id == 1);
+			//var storeDao = context.Store.FirstOrDefault(s => s.id == 1);
+            var clientDao = context.Client.Where(c => c.document == this.client.getDocument()).Single();
+            var storeDao = context.Store.Where(s => s.CNPJ == this.store.getCNPJ()).Single();
+            var productsDao = context.Product.Where(p => p.id == 1).Single();
+
+			DAO.Purchase purchase = new DAO.Purchase
 			{
 				number_confirmation = this.number_confirmation,
 				number_nf = this.number_nf,
 				payment_type = this.payment_type,
 				purchase_status = this.purchase_status,
-				date_purchase = this.date_purchase
+				date_purchase = this.date_purchase,
+				purchase_value = this.purchase_value,
+				client = clientDao,
+				store = storeDao,
+				product = productsDao
 			};
 
-			foreach (var prod in this.products)
-			{
-				DAO.Product product = new DAO.Product();
-				product.name = prod.getName();
-				product.bar_code = prod.getBarCode();
-				purchase.product = product;
+            //foreach (Product prod in this.products)
+            //         {
+            //	var productDao = context.Product.Where(p => p.bar_code == prod.getBarCode()).Single();
+            //	purchase.product = productDao;
 
-				context.Purchase.Add(purchase);
-				context.SaveChanges();
+            context.Purchase.Add(purchase);
+            context.Entry(purchase.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            context.Entry(purchase.store).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            context.Entry(purchase.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            context.SaveChanges();
+            //}
 
-				id = purchase.id;
-			}
+
+
+            id = purchase.id;
 		}
 
 		return id;
@@ -186,13 +208,14 @@ public class Purchase : IValidateDataObject<Purchase>, IDataController<PurchaseD
 		dtoPurchase.purchase_value = this.purchase_value;
 		dtoPurchase.payment_type = this.payment_type;
 		dtoPurchase.purchase_status = this.purchase_status;
-		dtoPurchase.number_confirmation = this.number_confirmation;
+		dtoPurchase.confirmation_number = this.number_confirmation;
 		dtoPurchase.number_nf = this.number_nf;
+		dtoPurchase.store = this.store.convertModelToDTO();
 		dtoPurchase.client = this.client.convertModelToDTO();
 		List<ProductDTO> products = new List<ProductDTO>();
 		foreach (Product prod in this.products)
 			products.Add(prod.convertModelToDTO());
-		dtoPurchase.products = products;
+		dtoPurchase.productsDTO = products;
 
 		return dtoPurchase;
 	}

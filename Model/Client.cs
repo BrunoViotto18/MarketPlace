@@ -4,7 +4,7 @@ using Interfaces;
 using DTO;
 using DAO;
 
-public class Client : Person, IValidateDataObject<Client>, IDataController<ClientDTO, Client>
+public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Client>
 {
     // Atributos
     private Guid uuid;
@@ -42,27 +42,30 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
         return instance;
     }
 
-    public Boolean validateObject(Client obj)
+    public Boolean validateObject()
     {
-        if (name == null)
+        if (this.name == null)
             return false;
 
-        if (date_of_birth == default)
+        if (this.date_of_birth == default)
             return false;
 
-        if (document == null)
+        if (this.document == null)
             return false;
 
-        if (email == null)
+        if (this.email == null)
             return false;
 
-        if (phone == null)
+        if (this.phone == null)
             return false;
 
-        if (login == null)
+        if (this.login == null)
             return false;
 
-        if (address == null)
+        if (this.address == null)
+            return false;
+
+        if (this.passwd == null)
             return false;
 
         return true;
@@ -70,26 +73,27 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
 
     public static Client convertDTOToModel(ClientDTO client)
     {
-        Client modelClient = new Client(Address.convertDTOToModel(client.address));
-
-        modelClient.name = client.name;
-        modelClient.email = client.email;
-        modelClient.date_of_birth = client.date_of_birth;
-        modelClient.phone = client.phone;
-        modelClient.document = client.document;
-        modelClient.login = client.login;
-        modelClient.passwd = client.passwd;
+        Client modelClient = new Client(Address.convertDTOToModel(client.address))
+        {
+            name = client.name,
+            email = client.email,
+            date_of_birth = client.date_of_birth,
+            phone = client.phone,
+            document = client.document,
+            login = client.login,
+            passwd = client.passwd
+        };
 
         return modelClient;
     }
 
     public int save()
     {
-        var id = 0;
+        int id;
 
-        using (var context = new DaoContext())
+        using (var context = new DAOContext())
         {
-            var address = new DAO.Address
+            var addressDao = new DAO.Address
             {
                 street = this.address.getStreet(),
                 city = this.address.getCity(),
@@ -98,7 +102,7 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
                 postal_code = this.address.getPostalCode()
             };
 
-            var owner = new DAO.Owner()
+            var client = new DAO.Client
             {
                 name = this.name,
                 email = this.email,
@@ -107,14 +111,13 @@ public class Client : Person, IValidateDataObject<Client>, IDataController<Clien
                 login = this.login,
                 passwd = this.passwd,
                 document = this.document,
-                address = address
+                address = addressDao
             };
 
-            context.Owner.Add(owner);
-
+            context.Client.Add(client);
             context.SaveChanges();
 
-            id = owner.id;
+            id = client.id;
         }
 
         return id;

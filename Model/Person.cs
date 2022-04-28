@@ -32,7 +32,7 @@ public class Person
         this.name = name;
     }
 
-    public DateTime getDate_of_birth()
+    public DateTime getDateOfBirth()
     {
         return date_of_birth;
     }

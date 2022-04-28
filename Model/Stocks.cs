@@ -4,7 +4,7 @@ using Interfaces;
 using DTO;
 using DAO;
 
-public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, Stocks>
+public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
 {
     // Atributos
     private int quantity;
@@ -61,15 +61,15 @@ public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, St
 
     // Métodos
 
-    public Boolean validateObject(Stocks stocks)
+    public Boolean validateObject()
     {
-        if (quantity == 0)
+        if (this.quantity == 0)
             return false;
 
-        if (product == null)
+        if (this.product == null)
             return false;
 
-        if (store == null)
+        if (this.store == null)
             return false;
 
         return true;
@@ -87,23 +87,29 @@ public class Stocks : IValidateDataObject<Stocks>, IDataController<StocksDTO, St
         return modelStocks;
     }
 
-    public int save()
+    public int save(int storeId, int productId, int quantity, double unit_price)
     {
-        int id = 0;
+        int id;
 
-        using (var context = new DaoContext())
+        using (var context = new DAOContext())
         {
-            var product = new DAO.Product
-            {
-                name = this.product.getName(),
-                bar_code = this.product.getBarCode()
-            };
+            var storeDao = context.Store.Where(s => s.id == storeId).Single();
+            var productDao = context.Product.Where(p => p.id == productId).Single();
 
             DAO.Stocks stocks = new DAO.Stocks
             {
-                quantity = this.quantity,
-                unit_price = this.unit_price,
+                quantity = quantity,
+                unit_price = unit_price,
+                product = productDao,
+                store = storeDao
             };
+
+            context.Stocks.Add(stocks);
+            context.Entry(stocks.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            context.Entry(stocks.store).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            context.SaveChanges();
+
+            id = stocks.id;
         }
 
         return id;

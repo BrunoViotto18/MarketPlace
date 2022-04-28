@@ -3,7 +3,7 @@ using DTO;
 using DAO;
 using Interfaces;
 
-public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store>
+public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 {
     // Atributos
     private String name;
@@ -14,13 +14,12 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
 
 
     // Construtor
-    public Store(Owner owner)
+    private Store(Owner owner)
     {
         this.owner = owner;
-        // this.purchases = new List<Purchase>();
     }
 
-
+    public Store() { }
     // GET & SET
     public String getName()
     {
@@ -55,7 +54,7 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
     }
     
 
-    //M�todos
+    //Métodos
 
     // Adiciona uma nova compra
     public void addNewPurchase(Purchase purchase)
@@ -63,67 +62,54 @@ public class Store : IValidateDataObject<Store>, IDataController<StoreDTO, Store
         purchases.Add(purchase);
     }
 
-    public Boolean validateObject(Store store)
+    public Boolean validateObject()
     {
-        if (name == null)
+        if (this.name == null)
             return false;
 
-        if (CNPJ == null)
+        if (this.CNPJ == null)
             return false;
 
-        if (owner == null)
+        /*if (this.owner == null)
             return false;
 
-        if (purchases == null)
-            return false;
+        if (this.purchases == null)
+            return false;*/
 
         return true;
     }
 
     public static Store convertDTOToModel(StoreDTO store)
     {
-        Store modelstore = new Store(Owner.convertDTOTOModel(store.owner));
+        // Store modelstore = new Store(Owner.convertDTOToModel(store.owner));
+        Store modelstore = new Store();
         modelstore.CNPJ = store.CNPJ;
         modelstore.name = store.name;
         return modelstore;
     }
 
-    public int save()
+    public int save(int ownerId)
     {
-        var id = 0;
-        using (var context = new DaoContext())
-        {
-            var address = new DAO.Address
-            {
-                street = this.owner.getAddress().getStreet(),
-                city = this.owner.getAddress().getCity(),
-                state = this.owner.getAddress().getState(),
-                country = this.owner.getAddress().getCountry(),
-                postal_code = this.owner.getAddress().getPostalCode()
-            };
+        int id;
 
-            var owner = new DAO.Owner()
-            {
-                name = this.owner.getName(),
-                email = this.owner.getEmail(),
-                date_of_birth = this.owner.getDate_of_birth(),
-                phone = this.owner.getPhone(),
-                login = this.owner.getLogin(),
-                passwd = this.owner.getPasswd(),
-                document = this.owner.getDocument(),
-                address = address
-            };
+        using (var context = new DAOContext())
+        {
+            var ownerDao = context.Owner.Where(o => o.id == ownerId).Single();
 
             var store = new DAO.Store
             {
                 name = this.name,
-                CNPJ = this.CNPJ
+                CNPJ = this.CNPJ,
+                owner = ownerDao
             };
-            context.Store.Add(store);
 
+            context.Store.Add(store);
+            context.Entry(store.owner).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
             context.SaveChanges();
+
             id = store.id;
         }
+
         return id;
     }
 

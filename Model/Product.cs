@@ -3,7 +3,7 @@ using DAO;
 using Interfaces;
 using DTO;
 
-public class Product : IValidateDataObject<Product>, IDataController<ProductDTO, Product>
+public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 {
     // Atributos
     private String name;
@@ -39,12 +39,12 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
 
     // Métodos
 
-    public Boolean validateObject( Product product)
+    public Boolean validateObject()
     {
-        if (name == null)
+        if (this.name == null)
             return false;
 
-        if (bar_code == null)
+        if (this.bar_code == null)
             return false;
 
         return true;
@@ -62,9 +62,9 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
 
     public int save()
     {
-        int id = 0;
+        int id;
 
-        using (var context = new DaoContext())
+        using (var context = new DAOContext())
         {
             var product = new DAO.Product
             {
@@ -77,6 +77,7 @@ public class Product : IValidateDataObject<Product>, IDataController<ProductDTO,
 
             id = product.id;
         }
+
         return id;
     }
 

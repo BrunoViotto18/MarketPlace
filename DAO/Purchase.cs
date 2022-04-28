@@ -8,6 +8,7 @@ public class Purchase
     public int payment_type;
     public int purchase_status;
     public DateTime date_purchase;
+    public Double purchase_value;
 
     public Client client;
     public Product product;

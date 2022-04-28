@@ -2,7 +2,7 @@ namespace DAO;
 using Microsoft.EntityFrameworkCore;
 
 
-public class DaoContext : DbContext
+public class DAOContext : DbContext
 {
     public DbSet<Address> Address { get; set; }
     public DbSet<Client> Client { get; set; }
@@ -26,10 +26,10 @@ public class DaoContext : DbContext
         {
             entity.HasKey(p => p.id);
             entity.Property(e => e.city);
+            entity.Property(e => e.street);
             entity.Property(e => e.state);
             entity.Property(e => e.country);
             entity.Property(e => e.postal_code);
-            entity.Property(e => e.street);
         }
         );
 
@@ -42,6 +42,7 @@ public class DaoContext : DbContext
             entity.Property(e => e.phone);
             entity.Property(e => e.login);
             entity.Property(e => e.passwd);
+            entity.Property(e => e.document);
             entity.HasOne(e => e.address);
         }
         );
@@ -55,6 +56,7 @@ public class DaoContext : DbContext
             entity.Property(e => e.phone);
             entity.Property(e => e.login);
             entity.Property(e => e.passwd);
+            entity.Property(e => e.document);
             entity.HasOne(e => e.address);
         }
         );
@@ -64,21 +66,22 @@ public class DaoContext : DbContext
             entity.HasKey(p => p.id);
             entity.Property(e => e.name);
             entity.Property(e => e.bar_code);
-            entity.Property(e => e.name);
 
         }
         );
 
         modelBuilder.Entity<WishList>(entity =>
         {
+            entity.HasKey(e => e.id);
             entity.HasOne(e => e.client);
             entity.HasOne(e => e.product);
-            entity.HasKey(e => e.id);
         }
         );
 
         modelBuilder.Entity<Store>(entity =>
         {
+            entity.HasKey(p => p.id);
+            entity.Property(e => e.name);
             entity.Property(e => e.CNPJ);
             entity.HasOne(f => f.owner);
         }
@@ -92,6 +95,7 @@ public class DaoContext : DbContext
             entity.Property(e => e.payment_type);
             entity.Property(e => e.purchase_status);
             entity.Property(e => e.date_purchase);
+            entity.Property(e => e.purchase_value);
             entity.HasOne(f => f.client);
             entity.HasOne(f => f.product);
             entity.HasOne(f => f.store);
@@ -102,9 +106,9 @@ public class DaoContext : DbContext
         {
             entity.HasKey(p => p.id);
             entity.Property(e => e.quantity);
+            entity.Property(e => e.unit_price);
             entity.HasOne(f => f.product);
             entity.HasOne(f => f.store);
-            entity.Property(e => e.unit_price);
         }
         );
     }

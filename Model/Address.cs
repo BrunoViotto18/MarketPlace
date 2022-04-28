@@ -3,7 +3,7 @@ using DAO;
 using Interfaces;
 using DTO;
 
-public class Address : IValidateDataObject<Address>, IDataController<AddressDTO, Address>
+public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 {
     // Atributos
     private String street;
@@ -74,9 +74,9 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
     // Métodos
 
     // Valida se um objeto tem todos os seus campos diferente de nulo
-    public Boolean validateObject(Address address)
+    public Boolean validateObject()
     {
-        if (street == null)
+        if (this.street == null)
             return false;
 
         if (this.city == null)
@@ -96,14 +96,22 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
 
     public static Address convertDTOToModel(AddressDTO address)
     {
-        return new Address(address.street, address.city, address.street, address.country, address.postal_code);
+        var modelAddress = new Address(
+            address.street,
+            address.city,
+            address.state,
+            address.country,
+            address.postal_code
+        );
+
+        return modelAddress;
     }
 
     public int save()
     {
-        var id = 0;
+        int id;
 
-        using (var context = new DaoContext())
+        using (var context = new DAOContext())
         {
             var address = new DAO.Address
             {
@@ -118,13 +126,15 @@ public class Address : IValidateDataObject<Address>, IDataController<AddressDTO,
             context.SaveChanges();
 
             id = address.id;
-
         }
+
         return id;
     }
+
     public AddressDTO convertModelToDTO()
     {
         AddressDTO addressDTO = new AddressDTO();
+
         addressDTO.street = this.street;    
         addressDTO.state = this.state;
         addressDTO.city = this.city;    

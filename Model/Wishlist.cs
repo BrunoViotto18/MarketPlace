@@ -4,18 +4,22 @@ using Interfaces;
 using DTO;
 using DAO;
 
-public class WishList : IValidateDataObject<WishList>, IDataController<WishListDTO, WishList>
+public class WishList : IValidateDataObject, IDataController<WishListDTO, WishList>
 {
     // Atributos
     private Client client;
-    List<Product> products; 
+    List<Product> products = new List<Product>(); 
 
 
     // Construtor
-    public WishList(Client client)
+    private WishList(Client client)
     {
-        this.products = new List<Product>();
         this.client = client;
+    }
+
+    public WishList()
+    {
+
     }
 
 
@@ -35,7 +39,7 @@ public class WishList : IValidateDataObject<WishList>, IDataController<WishListD
     }
 
 
-    // M�todos
+    // Métodos
 
     // Adiciona um produto para a Wishlist
     public void addProductToWishList(Product product)
@@ -43,12 +47,12 @@ public class WishList : IValidateDataObject<WishList>, IDataController<WishListD
         products.Add(product);
     }
 
-    public Boolean validateObject(WishList wishlist)
+    public Boolean validateObject()
     {
-        if (client == null)
+        if (this.client == null)
             return false;
 
-        if (products == null)
+        if (this.products == null)
             return false;
 
         return true;
@@ -66,21 +70,29 @@ public class WishList : IValidateDataObject<WishList>, IDataController<WishListD
         return modelWishlist;
     }
 
-    public int save()
+    public int save(string document, int productId)
     {
-        var id = 0;
-        using (var context = new DaoContext())
+        int id;
+
+        using (var context = new DAOContext())
         {
+            var clientDao = context.Client.Where(c => c.document == document).Single();
+            var productDao = context.Product.Where(p => p.id == productId).Single();
+
             var wishlist = new DAO.WishList
             {
-
+                client = clientDao,
+                product = productDao
             };
 
             context.WishList.Add(wishlist);
+            context.Entry(wishlist.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            context.Entry(wishlist.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
             context.SaveChanges();
 
             id = wishlist.id;
         }
+
         return id;
     }
 
