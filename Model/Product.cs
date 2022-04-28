@@ -52,10 +52,11 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 
     public static Product convertDTOToModel(ProductDTO product)
     {
-        Product modelProduct = new Product();
-
-        modelProduct.name = product.name;
-        modelProduct.bar_code = product.bar_code;
+        Product modelProduct = new Product
+        {
+            name = product.name,
+            bar_code = product.bar_code
+        };
 
         return modelProduct;
     }

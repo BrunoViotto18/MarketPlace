@@ -13,7 +13,7 @@ namespace testesAutomatizados
     public class TestDAO 
     {
         [Test]
-        public void insertAddress()
+        public void AinsertAddress()
         {
             var id=0;
 
@@ -39,7 +39,7 @@ namespace testesAutomatizados
         }
 
        [Test]
-        public void insertClient()
+        public void BinsertClient()
         {
             var id = 0;
 
@@ -240,7 +240,7 @@ namespace testesAutomatizados
         }
 
         [Test]
-        public void insertOwner()
+        public void CinsertOwner()
         {
             var id = 0;
 
@@ -402,7 +402,7 @@ namespace testesAutomatizados
 
         }
         [Test]
-        public void insertStore()
+        public void DinsertStore()
         {
             List<StoreDTO> stores = new List<StoreDTO>();
            
@@ -460,6 +460,9 @@ namespace testesAutomatizados
 
                 Assert.That(id, Is.Not.EqualTo(0));
 
+                Console.WriteLine("AAA");
+                Console.WriteLine(id);
+
                 id = 0;
 
             }         
@@ -467,7 +470,7 @@ namespace testesAutomatizados
         }
 
         [Test]
-        public void insertProduct()
+        public void EinsertProduct()
         {
             List<ProductDTO> produtos = new List<ProductDTO>();
 
@@ -529,12 +532,12 @@ namespace testesAutomatizados
                 Assert.That(id, Is.Not.EqualTo(0));
 
                 id= 0;
-            }          
+            }
 
         }
 
         [Test]
-        public void insertStocks()
+        public void FinsertStocks()
         {   
             int id = 0;
             for(int i = 1; i<5; i++){
@@ -557,7 +560,7 @@ namespace testesAutomatizados
         }
 
         [Test]
-        public void insertWishList()
+        public void GinsertWishList()
         {
             int id = 0;
 
@@ -580,7 +583,7 @@ namespace testesAutomatizados
         }
 
         [Test]
-        public void insertPurchase()
+        public void HinsertPurchase()
         {
             var id = 0;
 
@@ -665,6 +668,7 @@ namespace testesAutomatizados
             purchaseDTO.store = storeDTO1;
 
             var purchase = Model.Purchase.convertDTOToModel(purchaseDTO);
+
 
             if(purchase.validateObject()){
                 id=purchase.save();
