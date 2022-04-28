@@ -7,19 +7,28 @@ namespace Controller.Controllers;
 [Route("[controller]")]
 public class PurchaseController : ControllerBase
 {
-    public void getClientPurchase(int clientID)
+    [HttpGet]
+    [Route("getClientPurchase/{clientID}")]
+    public object getClientPurchase(int clientID)
     {
-        
+        return new
+        {
+            id = clientID
+        };
+    }
+    
+    [HttpGet]
+    [Route("getStorePurchase/{storeID}")]
+    public int getStorePurchase(int storeID)
+    {
+        return storeID;
     }
 
-    public void getStorePurchase(int storeID)
+    [HttpPost]
+    [Route("makePurchase")]
+    public PurchaseDTO makePurchase(PurchaseDTO purchase)
     {
-
-    }
-
-    public void makePurchase(PurchaseDTO purchase)
-    {
-
+        return null;
     }
 
     /*

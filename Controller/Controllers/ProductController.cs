@@ -7,14 +7,23 @@ namespace Controller.Controllers;
 [Route("[controller]")]
 public class ProductController : ControllerBase
 {
-    public void allProducts() { }
-
-    public void createProduct(ProductDTO product) { }
-
-    public void deleteProduct(ProductDTO product) { }
-
-    public void updateProduct(ProductDTO product) { }
-
+    public void allProducts()
+    {
     
+    }
 
+    public void createProduct(ProductDTO product)
+    {
+    
+    }
+
+    public void deleteProduct(ProductDTO product)
+    {
+    
+    }
+
+    public void updateProduct(ProductDTO product)
+    {
+    
+    }
 }
