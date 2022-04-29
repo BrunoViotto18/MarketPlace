@@ -97,8 +97,8 @@ public class DAOContext : DbContext
             entity.Property(e => e.date_purchase);
             entity.Property(e => e.purchase_value);
             entity.HasOne(f => f.client);
-            entity.HasOne(f => f.product);
             entity.HasOne(f => f.store);
+            entity.HasOne(f => f.product);
         }
         );
 

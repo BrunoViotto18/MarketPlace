@@ -11,6 +11,6 @@ public class Purchase
     public Double purchase_value;
 
     public Client client;
-    public Product product;
     public Store store;
+    public Product product;
 }

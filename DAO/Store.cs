@@ -2,9 +2,9 @@
 
 public class Store
 {
+    public int id;
     public string name;
     public string CNPJ;
-    public int id;
 
     public Owner owner;
 }
