@@ -8,7 +8,7 @@ namespace Controller.Controllers;
 public class PurchaseController : ControllerBase
 {
     [HttpGet]
-    [Route("getClientPurchase/{clientID}")]
+    [Route("clientPurchase/{clientID}")]
     public object getClientPurchase(int clientID)
     {
         return new
@@ -18,14 +18,14 @@ public class PurchaseController : ControllerBase
     }
     
     [HttpGet]
-    [Route("getStorePurchase/{storeID}")]
+    [Route("storePurchase/{storeID}")]
     public int getStorePurchase(int storeID)
     {
         return storeID;
     }
 
     [HttpPost]
-    [Route("makePurchase")]
+    [Route("make")]
     public PurchaseDTO makePurchase(PurchaseDTO purchase)
     {
         return null;

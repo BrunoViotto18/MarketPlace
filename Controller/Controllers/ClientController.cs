@@ -18,14 +18,14 @@ public class ClientController : ControllerBase
         return new
         {
             id = id,
-            name = client.name,
-            date_of_birth = client.date_of_birth,
-            document = client.document,
+            nome = client.name,
+            dataDeNascimento = client.date_of_birth,
+            documento = client.document,
             email = client.email,
-            phone = client.phone,
+            telefone = client.phone,
             login = client.login,
-            passwd = client.passwd,
-            address = client.address
+            senha = client.passwd,
+            endereço = client.address
         };
     }
 
