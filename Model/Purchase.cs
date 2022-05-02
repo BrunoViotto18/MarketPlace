@@ -20,6 +20,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
     List<Product> products;
 
 
+	// Construtor
 	public Purchase()
     {
 
@@ -116,7 +117,8 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		throw new NotImplementedException();
     }
 
-    public Boolean validateObject(){
+	// Valida se o objeto tem todos os seus campos diferente de nulo
+	public Boolean validateObject(){
         if(this.date_purchase == default)
             return false; 
         
@@ -132,6 +134,10 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
         return true;
     }
 
+
+	/* Conversores */
+
+	// Converte um objeto DTO para Model
 	public static Purchase convertDTOToModel(PurchaseDTO purchase)
     {
 		Purchase modelPurchase = new Purchase
@@ -153,8 +159,30 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		modelPurchase.products = products;
 
 		return modelPurchase;
-    }
+	}
 
+	// Converte um objeto Model para DTO
+	public PurchaseDTO convertModelToDTO()
+	{
+		PurchaseDTO dtoPurchase = new PurchaseDTO();
+
+		dtoPurchase.data_purchase = this.date_purchase;
+		dtoPurchase.purchase_value = this.purchase_value;
+		dtoPurchase.payment_type = this.payment_type;
+		dtoPurchase.purchase_status = this.purchase_status;
+		dtoPurchase.confirmation_number = this.number_confirmation;
+		dtoPurchase.number_nf = this.number_nf;
+		dtoPurchase.store = this.store.convertModelToDTO();
+		dtoPurchase.client = this.client.convertModelToDTO();
+		List<ProductDTO> products = new List<ProductDTO>();
+		foreach (Product prod in this.products)
+			products.Add(prod.convertModelToDTO());
+		dtoPurchase.productsDTO = products;
+
+		return dtoPurchase;
+	}
+
+	// Converte um objeto DAO para Model
 	public static Purchase convertDAOToModel(DAO.Purchase purchase)
     {
 		List<Product> products = new List<Product>();
@@ -179,6 +207,10 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		};
     }
 
+
+	/* Métodos SQL */
+
+	// Salva o objeto atual no banco de dados
 	public int save()
     {
 		int id;
@@ -223,26 +255,6 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 
 		return id;
     }
-
-	public PurchaseDTO convertModelToDTO()
-	{
-		PurchaseDTO dtoPurchase = new PurchaseDTO();
-
-		dtoPurchase.data_purchase = this.date_purchase;
-		dtoPurchase.purchase_value = this.purchase_value;
-		dtoPurchase.payment_type = this.payment_type;
-		dtoPurchase.purchase_status = this.purchase_status;
-		dtoPurchase.confirmation_number = this.number_confirmation;
-		dtoPurchase.number_nf = this.number_nf;
-		dtoPurchase.store = this.store.convertModelToDTO();
-		dtoPurchase.client = this.client.convertModelToDTO();
-		List<ProductDTO> products = new List<ProductDTO>();
-		foreach (Product prod in this.products)
-			products.Add(prod.convertModelToDTO());
-		dtoPurchase.productsDTO = products;
-
-		return dtoPurchase;
-	}
 
 	public void delete()
 	{

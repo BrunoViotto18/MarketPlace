@@ -39,6 +39,7 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 
     // Métodos
 
+    // Valida se o objeto tem todos os seus campos diferente de nulo
     public Boolean validateObject()
     {
         if (this.name == null)
@@ -50,6 +51,10 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return true;
     }
 
+
+    /* Conversores */
+
+    // Converte um objeto DTO para Model
     public static Product convertDTOToModel(ProductDTO product)
     {
         Product modelProduct = new Product
@@ -61,6 +66,31 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return modelProduct;
     }
 
+    // Converte um objeto Model para DTO
+    public ProductDTO convertModelToDTO()
+    {
+        ProductDTO dtoProduct = new ProductDTO();
+
+        dtoProduct.name = this.name;
+        dtoProduct.bar_code = this.bar_code;
+
+        return dtoProduct;
+    }
+
+    // Converte um objeto DAO para Model
+    public static Product convertDAOToModel(DAO.Product product)
+    {
+        return new Product()
+        {
+            name = product.name,
+            bar_code = product.bar_code
+        };
+    }
+
+
+    /* Métodos SQL */
+
+    // Salva o objeto atual no banco de dados
     public int save()
     {
         int id;
@@ -80,25 +110,6 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         }
 
         return id;
-    }
-
-    public ProductDTO convertModelToDTO()
-    {
-        ProductDTO dtoProduct = new ProductDTO();
-
-        dtoProduct.name = this.name;
-        dtoProduct.bar_code = this.bar_code;
-
-        return dtoProduct;
-    }
-
-    public static Product convertDAOToModel(DAO.Product product)
-    {
-        return new Product()
-        {
-            name = product.name,
-            bar_code = product.bar_code
-        };
     }
 
     public void delete()

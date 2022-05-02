@@ -73,7 +73,7 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 
     // Métodos
 
-    // Valida se um objeto tem todos os seus campos diferente de nulo
+    // Valida se o objeto tem todos os seus campos diferente de nulo
     public Boolean validateObject()
     {
         if (this.street == null)
@@ -93,6 +93,9 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 
         return true;
     }
+
+
+    /* Conversores */
 
     // Converte um objeto DTO para Model
     public static Address convertDTOToModel(AddressDTO address)
@@ -128,6 +131,8 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
         return new Address(address.street, address.city, address.state, address.country, address.postal_code);
     }
 
+
+    /* Métodos SQL */
 
     // Salva o objeto atual no banco de dados
     public int save()

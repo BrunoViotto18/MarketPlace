@@ -13,7 +13,7 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
     private List<Purchase> purchases;
 
 
-    // Construtor
+    // Construtores
     private Store(Owner owner)
     {
         this.owner = owner;
@@ -61,12 +61,13 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
     //Métodos
 
-    // Adiciona uma nova compra
+    // Adiciona uma nova compra ao objeto
     public void addNewPurchase(Purchase purchase)
     {
         purchases.Add(purchase);
     }
 
+    // Valida se o objeto tem todos os seus campos diferente de nulo
     public Boolean validateObject()
     {
         if (this.name == null)
@@ -84,6 +85,10 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         return true;
     }
 
+
+    /* Conversores */
+
+    // Converte um objeto DTO para Model
     public static Store convertDTOToModel(StoreDTO store)
     {
         Store modelstore = new Store();
@@ -92,6 +97,46 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         return modelstore;
     }
 
+    // Converte um objeto Model para DTO
+    public StoreDTO convertModelToDTO()
+    {
+        StoreDTO dtoStore = new StoreDTO();
+
+        dtoStore.name = this.name;
+        dtoStore.CNPJ = this.CNPJ;
+        dtoStore.owner = this.owner.convertModelToDTO();
+        List<PurchaseDTO> purchases = new List<PurchaseDTO>();
+        foreach (Purchase prod in this.purchases)
+            purchases.Add(prod.convertModelToDTO());
+        dtoStore.purchases = purchases;
+
+        return dtoStore;
+    }
+
+    // Converte um objeto DAO para Model
+    public static Store convertDAOToModel(DAO.Store store)
+    {
+        List<Purchase> purchases = new List<Purchase>();
+        using (var context = new DAOContext())
+        {
+            var purch = context.Purchase.Where(p => p.store.id == store.id);
+            foreach (var p in purch)
+                purchases.Add(Purchase.convertDAOToModel(p));
+        }
+
+        return new Store
+        {
+            name = store.name,
+            CNPJ = store.CNPJ,
+            owner = Owner.convertDAOToModel(store.owner),
+            purchases = purchases
+        };
+    }
+
+
+    /* Métodos SQL */
+
+    // Salva o objeto atual no banco de dados
     public int save(int ownerId)
     {
         int id;
@@ -115,42 +160,6 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         }
 
         return id;
-    }
-
-    public StoreDTO convertModelToDTO()
-    {
-        StoreDTO dtoStore = new StoreDTO();
-
-        dtoStore.name = this.name;
-        dtoStore.CNPJ = this.CNPJ;
-        dtoStore.owner = this.owner.convertModelToDTO();
-        List<PurchaseDTO> purchases = new List<PurchaseDTO>();
-        foreach (Purchase prod in this.purchases)
-            purchases.Add(prod.convertModelToDTO());
-        dtoStore.purchases = purchases;
-
-        return dtoStore;
-    }
-
-    public static Store convertDAOToModel(DAO.Store store)
-    {
-        List<Purchase> purchases = new List<Purchase>();
-        using (var context = new DAOContext())
-        {
-            var purch = context.Purchase.Where(p => p.store.id == store.id);
-            foreach (var p in purch)
-            {
-                purchases.Add(Purchase.convertDAOToModel(p));
-            }
-        }
-
-        return new Store
-        {
-            name = store.name,
-            CNPJ = store.CNPJ,
-            owner = Owner.convertDAOToModel(store.owner),
-            purchases = purchases
-        };
     }
 
     public void delete()
