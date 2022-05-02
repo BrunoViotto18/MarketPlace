@@ -173,9 +173,23 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
 
     }
 
+    // Retorna o ID do objeto atual
+    public int findId()
+    {
+        using (var context = new DAOContext())
+        {
+            var owner = context.Owner.Where(o => o.document == this.document).Single();
+            return owner.id;
+        }
+    }
+
+    public static Owner find()
+    {
+        return new Owner(new Address("", "", "", "", ""));
+    }
+
     public OwnerDTO findById()
     {
-
         return new OwnerDTO();
     }
 

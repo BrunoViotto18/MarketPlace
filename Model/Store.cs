@@ -10,7 +10,7 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
     private String CNPJ;
 
     private Owner owner;
-    private List<Purchase> purchases;
+    private List<Purchase> purchases = new List<Purchase>();
 
 
     // Construtores
@@ -91,9 +91,18 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
     // Converte um objeto DTO para Model
     public static Store convertDTOToModel(StoreDTO store)
     {
-        Store modelstore = new Store();
-        modelstore.CNPJ = store.CNPJ;
-        modelstore.name = store.name;
+        List<Purchase> purchases = new List<Purchase>();
+        foreach (var purch in store.purchases)
+            purchases.Add(Purchase.convertDTOToModel(purch));
+
+        Store modelstore = new Store
+        {
+            name = store.name,
+            CNPJ = store.CNPJ,
+            owner = Owner.convertDTOToModel(store.owner),
+            purchases = purchases
+        };
+
         return modelstore;
     }
 
@@ -172,7 +181,7 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
     }
 
-    public StoreDTO find(string CNPJ)
+    public static Store find(string CNPJ)
     {
         using (var context = new DAO.DAOContext())
         {
