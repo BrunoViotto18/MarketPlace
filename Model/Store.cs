@@ -19,7 +19,12 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         this.owner = owner;
     }
 
-    public Store() { }
+    public Store()
+    {
+
+    }
+
+
     // GET & SET
     public String getName()
     {
@@ -81,7 +86,6 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
     public static Store convertDTOToModel(StoreDTO store)
     {
-        // Store modelstore = new Store(Owner.convertDTOToModel(store.owner));
         Store modelstore = new Store();
         modelstore.CNPJ = store.CNPJ;
         modelstore.name = store.name;
@@ -128,6 +132,27 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         return dtoStore;
     }
 
+    public static Store convertDAOToModel(DAO.Store store)
+    {
+        List<Purchase> purchases = new List<Purchase>();
+        using (var context = new DAOContext())
+        {
+            var purch = context.Purchase.Where(p => p.store.id == store.id);
+            foreach (var p in purch)
+            {
+                purchases.Add(Purchase.convertDAOToModel(p));
+            }
+        }
+
+        return new Store
+        {
+            name = store.name,
+            CNPJ = store.CNPJ,
+            owner = Owner.convertDAOToModel(store.owner),
+            purchases = purchases
+        };
+    }
+
     public void delete()
     {
 
@@ -144,17 +169,7 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         {
             var store = context.Store.Where(s => s.CNPJ == CNPJ).Single();
 
-            var owner = new Owner
-            {
-
-            }
-
-            return new StoreDTO
-            {
-                name = store.name,
-                CNPJ = store.CNPJ,
-                owner = store.owner
-            };
+            return Store.convertDAOToModel(store);
         }
     }
 
