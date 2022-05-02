@@ -127,6 +127,17 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         return dtoStocks;
     }
 
+    public static Stocks convertDAOToModel(DAO.Stocks stocks)
+    {
+        return new Stocks
+        {
+            quantity = (int)stocks.quantity,
+            unit_price = stocks.unit_price,
+            product = Product.convertDAOToModel(stocks.product),
+            store = Store.convertDAOToModel(stocks.store)
+        };
+    }
+
     public void delete()
     {
 

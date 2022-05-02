@@ -109,6 +109,25 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         return dtoWishlist;
     }
 
+    public static WishList convertDAOToModel(DAO.WishList wishlist)
+    {
+        List<Product> products = new List<Product>();
+        using (var context = new DAOContext())
+        {
+            var prod = context.Product.Where(p => p.id == wishlist.product.id);
+            foreach (var p in prod)
+            {
+                products.Add(Product.convertDAOToModel(p));
+            }
+        }
+
+        return new WishList
+        {
+            client = Client.convertDAOToModel(wishlist.client),
+            products = products
+        };
+    }
+
     public void delete()
     {
 

@@ -20,7 +20,7 @@ public class StoreController : ControllerBase
     public void registerStore(StoreDTO store)
     {
         var storeModel = Store.convertDTOToModel(store);
-        var id = storeModel.save(store.find());
+        var id = storeModel.save(store.find(store.CNPJ));
     }
 
     [HttpGet]

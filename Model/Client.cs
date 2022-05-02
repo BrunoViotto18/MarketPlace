@@ -139,6 +139,20 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return dtoClient;
     }
 
+    public static Client convertDAOToModel(DAO.Client client)
+    {
+        return new Client(Address.convertDAOToModel(client.address))
+        {
+            name = client.name,
+            date_of_birth = client.date_of_birth,
+            document = client.document,
+            email = client.email,
+            phone = client.phone,
+            login = client.login,
+            passwd = client.passwd
+        };
+    }
+
     public void delete()
     {
 
