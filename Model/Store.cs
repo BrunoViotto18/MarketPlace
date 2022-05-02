@@ -138,6 +138,26 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
     }
 
+    public StoreDTO find(string CNPJ)
+    {
+        using (var context = new DAO.DAOContext())
+        {
+            var store = context.Store.Where(s => s.CNPJ == CNPJ).Single();
+
+            var owner = new Owner
+            {
+
+            }
+
+            return new StoreDTO
+            {
+                name = store.name,
+                CNPJ = store.CNPJ,
+                owner = store.owner
+            };
+        }
+    }
+
     public StoreDTO findById()
     {
 

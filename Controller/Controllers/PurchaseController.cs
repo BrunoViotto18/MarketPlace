@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using DTO;
+using Model;
 
 namespace Controller.Controllers;
 
@@ -26,9 +27,24 @@ public class PurchaseController : ControllerBase
 
     [HttpPost]
     [Route("make")]
-    public PurchaseDTO makePurchase(PurchaseDTO purchase)
+    public object makePurchase(PurchaseDTO purchase)
     {
-        return null;
+        Purchase purchaseModel = Purchase.convertDTOToModel(purchase);
+        var id = purchaseModel.save();
+
+        return new
+        {
+            id = id,
+            dataCompra = purchase.data_purchase,
+            valorCompra = purchase.purchase_value,
+            tipoPagamento = purchase.payment_type,
+            statusCompra = purchase.purchase_status,
+            numeroConfirmacao = purchase.confirmation_number,
+            numeroNF = purchase.number_nf,
+            loja = purchase.store,
+            cliente = purchase.client,
+            produtos = purchase.productsDTO
+        };
     }
 
     /*

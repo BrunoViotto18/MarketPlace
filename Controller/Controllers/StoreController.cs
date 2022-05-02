@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using DTO;
+using Model;
 
 namespace Controller.Controllers;
 
@@ -18,7 +19,8 @@ public class StoreController : ControllerBase
     [Route("register")]
     public void registerStore(StoreDTO store)
     {
-    
+        var storeModel = Store.convertDTOToModel(store);
+        var id = storeModel.save(store.find());
     }
 
     [HttpGet]

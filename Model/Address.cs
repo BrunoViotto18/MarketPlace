@@ -144,6 +144,11 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
         return addressDTO;
     }
 
+    public static Address convertDAOToModel(DAO.Address address)
+    {
+        return new Address(address.street, address.city, address.state, address.country, address.postal_code);
+    }
+
     public void delete()
     {
 

@@ -30,9 +30,9 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
-    [Route("information")]
-    public void getInformations()
+    [Route("informations")]
+    public void getInformations(int clientID)
     {
-
+        using (var context = new DAO.C)
     }
 }
