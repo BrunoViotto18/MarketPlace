@@ -155,7 +155,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		return modelPurchase;
     }
 
-	public static Purchase convertModelToDAO(DAO.Purchase purchase)
+	public static Purchase convertDAOToModel(DAO.Purchase purchase)
     {
 		List<Product> products = new List<Product>();
 		using (var context = new DAOContext())

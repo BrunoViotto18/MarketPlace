@@ -96,7 +96,7 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
     {
         return new Product()
         {
-            name = this.name,
+            name = product.name,
             bar_code = product.bar_code
         };
     }
