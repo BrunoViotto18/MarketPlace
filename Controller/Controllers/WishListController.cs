@@ -7,8 +7,17 @@ namespace Controller.Controllers;
 [Route("[controller]")]
 public class WishListController: ControllerBase
 {
-    public void addProductToWishList (object request) { }
+    [HttpPost]
+    [Route("addProduct")]
+    public void addProductToWishList (object request)
+    {
+    
+    }
 
-    public void removeProductToWishList(object request) { }
-
+    [HttpDelete]
+    [Route("removeProduct")]
+    public void removeProductToWishList(object request)
+    {
+    
+    }
 }

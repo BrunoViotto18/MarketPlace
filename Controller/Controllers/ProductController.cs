@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using DTO;
+using Model;
 
 namespace Controller.Controllers;
 
@@ -7,14 +8,31 @@ namespace Controller.Controllers;
 [Route("[controller]")]
 public class ProductController : ControllerBase
 {
-    public void allProducts() { }
+    [HttpGet]
+    [Route("all")]
+    public void allProducts()
+    {
+        
+    }
 
-    public void createProduct(ProductDTO product) { }
-
-    public void deleteProduct(ProductDTO product) { }
-
-    public void updateProduct(ProductDTO product) { }
-
+    [HttpPost]
+    [Route("create")]
+    public void createProduct(ProductDTO product)
+    {
     
+    }
 
+    [HttpDelete]
+    [Route("delete")]
+    public void deleteProduct(ProductDTO product)
+    {
+    
+    }
+
+    [HttpPut]
+    [Route("update")]
+    public void updateProduct(ProductDTO product)
+    {
+    
+    }
 }

@@ -7,8 +7,17 @@ namespace Controller.Controllers;
 [Route("[controller]")]
 public class StockController : ControllerBase
 {
-    public void addProductToStock(object request) { }
+    [HttpPost]
+    [Route("addProduct")]
+    public void addProductToStock(object request)
+    {
 
-    public void updateStock(object request) { }
+    }
 
+    [HttpPut]
+    [Route("update")]
+    public void updateStock(object request)
+    {
+    
+    }
 }

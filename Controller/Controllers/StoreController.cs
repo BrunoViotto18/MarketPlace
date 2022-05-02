@@ -7,10 +7,24 @@ namespace Controller.Controllers;
 [Route("[controller]")]
 public class StoreController : ControllerBase
 {
-    public void getAllStore() { }
+    [HttpGet]
+    [Route("all")]
+    public void getAllStore()
+    {
+    
+    }
 
-    public void registerStore(StoreDTO store) { }
+    [HttpPost]
+    [Route("register")]
+    public void registerStore(StoreDTO store)
+    {
+    
+    }
 
-    public void getStoreInformation(StoreDTO store) { }
-
+    [HttpGet]
+    [Route("information")]
+    public void getStoreInformation(StoreDTO store)
+    {
+    
+    }
 }
