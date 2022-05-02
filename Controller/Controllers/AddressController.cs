@@ -1,15 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using DTO;
-
+using Model;
 namespace Controller.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class AddressController : ControllerBase
 {
-    public void registerAddress(AddressDTO address)
+    [HttpPost]
+    [Route("register")]
+    public object registerAddress([FromBody]AddressDTO address)
     {
-        
+        var addressModel = Address.convertDTOToModel(address);
+        var id = addressModel.save();
+        return new
+        {
+            id = id,
+            rua = address.street,
+            cidade = address.city,
+            estado = address.state,
+            pais = address.country,
+            codigo_postal = address.postal_code
+        }; 
     }
 
     public void removeAddress(AddressDTO address)
