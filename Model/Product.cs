@@ -92,6 +92,15 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return dtoProduct;
     }
 
+    public static Product convertDAOToModel(DAO.Product product)
+    {
+        return new Product()
+        {
+            name = this.name,
+            bar_code = product.bar_code
+        };
+    }
+
     public void delete()
     {
 

@@ -155,6 +155,30 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		return modelPurchase;
     }
 
+	public static Purchase convertModelToDAO(DAO.Purchase purchase)
+    {
+		List<Product> products = new List<Product>();
+		using (var context = new DAOContext())
+        {
+			var purch = context.Purchase.Where(p => p.number_nf == purchase.number_nf ); 
+			foreach (var p in purch)
+            {
+				products.Add(Product.convertDAOToModel(p.product));
+            }
+        }
+		
+		return new Purchase(){
+		date_purchase = purchase.date_purchase,
+		number_confirmation =purchase.number_confirmation,
+		number_nf = purchase.number_nf,
+		purchase_status = purchase.purchase_status,
+		purchase_value = purchase.purchase_value,
+		client = Client.convertDAOToModel(purchase.client),
+		store = Store.convertDAOToModel(purchase.store),
+		products = products
+		};
+    }
+
 	public int save()
     {
 		int id;

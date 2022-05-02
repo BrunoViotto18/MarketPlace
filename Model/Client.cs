@@ -149,9 +149,18 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
 
     }
 
+   /* public ClientDTO find(string document)
+    {
+        using (var context = new DAO.DAOContext())
+        {
+            var client = context.Client.Where(c => c.document == document).Single();
+
+
+        }
+    }*/
+
     public ClientDTO findById()
     {
-
         return new ClientDTO();
     }
 

@@ -137,6 +137,21 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         return dtoClient;
     }
 
+    public static Owner convertDAOToModel(DAO.Owner owner)
+    {
+        return new Owner(Address.convertDAOToModel(owner.address))
+        {
+            name = owner.name,
+            date_of_birth = owner.date_of_birth,
+            document = owner.document, 
+            email = owner.email,    
+            phone = owner.phone,
+            login=owner.login,
+            passwd = owner.passwd
+
+        };
+    }
+
     public void delete()
     {
 

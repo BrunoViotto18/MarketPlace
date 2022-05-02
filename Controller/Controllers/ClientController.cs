@@ -31,8 +31,7 @@ public class ClientController : ControllerBase
 
     [HttpGet]
     [Route("informations")]
-    public void getInformations()
+    public void getInformations(int clientID)
     {
-
     }
 }

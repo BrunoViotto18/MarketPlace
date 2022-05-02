@@ -17,9 +17,17 @@ public class ProductController : ControllerBase
 
     [HttpPost]
     [Route("create")]
-    public void createProduct(ProductDTO product)
+    public object createProduct([FromBody] ProductDTO product)
     {
-    
+        Product productModel = Product.convertDTOToModel(product);
+        var id = productModel.save();
+
+        return new
+        {
+            id = id,
+            nome = product.name,
+            codigoDeBarra = product.bar_code
+        };
     }
 
     [HttpDelete]
