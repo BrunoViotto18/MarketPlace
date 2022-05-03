@@ -1,5 +1,6 @@
 namespace Model;
 
+using Microsoft.EntityFrameworkCore;
 using Interfaces;
 using DTO;
 using DAO;
@@ -174,15 +175,14 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
 
     }
 
-   /* public ClientDTO find(string document)
+    public static ClientDTO findByDocument(string document)
     {
         using (var context = new DAO.DAOContext())
         {
-            var client = context.Client.Where(c => c.document == document).Single();
-
-
+            var client = context.Client.Include(c => c.address).Where(c => c.document == document).Single();
+            return Client.convertDAOToModel(client).convertModelToDTO();
         }
-    }*/
+    }
 
     public ClientDTO findById()
     {
