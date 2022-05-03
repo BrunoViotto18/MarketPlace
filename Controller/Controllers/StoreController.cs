@@ -17,10 +17,18 @@ public class StoreController : ControllerBase
 
     [HttpPost]
     [Route("register")]
-    public void registerStore(StoreDTO store)
+    public object registerStore([FromBody] StoreDTO store)
     {
         var storeModel = Store.convertDTOToModel(store);
-        var id = storeModel.save(store.find(store.CNPJ));
+        var id = storeModel.save(storeModel.save(storeModel.getOwner().findId()));
+
+        return new
+        {
+            name = store.name,
+            CNPJ = store.CNPJ,
+            owner = store.owner,
+            purchases = store.purchases
+        };
     }
 
     [HttpGet]

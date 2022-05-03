@@ -42,6 +42,7 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return instance;
     }
 
+    // Valida se o objeto tem todos os seus campos diferente de nulo
     public Boolean validateObject()
     {
         if (this.name == null)
@@ -71,6 +72,10 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return true;
     }
 
+
+    /* Conversores */
+
+    // Converte um objeto DTO para Model
     public static Client convertDTOToModel(ClientDTO client)
     {
         Client modelClient = new Client(Address.convertDTOToModel(client.address))
@@ -87,6 +92,42 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return modelClient;
     }
 
+    // Converte um objeto Model para DTO
+    public ClientDTO convertModelToDTO()
+    {
+        ClientDTO dtoClient = new ClientDTO();
+
+        dtoClient.name = this.name;
+        dtoClient.date_of_birth = this.date_of_birth;
+        dtoClient.document = this.document;
+        dtoClient.email = this.email;
+        dtoClient.phone = this.phone;
+        dtoClient.login = this.login;
+        dtoClient.passwd = this.passwd;
+        dtoClient.address = this.address.convertModelToDTO();
+
+        return dtoClient;
+    }
+
+    // Converte um objeto DAO para Model
+    public static Client convertDAOToModel(DAO.Client client)
+    {
+        return new Client(Address.convertDAOToModel(client.address))
+        {
+            name = client.name,
+            date_of_birth = client.date_of_birth,
+            document = client.document,
+            email = client.email,
+            phone = client.phone,
+            login = client.login,
+            passwd = client.passwd
+        };
+    }
+
+
+    /* Métodos SQL */
+
+    // Salva o objeto atual no banco de dados
     public int save()
     {
         int id;
@@ -123,36 +164,6 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return id;
     }
 
-    public ClientDTO convertModelToDTO()
-    {
-        ClientDTO dtoClient = new ClientDTO();
-
-        dtoClient.name = this.name;
-        dtoClient.date_of_birth = this.date_of_birth;
-        dtoClient.document = this.document;
-        dtoClient.email = this.email;
-        dtoClient.phone = this.phone;
-        dtoClient.login = this.login;
-        dtoClient.passwd = this.passwd;
-        dtoClient.address = this.address.convertModelToDTO();
-
-        return dtoClient;
-    }
-
-    public static Client convertDAOToModel(DAO.Client client)
-    {
-        return new Client(Address.convertDAOToModel(client.address))
-        {
-            name = client.name,
-            date_of_birth = client.date_of_birth,
-            document = client.document,
-            email = client.email,
-            phone = client.phone,
-            login = client.login,
-            passwd = client.passwd
-        };
-    }
-
     public void delete()
     {
 
@@ -183,6 +194,4 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         List<ClientDTO> client = new List<ClientDTO>();
         return client;
     }
-
-
 }

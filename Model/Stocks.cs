@@ -61,6 +61,7 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
 
     // Métodos
 
+    // Valida se o objeto tem todos os seus campos diferente de nulo
     public Boolean validateObject()
     {
         if (this.quantity == 0)
@@ -75,6 +76,10 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         return true;
     }
 
+
+    /* Conversores */
+
+    // Converte um objeto DTO para Model
     public static Stocks convertDTOToModel(StocksDTO stocks)
     {
         Stocks modelStocks = new Stocks();
@@ -87,6 +92,35 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         return modelStocks;
     }
 
+    // Converte um objeto Model para DTO
+    public StocksDTO convertModelToDTO()
+    {
+        StocksDTO dtoStocks = new StocksDTO();
+
+        dtoStocks.quantity = this.quantity;
+        dtoStocks.unit_price = this.unit_price;
+        dtoStocks.store = this.store.convertModelToDTO();
+        dtoStocks.product = this.product.convertModelToDTO();
+
+        return dtoStocks;
+    }
+
+    // Converte um objeto DAO para Model
+    public static Stocks convertDAOToModel(DAO.Stocks stocks)
+    {
+        return new Stocks
+        {
+            quantity = (int)stocks.quantity,
+            unit_price = stocks.unit_price,
+            product = Product.convertDAOToModel(stocks.product),
+            store = Store.convertDAOToModel(stocks.store)
+        };
+    }
+
+
+    /* Métodos SQL */
+
+    // Salva o objeto atual no banco de dados
     public int save(int storeId, int productId, int quantity, double unit_price)
     {
         int id;
@@ -113,29 +147,6 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         }
 
         return id;
-    }
-
-    public StocksDTO convertModelToDTO()
-    {
-        StocksDTO dtoStocks = new StocksDTO();
-
-        dtoStocks.quantity = this.quantity;
-        dtoStocks.unit_price = this.unit_price;
-        dtoStocks.store = this.store.convertModelToDTO();
-        dtoStocks.product = this.product.convertModelToDTO();
-
-        return dtoStocks;
-    }
-
-    public static Stocks convertDAOToModel(DAO.Stocks stocks)
-    {
-        return new Stocks
-        {
-            quantity = (int)stocks.quantity,
-            unit_price = stocks.unit_price,
-            product = Product.convertDAOToModel(stocks.product),
-            store = Store.convertDAOToModel(stocks.store)
-        };
     }
 
     public void delete()

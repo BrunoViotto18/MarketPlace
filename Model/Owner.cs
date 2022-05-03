@@ -41,6 +41,7 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         return owner;
     }
 
+    // Valida se o objeto tem todos os seus campos diferente de nulo
     public Boolean validateObject() {
 
         if (this.address == null)
@@ -70,6 +71,10 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         return true;
     }
 
+
+    /* Conversores */
+
+    // Converte um objeto DTO para Model
     public static Owner convertDTOToModel(OwnerDTO owner)
     {
         Owner modelOwner = new Owner(Address.convertDTOToModel(owner.address));
@@ -85,6 +90,43 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         return modelOwner;
     }
 
+    // Converte um objeto Model para DTO
+    public OwnerDTO convertModelToDTO()
+    {
+        OwnerDTO dtoClient = new OwnerDTO();
+
+        dtoClient.name = this.name;
+        dtoClient.date_of_birth = this.date_of_birth;
+        dtoClient.document = this.document;
+        dtoClient.email = this.email;
+        dtoClient.phone = this.phone;
+        dtoClient.login = this.login;
+        dtoClient.passwd = this.passwd;
+        dtoClient.address = this.address.convertModelToDTO();
+
+        return dtoClient;
+    }
+
+    // Converte um objeto DAO para Model
+    public static Owner convertDAOToModel(DAO.Owner owner)
+    {
+        return new Owner(Address.convertDAOToModel(owner.address))
+        {
+            name = owner.name,
+            date_of_birth = owner.date_of_birth,
+            document = owner.document,
+            email = owner.email,
+            phone = owner.phone,
+            login = owner.login,
+            passwd = owner.passwd
+
+        };
+    }
+
+
+    /* Métodos SQL */
+
+    // Salva o objeto atual no banco de dados
     public int save()
     {
         int id;
@@ -121,37 +163,6 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         return id;
     }
 
-    public OwnerDTO convertModelToDTO()
-    {
-        OwnerDTO dtoClient = new OwnerDTO();
-
-        dtoClient.name = this.name;
-        dtoClient.date_of_birth = this.date_of_birth;
-        dtoClient.document = this.document;
-        dtoClient.email = this.email;
-        dtoClient.phone = this.phone;
-        dtoClient.login = this.login;
-        dtoClient.passwd = this.passwd;
-        dtoClient.address = this.address.convertModelToDTO();
-
-        return dtoClient;
-    }
-
-    public static Owner convertDAOToModel(DAO.Owner owner)
-    {
-        return new Owner(Address.convertDAOToModel(owner.address))
-        {
-            name = owner.name,
-            date_of_birth = owner.date_of_birth,
-            document = owner.document, 
-            email = owner.email,    
-            phone = owner.phone,
-            login=owner.login,
-            passwd = owner.passwd
-
-        };
-    }
-
     public void delete()
     {
 
@@ -162,9 +173,23 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
 
     }
 
+    // Retorna o ID do objeto atual
+    public int findId()
+    {
+        using (var context = new DAOContext())
+        {
+            var owner = context.Owner.Where(o => o.document == this.document).Single();
+            return owner.id;
+        }
+    }
+
+    public static Owner find()
+    {
+        return new Owner(new Address("", "", "", "", ""));
+    }
+
     public OwnerDTO findById()
     {
-
         return new OwnerDTO();
     }
 
