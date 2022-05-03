@@ -256,26 +256,54 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		return id;
     }
 
+
 	public void delete()
 	{
 
 	}
+
 
 	public void update()
 	{
 
 	}
 
+
 	public PurchaseDTO findById()
 	{
-
 		return new PurchaseDTO();
 	}
+
+	// Retorna todas as compras de um cliente
+	public static List<PurchaseDTO> getClientPurchases(int clientID)
+    {
+		List<PurchaseDTO> clientPurchases = new List<PurchaseDTO>();
+		using (var context = new DAOContext())
+        {
+			var purchases = context.Purchase.Where(p => p.client.id == clientID);
+			foreach (var purch in purchases)
+				clientPurchases.Add(Purchase.convertDAOToModel(purch).convertModelToDTO());
+        }
+		return clientPurchases;
+	}
+
+	// Retorna todas as compras de uma loja
+	public static List<PurchaseDTO> getStorePurchases(int storeID)
+	{
+		List<PurchaseDTO> clientPurchases = new List<PurchaseDTO>();
+		using (var context = new DAOContext())
+		{
+			var purchases = context.Purchase.Where(p => p.store.id == storeID);
+			foreach (var purch in purchases)
+				clientPurchases.Add(Purchase.convertDAOToModel(purch).convertModelToDTO());
+		}
+		return clientPurchases;
+	}
+
 
 	public List<PurchaseDTO> getAll()
 	{
 		List<PurchaseDTO> purchase= new List<PurchaseDTO>();
 		return purchase;
 	}
-
 }
