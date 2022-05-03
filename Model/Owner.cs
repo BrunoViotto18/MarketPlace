@@ -2,6 +2,7 @@
 using DAO;
 using Interfaces;
 using DTO;
+using Microsoft.EntityFrameworkCore;
 
 public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owner>
 {
@@ -163,10 +164,12 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         return id;
     }
 
+
     public void delete()
     {
 
     }
+
 
     public void update()
     {
@@ -174,24 +177,30 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
     }
 
     // Retorna o ID do objeto atual
-    public int findId()
+    public int findID()
     {
         using (var context = new DAOContext())
         {
-            var owner = context.Owner.Where(o => o.document == this.document).Single();
-            return owner.id;
+            return context.Owner.Where(o => o.document == this.document).Single().id;
         }
     }
 
-    public static Owner find()
+    // Retorna o dono por documento
+    public static OwnerDTO findByDocument(string document)
     {
-        return new Owner(new Address("", "", "", "", ""));
+        using (var context = new DAO.DAOContext())
+        {
+            var owner = context.Owner.Include(c => c.address).Where(c => c.document == document).Single();
+            return Owner.convertDAOToModel(owner).convertModelToDTO();
+        }
     }
+
 
     public OwnerDTO findById()
     {
         return new OwnerDTO();
     }
+
 
     public List<OwnerDTO> getAll()
     {
