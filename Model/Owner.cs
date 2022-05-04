@@ -177,7 +177,7 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
     }
 
     // Retorna o ID do objeto atual
-    public int findID()
+    public int findId()
     {
         using (var context = new DAOContext())
         {
