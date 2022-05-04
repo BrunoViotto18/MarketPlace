@@ -39,6 +39,7 @@ public class StockController : ControllerBase
     public void deleteStock([FromBody] StocksDTO stocks)
     {
         var stockModel = Stocks.convertDTOToModel(stocks);
-
+        stockModel.delete();  
+       
     }
 }

@@ -157,6 +157,7 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
             if (thisDAO == null)
                 return;
             context.Stocks.Remove(thisDAO);
+            context.SaveChanges();
         };
     }
 
