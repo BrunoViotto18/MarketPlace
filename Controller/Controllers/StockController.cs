@@ -9,7 +9,7 @@ namespace Controller.Controllers;
 public class StockController : ControllerBase
 {
     [HttpPost]
-    [Route("addStock")]
+    [Route("addProduct")]
     public object addProductToStock([FromBody] StocksDTO stocks)
     {
         var stockModel = Stocks.convertDTOToModel(stocks);
