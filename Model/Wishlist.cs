@@ -62,6 +62,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 
     /* Conversores */
 
+
     // Converte um objeto DTO para Model
     public static WishList convertDTOToModel(WishListDTO wishlist)
     {
@@ -95,10 +96,10 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         List<Product> products = new List<Product>();
         using (var context = new DAOContext())
         {
-            var prod = context.Product.Where(p => p.id == wishlist.product.id);
-            foreach (var p in prod)
+            var wishlists = context.WishList.Where(w => w.client.id == wishlist.client.id);
+            foreach (var p in wishlists)
             {
-                products.Add(Product.convertDAOToModel(p));
+                products.Add(Product.convertDAOToModel(p.product));
             }
         }
 
@@ -111,6 +112,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 
 
     /* Métodos SQL */
+
 
     // Salva o objeto atual no banco de dados
     public int save(String document, int productID)
@@ -139,16 +141,33 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         return id;
     }
 
-
+    // Deleta o objeto atual no banco de dados
     public void delete()
     {
+        using (var context = new DAOContext())
+        {
+            var thisDAO = this.findDAO();
 
+            if (thisDAO == null)
+                return;
+
+            context.WishList.Remove(thisDAO);
+        }
     }
 
 
     public void update()
     {
 
+    }
+
+    // Retorna o objeto do banco de dados referente ao objeto model atual
+    private DAO.WishList? findDAO()
+    {
+        using (var context = new DAOContext())
+        {
+            return context.WishList.FirstOrDefault(w => w.product.id == this.product.id);
+        }
     }
 
 

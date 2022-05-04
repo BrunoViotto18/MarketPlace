@@ -34,8 +34,9 @@ public class WishListController: ControllerBase
 
     [HttpDelete]
     [Route("removeProduct")]
-    public void removeProductToWishList(object request)
+    public void removeProductToWishList([FromBody] WishListDTO request)
     {
-    
+        var wishlist = WishList.convertDTOToModel(request);
+        wishlist.delete();
     }
 }
