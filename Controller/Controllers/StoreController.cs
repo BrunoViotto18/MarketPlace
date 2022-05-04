@@ -10,9 +10,9 @@ public class StoreController : ControllerBase
 {
     [HttpGet]
     [Route("all")]
-    public void getAllStore()
+    public List<StoreDTO> getAllStore()
     {
-    
+        return Store.getAllStores();
     }
 
     [HttpPost]
@@ -20,10 +20,11 @@ public class StoreController : ControllerBase
     public object registerStore([FromBody] StoreDTO store)
     {
         var storeModel = Store.convertDTOToModel(store);
-        var id = storeModel.save(storeModel.save(storeModel.getOwner().findId()));
+        var id = storeModel.save(storeModel.getOwner().findID());
 
         return new
         {
+            id = id,
             name = store.name,
             CNPJ = store.CNPJ,
             owner = store.owner,
@@ -33,8 +34,8 @@ public class StoreController : ControllerBase
 
     [HttpGet]
     [Route("information")]
-    public void getStoreInformation(StoreDTO store)
+    public StoreDTO getStoreInformation(String CNPJ)
     {
-    
+        return Store.findByCNPJ(CNPJ);
     }
 }

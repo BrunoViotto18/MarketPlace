@@ -133,4 +133,15 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         List<ProductDTO> prod = new List<ProductDTO>();
         return prod;
     }
+
+    public static int FindId(string bar_code)
+    {
+        using (var context = new DAOContext())
+        {
+            var product = context.Product.Where(s => s.bar_code == bar_code).Single();
+            return product.id;
+
+
+        }
+    }
 }

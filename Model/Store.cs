@@ -165,15 +165,18 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         return id;
     }
 
+
     public void delete()
     {
 
     }
 
+
     public void update()
     {
 
     }
+
 
     public static Store find(string CNPJ)
     {
@@ -185,16 +188,49 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         }
     }
 
+    // Retorna a loja pelo CNPJ
+    public static StoreDTO findByCNPJ(String CNPJ)
+    {
+        using (var context = new DAOContext())
+        {
+            var store = context.Store.Where(s => s.CNPJ == CNPJ).Single();
+            return Store.convertDAOToModel(store).convertModelToDTO();
+        }
+    }
+
+
     public StoreDTO findById()
     {
 
         return new StoreDTO();
     }
 
-    public List<StoreDTO> getAll()
+    // Retorna todas as lojas
+    public static List<StoreDTO> getAllStores()
     {
-        List<StoreDTO> stores = new List<StoreDTO>(); 
-        return stores;
+        List<StoreDTO> lojas = new List<StoreDTO>();
+        using (var context = new DAOContext())
+        {
+            var stores = context.Store.Where(p => true);
+            foreach (var store in stores)
+                lojas.Add(Store.convertDAOToModel(store).convertModelToDTO());
+        }
+        return lojas;
     }
 
+    // Retorna todas as lojas
+    public List<StoreDTO> getAll()
+    {
+        List<StoreDTO> lojas = new List<StoreDTO>();
+        return lojas;
+    }
+
+    public static int findId(string CNPJ)
+    {
+        using (var context = new DAOContext())
+        {
+            var store = context.Store.Where(s => s.CNPJ == CNPJ).Single();
+            return store.id;
+        }
+    }
 }

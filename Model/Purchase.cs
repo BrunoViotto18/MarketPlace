@@ -224,46 +224,54 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		return id;
     }
 
-	public PurchaseDTO convertModelToDTO()
-	{
-		PurchaseDTO dtoPurchase = new PurchaseDTO();
-
-		dtoPurchase.data_purchase = this.date_purchase;
-		dtoPurchase.purchase_value = this.purchase_value;
-		dtoPurchase.payment_type = this.payment_type;
-		dtoPurchase.purchase_status = this.purchase_status;
-		dtoPurchase.confirmation_number = this.number_confirmation;
-		dtoPurchase.number_nf = this.number_nf;
-		dtoPurchase.store = this.store.convertModelToDTO();
-		dtoPurchase.client = this.client.convertModelToDTO();
-		List<ProductDTO> products = new List<ProductDTO>();
-		foreach (Product prod in this.products)
-			products.Add(prod.convertModelToDTO());
-		dtoPurchase.productsDTO = products;
-
-		return dtoPurchase;
-	}
 
 	public void delete()
 	{
 
 	}
 
+
 	public void update()
 	{
 
 	}
 
+
 	public PurchaseDTO findById()
 	{
-
 		return new PurchaseDTO();
 	}
+
+	// Retorna todas as compras de um cliente
+	public static List<PurchaseDTO> getClientPurchases(int clientID)
+    {
+		List<PurchaseDTO> clientPurchases = new List<PurchaseDTO>();
+		using (var context = new DAOContext())
+        {
+			var purchases = context.Purchase.Where(p => p.client.id == clientID);
+			foreach (var purch in purchases)
+				clientPurchases.Add(Purchase.convertDAOToModel(purch).convertModelToDTO());
+        }
+		return clientPurchases;
+	}
+
+	// Retorna todas as compras de uma loja
+	public static List<PurchaseDTO> getStorePurchases(int storeID)
+	{
+		List<PurchaseDTO> clientPurchases = new List<PurchaseDTO>();
+		using (var context = new DAOContext())
+		{
+			var purchases = context.Purchase.Where(p => p.store.id == storeID);
+			foreach (var purch in purchases)
+				clientPurchases.Add(Purchase.convertDAOToModel(purch).convertModelToDTO());
+		}
+		return clientPurchases;
+	}
+
 
 	public List<PurchaseDTO> getAll()
 	{
 		List<PurchaseDTO> purchase= new List<PurchaseDTO>();
 		return purchase;
 	}
-
 }

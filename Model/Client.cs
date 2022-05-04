@@ -165,16 +165,19 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return id;
     }
 
+
     public void delete()
     {
 
     }
+
 
     public void update()
     {
 
     }
 
+    // Retorna o cliente pelo documento
     public static ClientDTO findByDocument(string document)
     {
         using (var context = new DAO.DAOContext())
@@ -184,10 +187,12 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         }
     }
 
+
     public ClientDTO findById()
     {
         return new ClientDTO();
     }
+
 
     public List<ClientDTO> getAll()
     {
