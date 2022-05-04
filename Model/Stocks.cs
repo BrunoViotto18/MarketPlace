@@ -151,7 +151,13 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
 
     public void delete()
     {
-
+        using (var context = new DAOContext())
+        {
+            var thisDAO = this.FindDao();
+            if (thisDAO == null)
+                return;
+            context.Stocks.Remove(thisDAO);
+        };
     }
 
     public void update()
@@ -171,4 +177,13 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         return stocks;
     }
 
+
+    public DAO.Stocks? FindDao()
+    {
+        using (var context = new DAOContext())
+        {
+            var stock = context.Stocks.FirstOrDefault(i => Stocks.convertDAOToModel(i) == this);
+            return stock;
+        };
+    }
 }
