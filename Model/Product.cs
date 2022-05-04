@@ -112,21 +112,35 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return id;
     }
 
+
     public void delete()
     {
 
     }
+
 
     public void update()
     {
 
     }
 
+    // Retorna o ID do objeto atual
+    public int findId()
+    {
+        using (var context = new DAOContext())
+        {
+            var product = context.Product.Where(p => p.bar_code == this.bar_code).Single();
+            return product.id;
+        }
+    }
+
+
     public ProductDTO findById()
     {
 
         return new ProductDTO();
     }
+
 
     public List<ProductDTO> getAll()
     {

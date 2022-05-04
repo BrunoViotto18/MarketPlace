@@ -113,14 +113,14 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     /* Métodos SQL */
 
     // Salva o objeto atual no banco de dados
-    public int save(string document, int productId)
+    public int save(String document, int productID)
     {
         int id;
 
         using (var context = new DAOContext())
         {
             var clientDao = context.Client.Where(c => c.document == document).Single();
-            var productDao = context.Product.Where(p => p.id == productId).Single();
+            var productDao = context.Product.Where(p => p.id == productID).Single();
 
             var wishlist = new DAO.WishList
             {
@@ -139,21 +139,25 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         return id;
     }
 
+
     public void delete()
     {
 
     }
+
 
     public void update()
     {
 
     }
 
+
     public WishListDTO findById()
     {
 
         return new WishListDTO();
     }
+
 
     public List<WishListDTO> getAll()
     {

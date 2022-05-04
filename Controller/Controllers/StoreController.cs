@@ -20,7 +20,7 @@ public class StoreController : ControllerBase
     public object registerStore([FromBody] StoreDTO store)
     {
         var storeModel = Store.convertDTOToModel(store);
-        var id = storeModel.save(storeModel.getOwner().findID());
+        var id = storeModel.save(storeModel.getOwner().findId());
 
         return new
         {
