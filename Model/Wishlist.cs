@@ -153,7 +153,16 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     {
         using (var context = new DAOContext())
         {
+            foreach (var prod in this.products)
+            {
+                var wishlist = context.WishList.FirstOrDefault(w => w.client.document == this.client.getDocument() && w.product.bar_code == prod.getBarCode());
 
+                if (wishlist == null)
+                    return;
+
+                context.WishList.Remove(wishlist);
+                context.SaveChanges();
+            }
         }
     }
 

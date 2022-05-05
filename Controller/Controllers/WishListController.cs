@@ -17,9 +17,10 @@ public class WishListController: ControllerBase
         List<object> products = new List<object>();
         foreach (var prod in wishlist.getProducts())
         {
-            wishlist.save(wishlist.getClient().getDocument(), prod.findId());
+            var id = wishlist.save(wishlist.getClient().getDocument(), prod.findId());
             products.Add(new
             {
+                id = id,
                 nome = prod.getName(),
                 codigoDeBarras = prod.getBarCode()
             });
