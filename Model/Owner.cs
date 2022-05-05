@@ -2,6 +2,7 @@
 using DAO;
 using Interfaces;
 using DTO;
+using Microsoft.EntityFrameworkCore;
 
 public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owner>
 {
@@ -35,37 +36,36 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
     public static Owner getInstance(Address address)
     {
         if (owner == null)
-        {
             owner = new Owner(address);
-        }
+
         return owner;
     }
 
     // Valida se o objeto tem todos os seus campos diferente de nulo
-    public Boolean validateObject() {
-
-        if (this.address == null)
-            return false;
-
+    public Boolean validateObject()
+    {
         if (this.name == null)
-            return false;
-
-        if (this.login == null)
-            return false;
-
-        if (this.document == null)
-            return false;
-
-        if (this.phone == null)
-            return false;
-
-        if (this.email == null)
             return false;
 
         if (this.date_of_birth == default)
             return false;
 
+        if (this.document == null)
+            return false;
+
+        if (this.email == null)
+            return false;
+
+        if (this.phone == null)
+            return false;
+
+        if (this.login == null)
+            return false;
+
         if (this.passwd == null)
+            return false;
+
+        if (this.address == null)
             return false;
 
         return true;
@@ -77,34 +77,32 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
     // Converte um objeto DTO para Model
     public static Owner convertDTOToModel(OwnerDTO owner)
     {
-        Owner modelOwner = new Owner(Address.convertDTOToModel(owner.address));
-
-        modelOwner.name = owner.name;
-        modelOwner.email = owner.email;
-        modelOwner.date_of_birth = owner.date_of_birth;
-        modelOwner.phone = owner.phone;
-        modelOwner.document = owner.document;
-        modelOwner.login = owner.login;
-        modelOwner.passwd = owner.passwd;
-       
-        return modelOwner;
+        return new Owner(Address.convertDTOToModel(owner.address))
+        {
+            name = owner.name,
+            date_of_birth = owner.date_of_birth,
+            document = owner.document,
+            email = owner.email,
+            phone = owner.phone,
+            login = owner.login,
+            passwd = owner.passwd
+        };
     }
 
     // Converte um objeto Model para DTO
     public OwnerDTO convertModelToDTO()
     {
-        OwnerDTO dtoClient = new OwnerDTO();
-
-        dtoClient.name = this.name;
-        dtoClient.date_of_birth = this.date_of_birth;
-        dtoClient.document = this.document;
-        dtoClient.email = this.email;
-        dtoClient.phone = this.phone;
-        dtoClient.login = this.login;
-        dtoClient.passwd = this.passwd;
-        dtoClient.address = this.address.convertModelToDTO();
-
-        return dtoClient;
+        return new OwnerDTO
+        {
+            name = this.name,
+            date_of_birth = this.date_of_birth,
+            document = this.document,
+            email = this.email,
+            phone = this.phone,
+            login = this.login,
+            passwd = this.passwd,
+            address = this.address.convertModelToDTO()
+        };
     }
 
     // Converte um objeto DAO para Model
@@ -119,7 +117,6 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
             phone = owner.phone,
             login = owner.login,
             passwd = owner.passwd
-
         };
     }
 
@@ -145,14 +142,17 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
             var owner = new DAO.Owner()
             {
                 name = this.name,
-                email = this.email,
                 date_of_birth = this.date_of_birth,
+                document = this.document,
+                email = this.email,
                 phone = this.phone,
                 login = this.login,
                 passwd = this.passwd,
-                document = this.document,
                 address = addressDao
             };
+
+            if (context.Owner.FirstOrDefault(o => o.document == owner.document) != null)
+                return -1;
             
             context.Owner.Add(owner);
             context.SaveChanges();
@@ -163,10 +163,12 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         return id;
     }
 
+
     public void delete()
     {
 
     }
+
 
     public void update()
     {
@@ -178,20 +180,26 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
     {
         using (var context = new DAOContext())
         {
-            var owner = context.Owner.Where(o => o.document == this.document).Single();
-            return owner.id;
+            return context.Owner.Where(o => o.document == this.document).Single().id;
         }
     }
 
-    public static Owner find()
+    // Retorna o dono por documento
+    public static OwnerDTO findByDocument(string document)
     {
-        return new Owner(new Address("", "", "", "", ""));
+        using (var context = new DAO.DAOContext())
+        {
+            var owner = context.Owner.Include(c => c.address).Where(c => c.document == document).Single();
+            return Owner.convertDAOToModel(owner).convertModelToDTO();
+        }
     }
+
 
     public OwnerDTO findById()
     {
         return new OwnerDTO();
     }
+
 
     public List<OwnerDTO> getAll()
     {

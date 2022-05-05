@@ -57,24 +57,21 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
     // Converte um objeto DTO para Model
     public static Product convertDTOToModel(ProductDTO product)
     {
-        Product modelProduct = new Product
+        return new Product
         {
             name = product.name,
             bar_code = product.bar_code
         };
-
-        return modelProduct;
     }
 
     // Converte um objeto Model para DTO
     public ProductDTO convertModelToDTO()
     {
-        ProductDTO dtoProduct = new ProductDTO();
-
-        dtoProduct.name = this.name;
-        dtoProduct.bar_code = this.bar_code;
-
-        return dtoProduct;
+        return new ProductDTO
+        {
+            name = this.name,
+            bar_code = this.bar_code
+        };
     }
 
     // Converte um objeto DAO para Model
@@ -103,6 +100,9 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
                 bar_code = this.bar_code
             };
 
+            if (context.Product.FirstOrDefault(p => p.bar_code == product.bar_code) != null)
+                return -1;
+
             context.Product.Add(product);
             context.SaveChanges();
 
@@ -112,15 +112,28 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return id;
     }
 
+
     public void delete()
     {
 
     }
 
+
     public void update()
     {
 
     }
+
+    // Retorna o ID do objeto atual
+    public int findId()
+    {
+        using (var context = new DAOContext())
+        {
+            var product = context.Product.Where(p => p.bar_code == this.bar_code).Single();
+            return product.id;
+        }
+    }
+
 
     public ProductDTO findById()
     {
@@ -128,9 +141,21 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return new ProductDTO();
     }
 
+
     public List<ProductDTO> getAll()
     {
         List<ProductDTO> prod = new List<ProductDTO>();
         return prod;
+    }
+
+    public static int FindId(string bar_code)
+    {
+        using (var context = new DAOContext())
+        {
+            var product = context.Product.Where(s => s.bar_code == bar_code).Single();
+            return product.id;
+
+
+        }
     }
 }

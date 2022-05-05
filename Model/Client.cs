@@ -36,10 +36,9 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
     // Retorna uma instância/objeto desta classe
     public static Client getInstance(Address address)
     {
-        if(instance == null)
-        {
+        if (instance == null)
             instance = new Client(address);
-        }
+
         return instance;
     }
 
@@ -64,10 +63,10 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         if (this.login == null)
             return false;
 
-        if (this.address == null)
+        if (this.passwd == null)
             return false;
 
-        if (this.passwd == null)
+        if (this.address == null)
             return false;
 
         return true;
@@ -79,35 +78,32 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
     // Converte um objeto DTO para Model
     public static Client convertDTOToModel(ClientDTO client)
     {
-        Client modelClient = new Client(Address.convertDTOToModel(client.address))
+        return new Client(Address.convertDTOToModel(client.address))
         {
             name = client.name,
-            email = client.email,
             date_of_birth = client.date_of_birth,
-            phone = client.phone,
             document = client.document,
+            email = client.email,
+            phone = client.phone,
             login = client.login,
             passwd = client.passwd
         };
-
-        return modelClient;
     }
 
     // Converte um objeto Model para DTO
     public ClientDTO convertModelToDTO()
     {
-        ClientDTO dtoClient = new ClientDTO();
-
-        dtoClient.name = this.name;
-        dtoClient.date_of_birth = this.date_of_birth;
-        dtoClient.document = this.document;
-        dtoClient.email = this.email;
-        dtoClient.phone = this.phone;
-        dtoClient.login = this.login;
-        dtoClient.passwd = this.passwd;
-        dtoClient.address = this.address.convertModelToDTO();
-
-        return dtoClient;
+        return new ClientDTO
+        {
+            name = this.name,
+            date_of_birth = this.date_of_birth,
+            document = this.document,
+            email = this.email,
+            phone = this.phone,
+            login = this.login,
+            passwd = this.passwd,
+            address = this.address.convertModelToDTO()
+        };
     }
 
     // Converte um objeto DAO para Model
@@ -156,6 +152,9 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
                 address = addressDao
             };
 
+            if (context.Client.FirstOrDefault(c => c.document == client.document) != null)
+                return -1;
+
             context.Client.Add(client);
             context.SaveChanges();
 
@@ -165,16 +164,19 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return id;
     }
 
+
     public void delete()
     {
 
     }
+
 
     public void update()
     {
 
     }
 
+    // Retorna o cliente pelo documento
     public static ClientDTO findByDocument(string document)
     {
         using (var context = new DAO.DAOContext())
@@ -184,10 +186,12 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         }
     }
 
+
     public ClientDTO findById()
     {
         return new ClientDTO();
     }
+
 
     public List<ClientDTO> getAll()
     {

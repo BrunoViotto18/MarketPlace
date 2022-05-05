@@ -10,19 +10,16 @@ public class PurchaseController : ControllerBase
 {
     [HttpGet]
     [Route("clientPurchase/{clientID}")]
-    public object getClientPurchase(int clientID)
+    public List<PurchaseDTO> getClientPurchase(int clientID)
     {
-        return new
-        {
-            id = clientID
-        };
+        return Purchase.getClientPurchases(clientID);
     }
     
     [HttpGet]
     [Route("storePurchase/{storeID}")]
-    public int getStorePurchase(int storeID)
+    public List<PurchaseDTO> getStorePurchase(int storeID)
     {
-        return storeID;
+        return Purchase.getStorePurchases(storeID);
     }
 
     [HttpPost]

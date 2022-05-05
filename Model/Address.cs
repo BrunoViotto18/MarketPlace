@@ -100,35 +100,38 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
     // Converte um objeto DTO para Model
     public static Address convertDTOToModel(AddressDTO address)
     {
-        var modelAddress = new Address(
+        return new Address(
             address.street,
             address.city,
             address.state,
             address.country,
             address.postal_code
         );
-
-        return modelAddress;
     }
 
     // Converte um objeto Model para DTO
     public AddressDTO convertModelToDTO()
     {
-        AddressDTO addressDTO = new AddressDTO();
-
-        addressDTO.street = this.street;
-        addressDTO.state = this.state;
-        addressDTO.city = this.city;
-        addressDTO.country = this.country;
-        addressDTO.postal_code = this.poste_code;
-
-        return addressDTO;
+        return new AddressDTO
+        {
+            street = this.street,
+            state = this.state,
+            city = this.city,
+            country = this.country,
+            postal_code = this.poste_code
+        };
     }
 
     // Converte um objeto DAO para Model
     public static Address convertDAOToModel(DAO.Address address)
     {
-        return new Address(address.street, address.city, address.state, address.country, address.postal_code);
+        return new Address(
+            address.street,
+            address.city,
+            address.state,
+            address.country,
+            address.postal_code
+        );
     }
 
 

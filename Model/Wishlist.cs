@@ -62,31 +62,35 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 
     /* Conversores */
 
+
     // Converte um objeto DTO para Model
     public static WishList convertDTOToModel(WishListDTO wishlist)
     {
-        WishList modelWishlist = new WishList(Client.convertDTOToModel(wishlist.client));
+        if (wishlist.products == null)
+            wishlist.products = new List<ProductDTO>();
 
         List<Product> products = new List<Product>();
         foreach (ProductDTO prod in wishlist.products)
             products.Add(Product.convertDTOToModel(prod));
-        modelWishlist.products = products;
 
-        return modelWishlist;
+        return new WishList(Client.convertDTOToModel(wishlist.client))
+        {
+            products = products
+        };
     }
 
     // Converte um objeto Model para DTO
     public WishListDTO convertModelToDTO()
     {
-        WishListDTO dtoWishlist = new WishListDTO();
-
-        dtoWishlist.client = this.client.convertModelToDTO();
         List<ProductDTO> products = new List<ProductDTO>();
         foreach (Product prod in this.products)
             products.Add(prod.convertModelToDTO());
-        dtoWishlist.products = products;
 
-        return dtoWishlist;
+        return new WishListDTO
+        {
+            client = this.client.convertModelToDTO(),
+            products = products
+        };
     }
 
     // Converte um objeto DAO para Model
@@ -95,11 +99,9 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         List<Product> products = new List<Product>();
         using (var context = new DAOContext())
         {
-            var prod = context.Product.Where(p => p.id == wishlist.product.id);
-            foreach (var p in prod)
-            {
-                products.Add(Product.convertDAOToModel(p));
-            }
+            var wishlists = context.WishList.Where(w => w.client == wishlist.client);
+            foreach (var p in wishlists)
+                products.Add(Product.convertDAOToModel(p.product));
         }
 
         return new WishList
@@ -112,21 +114,28 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 
     /* Métodos SQL */
 
+
     // Salva o objeto atual no banco de dados
-    public int save(string document, int productId)
+    public int save(String document, int productID)
     {
         int id;
 
         using (var context = new DAOContext())
         {
-            var clientDao = context.Client.Where(c => c.document == document).Single();
-            var productDao = context.Product.Where(p => p.id == productId).Single();
+            var clientDao = context.Client.FirstOrDefault(c => c.document == document);
+            var productDao = context.Product.FirstOrDefault(p => p.id == productID);
+
+            if (clientDao == null || productDao == null)
+                return -1;
 
             var wishlist = new DAO.WishList
             {
                 client = clientDao,
                 product = productDao
             };
+
+            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.product == wishlist.product) != null)
+                return -1;
 
             context.WishList.Add(wishlist);
             context.Entry(wishlist.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
@@ -139,21 +148,41 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         return id;
     }
 
+    // Deleta o objeto atual no banco de dados
     public void delete()
     {
+        using (var context = new DAOContext())
+        {
+            foreach (var wish in this.products)
+            {
+               var product = context.WishList.FirstOrDefault(w => w.product.bar_code == wish.getBarCode() && w.client.document == this.client.getDocument());
+                Console.WriteLine("III");
+                if (product == null)
+                {
+                    Console.WriteLine("AAAA");
+                    return;
+                }
+                    
 
+               context.WishList.Remove(product);
+               context.SaveChanges();
+            }
+        }
     }
+
 
     public void update()
     {
 
     }
 
+
     public WishListDTO findById()
     {
 
         return new WishListDTO();
     }
+
 
     public List<WishListDTO> getAll()
     {
