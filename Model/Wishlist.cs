@@ -66,28 +66,31 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     // Converte um objeto DTO para Model
     public static WishList convertDTOToModel(WishListDTO wishlist)
     {
-        WishList modelWishlist = new WishList(Client.convertDTOToModel(wishlist.client));
+        if (wishlist.products == null)
+            wishlist.products = new List<ProductDTO>();
 
         List<Product> products = new List<Product>();
         foreach (ProductDTO prod in wishlist.products)
             products.Add(Product.convertDTOToModel(prod));
-        modelWishlist.products = products;
 
-        return modelWishlist;
+        return new WishList(Client.convertDTOToModel(wishlist.client))
+        {
+            products = products
+        };
     }
 
     // Converte um objeto Model para DTO
     public WishListDTO convertModelToDTO()
     {
-        WishListDTO dtoWishlist = new WishListDTO();
-
-        dtoWishlist.client = this.client.convertModelToDTO();
         List<ProductDTO> products = new List<ProductDTO>();
         foreach (Product prod in this.products)
             products.Add(prod.convertModelToDTO());
-        dtoWishlist.products = products;
 
-        return dtoWishlist;
+        return new WishListDTO
+        {
+            client = this.client.convertModelToDTO(),
+            products = products
+        };
     }
 
     // Converte um objeto DAO para Model
@@ -96,11 +99,9 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         List<Product> products = new List<Product>();
         using (var context = new DAOContext())
         {
-            var wishlists = context.WishList.Where(w => w.client.id == wishlist.client.id);
+            var wishlists = context.WishList.Where(w => w.client == wishlist.client);
             foreach (var p in wishlists)
-            {
                 products.Add(Product.convertDAOToModel(p.product));
-            }
         }
 
         return new WishList
@@ -121,14 +122,20 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 
         using (var context = new DAOContext())
         {
-            var clientDao = context.Client.Where(c => c.document == document).Single();
-            var productDao = context.Product.Where(p => p.id == productID).Single();
+            var clientDao = context.Client.FirstOrDefault(c => c.document == document);
+            var productDao = context.Product.FirstOrDefault(p => p.id == productID);
+
+            if (clientDao == null || productDao == null)
+                return -1;
 
             var wishlist = new DAO.WishList
             {
                 client = clientDao,
                 product = productDao
             };
+
+            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.product == wishlist.product) != null)
+                return -1;
 
             context.WishList.Add(wishlist);
             context.Entry(wishlist.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
@@ -146,12 +153,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     {
         using (var context = new DAOContext())
         {
-            var thisDAO = this.findDAO();
 
-            if (thisDAO == null)
-                return;
-
-            context.WishList.Remove(thisDAO);
         }
     }
 
@@ -159,15 +161,6 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     public void update()
     {
 
-    }
-
-    // Retorna o objeto do banco de dados referente ao objeto model atual
-    private DAO.WishList? findDAO()
-    {
-        using (var context = new DAOContext())
-        {
-            return context.WishList.FirstOrDefault(w => w.product.id == this.product.id);
-        }
     }
 
 

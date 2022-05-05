@@ -57,24 +57,21 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
     // Converte um objeto DTO para Model
     public static Product convertDTOToModel(ProductDTO product)
     {
-        Product modelProduct = new Product
+        return new Product
         {
             name = product.name,
             bar_code = product.bar_code
         };
-
-        return modelProduct;
     }
 
     // Converte um objeto Model para DTO
     public ProductDTO convertModelToDTO()
     {
-        ProductDTO dtoProduct = new ProductDTO();
-
-        dtoProduct.name = this.name;
-        dtoProduct.bar_code = this.bar_code;
-
-        return dtoProduct;
+        return new ProductDTO
+        {
+            name = this.name,
+            bar_code = this.bar_code
+        };
     }
 
     // Converte um objeto DAO para Model
@@ -102,6 +99,9 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
                 name = this.name,
                 bar_code = this.bar_code
             };
+
+            if (context.Product.FirstOrDefault(p => p.bar_code == product.bar_code) != null)
+                return -1;
 
             context.Product.Add(product);
             context.SaveChanges();

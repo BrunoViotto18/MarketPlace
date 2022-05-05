@@ -19,7 +19,12 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         this.owner = owner;
     }
 
-    public Store() { }
+    public Store()
+    {
+    
+    }
+
+
     // GET & SET
     public String getName()
     {
@@ -72,48 +77,49 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
             return false;
 
         /*if (this.owner == null)
-            return false;
+            return false;*/
 
         if (this.purchases == null)
-            return false;*/
+            return false;
 
         return true;
     }
 
     /* Conversores */
 
-    // Converte um objeto DTO para Model
+    // Converte um objeto DTO para Model   // DETALHES A DISCUTIR //
     public static Store convertDTOToModel(StoreDTO store)
     {
+        if (store.purchases == null)
+            store.purchases = new List<PurchaseDTO>();
+
         List<Purchase> purchases = new List<Purchase>();
         foreach (var purch in store.purchases)
             purchases.Add(Purchase.convertDTOToModel(purch));
 
-        Store modelstore = new Store
+        return new Store
         {
             name = store.name,
             CNPJ = store.CNPJ,
-            owner = Owner.convertDTOToModel(store.owner),
+            //owner = Owner.convertDTOToModel(store.owner),
             purchases = purchases
         };
-
-        return modelstore;
     }
 
     // Converte um objeto Model para DTO
     public StoreDTO convertModelToDTO()
     {
-        StoreDTO dtoStore = new StoreDTO();
-
-        dtoStore.name = this.name;
-        dtoStore.CNPJ = this.CNPJ;
-        dtoStore.owner = this.owner.convertModelToDTO();
         List<PurchaseDTO> purchases = new List<PurchaseDTO>();
         foreach (Purchase prod in this.purchases)
             purchases.Add(prod.convertModelToDTO());
-        dtoStore.purchases = purchases;
 
-        return dtoStore;
+        return new StoreDTO
+        {
+            name = this.name,
+            CNPJ = this.CNPJ,
+            owner = this.owner.convertModelToDTO(),
+            purchases = purchases
+        };
     }
 
     // Converte um objeto DAO para Model
@@ -146,7 +152,10 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
         using (var context = new DAOContext())
         {
-            var ownerDao = context.Owner.Where(o => o.id == ownerId).Single();
+            var ownerDao = context.Owner.FirstOrDefault(o => o.id == ownerId);
+
+            if (ownerDao == null)
+                return -1;
 
             var store = new DAO.Store
             {
@@ -154,6 +163,9 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
                 CNPJ = this.CNPJ,
                 owner = ownerDao
             };
+
+            if (context.Store.FirstOrDefault(s => s.CNPJ == store.CNPJ) != null)
+                return -1;
 
             context.Store.Add(store);
             context.Entry(store.owner).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
