@@ -80,14 +80,6 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         return true;
     }
 
-    public static Store convertDTOToModel(StoreDTO store)
-    {
-        Store modelstore = new Store();
-        modelstore.CNPJ = store.CNPJ;
-        modelstore.name = store.name;
-        return modelstore;
-    }
-
     /* Conversores */
 
     // Converte um objeto DTO para Model
