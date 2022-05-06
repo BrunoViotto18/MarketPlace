@@ -8,7 +8,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 {
     // Atributos
     private Client client;
-    List<Product> products = new List<Product>(); 
+    private List<Product> products = new List<Product>(); 
 
 
     // Construtor
@@ -126,7 +126,10 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
             var productDao = context.Product.FirstOrDefault(p => p.id == productID);
 
             if (clientDao == null || productDao == null)
+            {
+                Console.WriteLine("A");
                 return -1;
+            }
 
             var wishlist = new DAO.WishList
             {
@@ -134,7 +137,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
                 product = productDao
             };
 
-            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.product == wishlist.product) != null)
+            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.product.bar_code == wishlist.product.bar_code) != null)
                 return -1;
 
             context.WishList.Add(wishlist);
@@ -158,7 +161,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
                 var wishlist = context.WishList.FirstOrDefault(w => w.client.document == this.client.getDocument() && w.product.bar_code == prod.getBarCode());
 
                 if (wishlist == null)
-                    return;
+                    continue;
 
                 context.WishList.Remove(wishlist);
                 context.SaveChanges();

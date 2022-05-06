@@ -156,22 +156,27 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         return id;
     }
 
+    // Deleta o objeto atual do banco de dados
     public void delete()
     {
         using (var context = new DAOContext())
         {
-            var thisDAO = this.FindDao();
-            if (thisDAO == null)
+            var stock = context.Stocks.FirstOrDefault(s => s.store.CNPJ == this.store.getCNPJ() && s.product.bar_code == this.product.getBarCode());
+
+            if (stock == null)
                 return;
-            context.Stocks.Remove(thisDAO);
+
+            context.Stocks.Remove(stock);
             context.SaveChanges();
         };
     }
+
 
     public void update()
     {
 
     }
+
 
     public StocksDTO findById()
     {
@@ -179,19 +184,10 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         return new StocksDTO();
     }
 
+
     public List<StocksDTO> getAll()
     {
         List<StocksDTO> stocks = new List<StocksDTO>();
         return stocks;
-    }
-
-
-    public DAO.Stocks? FindDao()
-    {
-        using (var context = new DAOContext())
-        {
-            var stock = context.Stocks.FirstOrDefault(i => Stocks.convertDAOToModel(i) == this);
-            return stock;
-        };
     }
 }

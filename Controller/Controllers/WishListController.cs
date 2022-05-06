@@ -15,12 +15,13 @@ public class WishListController: ControllerBase
         WishList wishlist = WishList.convertDTOToModel(request);
 
         List<object> products = new List<object>();
+        List<int> ids = new List<int>();
         foreach (var prod in wishlist.getProducts())
         {
             var id = wishlist.save(wishlist.getClient().getDocument(), prod.findId());
+            ids.Add(id);
             products.Add(new
             {
-                id = id,
                 nome = prod.getName(),
                 codigoDeBarras = prod.getBarCode()
             });
@@ -28,6 +29,7 @@ public class WishListController: ControllerBase
 
         return new
         {
+            id = ids,
             cliente = request.client,
             produtos = products
         };

@@ -129,7 +129,11 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
     {
         using (var context = new DAOContext())
         {
-            var product = context.Product.Where(p => p.bar_code == this.bar_code).Single();
+            var product = context.Product.FirstOrDefault(p => p.bar_code == this.bar_code);
+
+            if (product == null)
+                return -1;
+
             return product.id;
         }
     }

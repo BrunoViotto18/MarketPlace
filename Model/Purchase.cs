@@ -268,7 +268,19 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 
 	public void delete()
 	{
+		using (var context = new DAO.DAOContext())
+        {
+			foreach (var prod in this.products)
+			{
+				var purchase = context.Purchase.FirstOrDefault(p => p.number_nf == this.number_nf && p.product.bar_code == prod.getBarCode());
 
+				if (purchase == null)
+					continue;
+
+				context.Purchase.Remove(purchase);
+				context.SaveChanges();
+			}
+        }
 	}
 
 
