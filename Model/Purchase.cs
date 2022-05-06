@@ -20,7 +20,6 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
     List<Product> products;
 
 
-	// Construtor
 	public Purchase()
     {
 
@@ -118,8 +117,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		throw new NotImplementedException();
     }
 
-	// Valida se o objeto tem todos os seus campos diferente de nulo
-	public Boolean validateObject(){
+    public Boolean validateObject(){
         if(this.date_purchase == default)
             return false; 
         
@@ -144,10 +142,6 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
         return true;
     }
 
-
-	/* Conversores */
-
-	// Converte um objeto DTO para Model
 	public static Purchase convertDTOToModel(PurchaseDTO purchase)
 	{
 		if (purchase.productsDTO == null)
@@ -192,7 +186,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		};
 	}
 
-	// Converte um objeto DAO para Model
+
 	public static Purchase convertDAOToModel(DAO.Purchase purchase)
     {
 		List<Product> products = new List<Product>();
@@ -217,10 +211,6 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		};
     }
 
-
-	/* Métodos SQL */
-
-	// Salva o objeto atual no banco de dados
 	public int save()
     {
 		int id;
@@ -264,7 +254,6 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 
 		return id;
     }
-
 
 	public void delete()
 	{
