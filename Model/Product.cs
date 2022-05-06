@@ -115,7 +115,16 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 
     public void delete()
     {
+        using (var context = new DAOContext())
+        {
+            var product = context.Product.FirstOrDefault(p => p.bar_code == this.bar_code);
 
+            if (product == null)
+                return;
+
+            context.Product.Remove(product);
+            context.SaveChanges();
+        }
     }
 
 

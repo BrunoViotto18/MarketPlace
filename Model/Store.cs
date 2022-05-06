@@ -180,7 +180,16 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
     public void delete()
     {
+        using (var context = new DAOContext())
+        {
+            var store = context.Store.FirstOrDefault(s => s.CNPJ == this.CNPJ);
 
+            if (store == null)
+                return;
+
+            context.Store.Remove(store);
+            context.SaveChanges();
+        }
     }
 
 
