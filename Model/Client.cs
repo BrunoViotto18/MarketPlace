@@ -131,14 +131,15 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
 
         using (var context = new DAOContext())
         {
-            var addressDao = new DAO.Address
-            {
-                street = this.address.getStreet(),
-                city = this.address.getCity(),
-                state = this.address.getState(),
-                country = this.address.getCountry(),
-                postal_code = this.address.getPostalCode()
-            };
+            var addressDao = context.Address.FirstOrDefault(
+                a => a.street == address.getStreet() &&
+                a.city == address.getCity() &&
+                a.state == address.getState() &&
+                a.country == address.getCountry() &&
+                a.postal_code == address.getPostalCode());
+
+            if (addressDao == null)
+                return -1;
 
             var client = new DAO.Client
             {
@@ -156,6 +157,7 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
                 return -1;
 
             context.Client.Add(client);
+            context.Entry(client.address).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
             context.SaveChanges();
 
             id = client.id;

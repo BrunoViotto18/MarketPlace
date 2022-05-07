@@ -30,9 +30,9 @@ public class OwnerController : ControllerBase
     }
 
     [HttpGet]
-    [Route("informations")]
-    public void getInformations()
+    [Route("informations/{document}")]
+    public object getInformations(String document)
     {
-
+        return Owner.findByDocument(document);
     }
 }
