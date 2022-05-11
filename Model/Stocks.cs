@@ -67,6 +67,9 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         if (this.quantity == 0)
             return false;
 
+        if (this.unit_price == 0)
+            return false;
+
         if (this.product == null)
             return false;
 
@@ -82,27 +85,25 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
     // Converte um objeto DTO para Model
     public static Stocks convertDTOToModel(StocksDTO stocks)
     {
-        Stocks modelStocks = new Stocks();
-
-        modelStocks.quantity = stocks.quantity;
-        modelStocks.unit_price = stocks.unit_price;
-        modelStocks.product = Product.convertDTOToModel(stocks.product);
-        modelStocks.store = Store.convertDTOToModel(stocks.store);
-
-        return modelStocks;
+        return new Stocks
+        {
+            quantity = stocks.quantity,
+            unit_price = stocks.unit_price,
+            product = Product.convertDTOToModel(stocks.product),
+            store = Store.convertDTOToModel(stocks.store)
+        };
     }
 
     // Converte um objeto Model para DTO
     public StocksDTO convertModelToDTO()
     {
-        StocksDTO dtoStocks = new StocksDTO();
-
-        dtoStocks.quantity = this.quantity;
-        dtoStocks.unit_price = this.unit_price;
-        dtoStocks.store = this.store.convertModelToDTO();
-        dtoStocks.product = this.product.convertModelToDTO();
-
-        return dtoStocks;
+        return new StocksDTO
+        {
+            quantity = this.quantity,
+            unit_price = this.unit_price,
+            store = this.store.convertModelToDTO(),
+            product = this.product.convertModelToDTO()
+        };
     }
 
     // Converte um objeto DAO para Model
@@ -127,8 +128,11 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
 
         using (var context = new DAOContext())
         {
-            var storeDao = context.Store.Where(s => s.id == storeId).Single();
-            var productDao = context.Product.Where(p => p.id == productId).Single();
+            var storeDao = context.Store.FirstOrDefault(s => s.id == storeId);
+            var productDao = context.Product.FirstOrDefault(p => p.id == productId);
+
+            if (storeDao == null || productDao == null)
+                return -1;
 
             DAO.Stocks stocks = new DAO.Stocks
             {
@@ -137,6 +141,9 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
                 product = productDao,
                 store = storeDao
             };
+
+            if (context.Stocks.FirstOrDefault(s => s.store == stocks.store && s.product == stocks.product) != null)
+                return -1;
 
             context.Stocks.Add(stocks);
             context.Entry(stocks.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
@@ -151,7 +158,14 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
 
     public void delete()
     {
-
+        using (var context = new DAOContext())
+        {
+            var thisDAO = this.FindDao();
+            if (thisDAO == null)
+                return;
+            context.Stocks.Remove(thisDAO);
+            context.SaveChanges();
+        };
     }
 
     public void update()
@@ -171,4 +185,13 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         return stocks;
     }
 
+
+    public DAO.Stocks? FindDao()
+    {
+        using (var context = new DAOContext())
+        {
+            var stock = context.Stocks.FirstOrDefault(i => Stocks.convertDAOToModel(i) == this);
+            return stock;
+        };
+    }
 }

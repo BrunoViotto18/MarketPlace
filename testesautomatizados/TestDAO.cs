@@ -460,9 +460,6 @@ namespace testesAutomatizados
 
                 Assert.That(id, Is.Not.EqualTo(0));
 
-                Console.WriteLine("AAA");
-                Console.WriteLine(id);
-
                 id = 0;
 
             }         

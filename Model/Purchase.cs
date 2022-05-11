@@ -111,6 +111,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 
     // Métodos
 
+	// Atualiza o status da compra
 	public void updateStatus()
     {
 		throw new NotImplementedException();
@@ -129,12 +130,28 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
         if(this.purchase_value == 0)
             return false;
 
+		if (this.client == null)
+			return false;
+
+		if (this.store == null)
+			return false;
+
+		if (this.products == null)
+			return false;
+
         return true;
     }
 
 	public static Purchase convertDTOToModel(PurchaseDTO purchase)
-    {
-		Purchase modelPurchase = new Purchase
+	{
+		if (purchase.productsDTO == null)
+			purchase.productsDTO = new List<ProductDTO>();
+
+		List<Product> products = new List<Product>();
+		foreach (ProductDTO prod in purchase.productsDTO)
+			products.Add(Product.convertDTOToModel(prod));
+
+		return new Purchase
 		{
 			date_purchase = purchase.data_purchase,
 			number_confirmation = purchase.confirmation_number,
@@ -143,39 +160,54 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 			purchase_status = purchase.purchase_status,
 			purchase_value = purchase.purchase_value,
 			client = Client.convertDTOToModel(purchase.client),
-			store = Store.convertDTOToModel(purchase.store)
+			store = Store.convertDTOToModel(purchase.store),
+			products = products
 		};
-
-		List<Product> products = new List<Product>();
-		foreach (ProductDTO prod in purchase.productsDTO)
-			products.Add(Product.convertDTOToModel(prod));
-
-		modelPurchase.products = products;
-
-		return modelPurchase;
     }
+
+	// Converte um objeto Model para DTO
+	public PurchaseDTO convertModelToDTO()
+	{
+		List<ProductDTO> products = new List<ProductDTO>();
+		foreach (Product prod in this.products)
+			products.Add(prod.convertModelToDTO());
+
+		return new PurchaseDTO
+		{
+			data_purchase = this.date_purchase,
+			purchase_value = this.purchase_value,
+			payment_type = this.payment_type,
+			purchase_status = this.purchase_status,
+			confirmation_number = this.number_confirmation,
+			number_nf = this.number_nf,
+			store = this.store.convertModelToDTO(),
+			client = this.client.convertModelToDTO(),
+			productsDTO = products
+		};
+	}
+
 
 	public static Purchase convertDAOToModel(DAO.Purchase purchase)
     {
 		List<Product> products = new List<Product>();
 		using (var context = new DAOContext())
         {
-			var purch = context.Purchase.Where(p => p.number_nf == purchase.number_nf ); 
+			var purch = context.Purchase.Where(p => p.number_nf == purchase.number_nf); 
 			foreach (var p in purch)
-            {
 				products.Add(Product.convertDAOToModel(p.product));
-            }
         }
 		
-		return new Purchase(){
-		date_purchase = purchase.date_purchase,
-		number_confirmation =purchase.number_confirmation,
-		number_nf = purchase.number_nf,
-		purchase_status = purchase.purchase_status,
-		purchase_value = purchase.purchase_value,
-		client = Client.convertDAOToModel(purchase.client),
-		store = Store.convertDAOToModel(purchase.store),
-		products = products
+		return new Purchase
+		{
+			date_purchase = purchase.date_purchase,
+			number_confirmation =purchase.number_confirmation,
+			number_nf = purchase.number_nf,
+			payment_type = purchase.payment_type,
+			purchase_status = purchase.purchase_status,
+			purchase_value = purchase.purchase_value,
+			client = Client.convertDAOToModel(purchase.client),
+			store = Store.convertDAOToModel(purchase.store),
+			products = products
 		};
     }
 
@@ -185,15 +217,15 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 
 		using (var context = new DAOContext())
 		{
-			//var clientDao = context.Client.FirstOrDefault(c => c.id == 1);
-			//var storeDao = context.Store.Where(s => s.CNPJ == this.store.getCNPJ()).Single();
-			var clientDao = context.Client.Where(c => c.document == this.client.getDocument()).Single();
-			var storeDao = context.Store.Where(s => s.CNPJ == this.store.getCNPJ()).Single();
+			var clientDao = context.Client.FirstOrDefault(c => c.document == this.client.getDocument());
+			var storeDao = context.Store.FirstOrDefault(s => s.CNPJ == this.store.getCNPJ());
 
 			if (this.products.Count() == 0)
 				return -1;
+			var productDao = context.Product.FirstOrDefault(p => p.bar_code == this.products.First().getBarCode());
 
-			var productDao = context.Product.Where(p => p.bar_code == this.products.First().getBarCode()).Single();
+			if (productDao == null || clientDao == null || storeDao == null)
+				return -1;
 
 			DAO.Purchase purchase = new DAO.Purchase
 			{
@@ -208,8 +240,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 				product = productDao
 			};
 
-            context.Purchase.Add(purchase);
-			
+			context.Purchase.Add(purchase);
 			context.Entry(purchase.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
 			context.Entry(purchase.store).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
 			context.Entry(purchase.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
@@ -224,46 +255,53 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		return id;
     }
 
-	public PurchaseDTO convertModelToDTO()
-	{
-		PurchaseDTO dtoPurchase = new PurchaseDTO();
-
-		dtoPurchase.data_purchase = this.date_purchase;
-		dtoPurchase.purchase_value = this.purchase_value;
-		dtoPurchase.payment_type = this.payment_type;
-		dtoPurchase.purchase_status = this.purchase_status;
-		dtoPurchase.confirmation_number = this.number_confirmation;
-		dtoPurchase.number_nf = this.number_nf;
-		dtoPurchase.store = this.store.convertModelToDTO();
-		dtoPurchase.client = this.client.convertModelToDTO();
-		List<ProductDTO> products = new List<ProductDTO>();
-		foreach (Product prod in this.products)
-			products.Add(prod.convertModelToDTO());
-		dtoPurchase.productsDTO = products;
-
-		return dtoPurchase;
-	}
-
 	public void delete()
 	{
 
 	}
+
 
 	public void update()
 	{
 
 	}
 
+
 	public PurchaseDTO findById()
 	{
-
 		return new PurchaseDTO();
 	}
+
+	// Retorna todas as compras de um cliente
+	public static List<PurchaseDTO> getClientPurchases(int clientID)
+    {
+		List<PurchaseDTO> clientPurchases = new List<PurchaseDTO>();
+		using (var context = new DAOContext())
+        {
+			var purchases = context.Purchase.Where(p => p.client.id == clientID);
+			foreach (var purch in purchases)
+				clientPurchases.Add(Purchase.convertDAOToModel(purch).convertModelToDTO());
+        }
+		return clientPurchases;
+	}
+
+	// Retorna todas as compras de uma loja
+	public static List<PurchaseDTO> getStorePurchases(int storeID)
+	{
+		List<PurchaseDTO> clientPurchases = new List<PurchaseDTO>();
+		using (var context = new DAOContext())
+		{
+			var purchases = context.Purchase.Where(p => p.store.id == storeID);
+			foreach (var purch in purchases)
+				clientPurchases.Add(Purchase.convertDAOToModel(purch).convertModelToDTO());
+		}
+		return clientPurchases;
+	}
+
 
 	public List<PurchaseDTO> getAll()
 	{
 		List<PurchaseDTO> purchase= new List<PurchaseDTO>();
 		return purchase;
 	}
-
 }
