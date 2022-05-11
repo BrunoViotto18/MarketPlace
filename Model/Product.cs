@@ -171,8 +171,16 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 
     public List<ProductDTO> getAll()
     {
-        List<ProductDTO> prod = new List<ProductDTO>();
-        return prod;
+        using (var context = new DAOContext())
+        {
+            List<ProductDTO> allProducts = new List<ProductDTO>();
+            var products = context.Product.ToList();
+
+            foreach (var product in products)
+                allProducts.Add(Product.convertDAOToModel(product).convertModelToDTO());
+
+            return allProducts;
+        }
     }
 
     public static int FindId(string bar_code)

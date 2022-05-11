@@ -214,47 +214,51 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 
 	public int save()
     {
-		int id;
+		int id = 0;
 
 		using (var context = new DAOContext())
 		{
 			var clientDao = context.Client.FirstOrDefault(c => c.document == this.client.getDocument());
 			var storeDao = context.Store.FirstOrDefault(s => s.CNPJ == this.store.getCNPJ());
+			var nf = context.Purchase.FirstOrDefault(p => p.number_nf == this.number_nf);
 
-			if (this.products.Count() == 0)
-				return -1;
-			var productDao = context.Product.FirstOrDefault(p => p.bar_code == this.products.First().getBarCode());
-
-			if (productDao == null || clientDao == null || storeDao == null)
+			if (clientDao == null || storeDao == null || nf != null)
 				return -1;
 
-			DAO.Purchase purchase = new DAO.Purchase
+			foreach (var prod in products)
 			{
-				number_confirmation = this.number_confirmation,
-				number_nf = this.number_nf,
-				payment_type = this.payment_type,
-				purchase_status = this.purchase_status,
-				date_purchase = this.date_purchase,
-				purchase_value = this.purchase_value,
-				client = clientDao,
-				store = storeDao,
-				product = productDao
-			};
+				var productDao = context.Product.FirstOrDefault(p => p.bar_code == this.products.First().getBarCode());
+				if (productDao == null)
+					return -1;
 
-			context.Purchase.Add(purchase);
-			context.Entry(purchase.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-			context.Entry(purchase.store).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-			context.Entry(purchase.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-			context.SaveChanges();
+				DAO.Purchase purchase = new DAO.Purchase
+				{
+					number_confirmation = this.number_confirmation,
+					number_nf = this.number_nf,
+					payment_type = this.payment_type,
+					purchase_status = this.purchase_status,
+					date_purchase = this.date_purchase,
+					purchase_value = this.purchase_value,
+					client = clientDao,
+					store = storeDao,
+					product = productDao
+				};
 
-			this.products.RemoveAt(0);
-			this.save();
+				if (context.Purchase.FirstOrDefault(p => p.number_nf == purchase.number_nf && p.product.bar_code == purchase.product.bar_code) != null)
+					continue;
 
-			id = purchase.id;
+				context.Purchase.Add(purchase);
+				context.Entry(purchase.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+				context.Entry(purchase.store).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+				context.Entry(purchase.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+				context.SaveChanges();
+
+				id = purchase.id;
+			}
 		}
 
 		return id;
-    }
+	}
 
 	public void delete()
 	{

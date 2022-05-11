@@ -153,6 +153,16 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
                 postal_code = this.poste_code
             };
 
+            if (context.Address
+                .FirstOrDefault(
+                    a => a.street == address.street &&
+                    a.city == address.city &&
+                    a.state == address.state &&
+                    a.country == address.country &&
+                    a.postal_code == address.postal_code
+                ) != null)
+                return -1;
+
             context.Address.Add(address);
             context.SaveChanges();
 
@@ -165,8 +175,18 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 
     public void delete()
     {
+        using(var context = new DAOContext())
+        {
+            var address = context.Address.FirstOrDefault(a => a.street == this.street && a.country == this.country && this.poste_code == a.postal_code && a.city == this.city && a.state == this.state);
 
+            if (address == null)
+                return;
+            context.Address.Remove(address);
+            context.SaveChanges();
+        }
+        
     }
+
 
     public void update()
     {

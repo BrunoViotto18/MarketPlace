@@ -35,4 +35,11 @@ public class OwnerController : ControllerBase
     {
         return Owner.findByDocument(document);
     }
+
+    [HttpDelete]
+    [Route("removeOwner")]
+    public void removeOwner([FromBody] OwnerDTO request)
+    {
+        Owner.convertDTOToModel(request).delete();
+    }
 }

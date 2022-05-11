@@ -163,10 +163,35 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         return id;
     }
 
+    //    using (var context = new DAOContext())
+    //{
+    //    var store = context.Store.FirstOrDefault(s => s.CNPJ == this.CNPJ);
+
+    //    if (store == null)
+    //        return;
+
+    //    context.Store.Remove(store);
+    //    context.SaveChanges();
+    //}
 
     public void delete()
     {
+        using(var context = new DAOContext())
+        {
+            var owner = context.Owner.FirstOrDefault(s => s.document == this.document);
+            var address = context.Address.FirstOrDefault(a => a.street == this.address.getStreet() && a.country == this.address.getCountry() && this.address.getPostalCode() == a.postal_code && a.city == this.address.getCity() && a.state == this.address.getState());
 
+            if (owner == null || address == null)
+            {
+                Console.WriteLine("Anulou :(");
+                return;
+
+            }
+                
+            context.Address.Remove(address);
+            context.Owner.Remove(owner);
+            context.SaveChanges();
+        }
     }
 
 
