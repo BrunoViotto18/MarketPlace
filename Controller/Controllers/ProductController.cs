@@ -10,9 +10,9 @@ public class ProductController : ControllerBase
 {
     [HttpGet]
     [Route("all")]
-    public void allProducts()
+    public List<ProductDTO> allProducts()
     {
-        
+        return Product.getAllProducts();
     }
 
     [HttpPost]

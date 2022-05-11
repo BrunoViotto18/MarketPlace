@@ -15,11 +15,7 @@ public class DAOContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-<<<<<<< HEAD
         optionsBuilder.UseSqlServer("Data Source = JVLPC0524; Initial Catalog = Marketplace; Integrated Security = True");
-=======
-        optionsBuilder.UseSqlServer("Data Source=JVLPC0510\\SQLSERVER;Initial Catalog=TrevisanDB;Integrated Security=True");
->>>>>>> b23dca99efb63ebcb9455862dd70e2e5086c2ec8
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

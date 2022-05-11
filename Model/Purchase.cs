@@ -3,7 +3,7 @@ using DAO;
 using Enums;
 using Interfaces;
 using DTO;
-using System.Globalization;
+using Microsoft.EntityFrameworkCore;
 
 public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purchase>
 {
@@ -192,7 +192,8 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		List<Product> products = new List<Product>();
 		using (var context = new DAOContext())
         {
-			var purch = context.Purchase.Where(p => p.number_nf == purchase.number_nf); 
+			var purch = context.Purchase.Where(p => p.number_nf == purchase.number_nf && p.client == purchase.client)
+				.Include(p => p.product);
 			foreach (var p in purch)
 				products.Add(Product.convertDAOToModel(p.product));
         }
@@ -206,7 +207,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 			purchase_status = purchase.purchase_status,
 			purchase_value = purchase.purchase_value,
 			client = Client.convertDAOToModel(purchase.client),
-			store = Store.convertDAOToModel(purchase.store),
+			store = Store.convertDAOToModel(purchase.store, false),
 			products = products
 		};
     }
@@ -289,12 +290,39 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
     {
 		List<PurchaseDTO> clientPurchases = new List<PurchaseDTO>();
 		using (var context = new DAOContext())
-        {
-			var purchases = context.Purchase.Where(p => p.client.id == clientID);
+		{
+			var purchases = context.Purchase
+				.Include(p => p.client)
+					.ThenInclude(c => c.address)
+				.Include(p => p.store)
+					.ThenInclude(s => s.owner)
+						.ThenInclude(o => o.address)
+				.Include(p => p.product)
+				.Where(p => p.client.id == clientID)
+				.ToList()
+				.GroupBy(p => p.number_nf);
+
 			foreach (var purch in purchases)
-				clientPurchases.Add(Purchase.convertDAOToModel(purch).convertModelToDTO());
-        }
-		return clientPurchases;
+            {
+				if (purch == null)
+					continue;
+
+				List<ProductDTO> products = new List<ProductDTO>();
+				foreach (var p in purch)
+					products.Add(Product.convertDAOToModel(p.product).convertModelToDTO());
+
+				var compra = purch.FirstOrDefault();
+				if (compra == null)
+					continue;
+
+				PurchaseDTO purchase = Purchase.convertDAOToModel(compra).convertModelToDTO();
+				purchase.productsDTO = products;
+
+				clientPurchases.Add(purchase);
+            }
+
+			return clientPurchases;
+		}
 	}
 
 	// Retorna todas as compras de uma loja

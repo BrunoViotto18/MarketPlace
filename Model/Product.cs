@@ -155,6 +155,20 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
     }
 
 
+    public static List<ProductDTO> getAllProducts()
+    {
+        List<ProductDTO> produtos = new List<ProductDTO>();
+
+        using (var context = new DAOContext())
+        {
+            var products = context.Product.ToList();
+            foreach (var prod in products)
+                produtos.Add(Product.convertDAOToModel(prod).convertModelToDTO());
+        }
+        return produtos;
+    }
+
+
     public List<ProductDTO> getAll()
     {
         List<ProductDTO> prod = new List<ProductDTO>();
