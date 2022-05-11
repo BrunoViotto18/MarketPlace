@@ -123,16 +123,16 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
     }
 
     // Converte um objeto DAO para Model
-    public static Store convertDAOToModel(DAO.Store store, bool purchase=true)
+    public static Store convertDAOToModel(DAO.Store store, bool purchaseStore=true)
     {
         List<Purchase> purchases = new List<Purchase>();
-        if (purchase)
+        if (purchaseStore)
         {
             using (var context = new DAOContext())
             {
                 var purch = context.Purchase.Where(p => p.store.id == store.id);
                 foreach (var p in purch)
-                    purchases.Add(Purchase.convertDAOToModel(p));
+                    purchases.Add(Purchase.convertDAOToModel(p, false));
             }
         }
 
