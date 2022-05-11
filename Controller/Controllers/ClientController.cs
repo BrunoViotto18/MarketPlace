@@ -35,4 +35,12 @@ public class ClientController : ControllerBase
     {
         return Client.findByDocument(document);
     }
+
+    [HttpDelete]
+    [Route("removeClient")]
+    public void removeOwner([FromBody] ClientDTO request)
+    {
+        Client.convertDTOToModel(request).delete();
+    }
+
 }
