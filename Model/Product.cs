@@ -115,7 +115,16 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 
     public void delete()
     {
+        using (var context = new DAOContext())
+        {
+            var product = context.Product.FirstOrDefault(p => p.bar_code == this.bar_code);
 
+            if (product == null)
+                return;
+
+            context.Product.Remove(product);
+            context.SaveChanges();
+        }
     }
 
 
@@ -129,7 +138,11 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
     {
         using (var context = new DAOContext())
         {
-            var product = context.Product.Where(p => p.bar_code == this.bar_code).Single();
+            var product = context.Product.FirstOrDefault(p => p.bar_code == this.bar_code);
+
+            if (product == null)
+                return -1;
+
             return product.id;
         }
     }
@@ -144,8 +157,16 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 
     public List<ProductDTO> getAll()
     {
-        List<ProductDTO> prod = new List<ProductDTO>();
-        return prod;
+        using (var context = new DAOContext())
+        {
+            List<ProductDTO> allProducts = new List<ProductDTO>();
+            var products = context.Product.ToList();
+
+            foreach (var product in products)
+                allProducts.Add(Product.convertDAOToModel(product).convertModelToDTO());
+
+            return allProducts;
+        }
     }
 
     public static int FindId(string bar_code)

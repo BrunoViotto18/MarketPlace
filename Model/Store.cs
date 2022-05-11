@@ -76,8 +76,8 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         if (this.CNPJ == null)
             return false;
 
-        /*if (this.owner == null)
-            return false;*/
+        if (this.owner == null)
+            return false;
 
         if (this.purchases == null)
             return false;
@@ -101,7 +101,7 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         {
             name = store.name,
             CNPJ = store.CNPJ,
-            //owner = Owner.convertDTOToModel(store.owner),
+            owner = Owner.convertDTOToModel(store.owner),
             purchases = purchases
         };
     }
@@ -180,7 +180,16 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
     public void delete()
     {
+        using (var context = new DAOContext())
+        {
+            var store = context.Store.FirstOrDefault(s => s.CNPJ == this.CNPJ);
 
+            if (store == null)
+                return;
+
+            context.Store.Remove(store);
+            context.SaveChanges();
+        }
     }
 
 

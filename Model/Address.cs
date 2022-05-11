@@ -153,6 +153,16 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
                 postal_code = this.poste_code
             };
 
+            if (context.Address
+                .FirstOrDefault(
+                    a => a.street == address.street &&
+                    a.city == address.city &&
+                    a.state == address.state &&
+                    a.country == address.country &&
+                    a.postal_code == address.postal_code
+                ) != null)
+                return -1;
+
             context.Address.Add(address);
             context.SaveChanges();
 
