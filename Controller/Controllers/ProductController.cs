@@ -26,7 +26,9 @@ public class ProductController : ControllerBase
         {
             id = id,
             nome = product.name,
-            codigoDeBarra = product.bar_code
+            codigoDeBarra = product.bar_code,
+            imagem = product.image,
+            descricao = product.description
         };
     }
 
