@@ -8,6 +8,8 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
     // Atributos
     private String name;
     private String bar_code;
+    private String image;
+    private String description;
 
 
     // Construtor
@@ -36,6 +38,24 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         this.bar_code = bar_code;
     }
 
+    public String getImage()
+    {
+        return image;
+    }
+    public void setImage(String image)
+    {
+        this.image = image;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
 
     // Métodos
 
@@ -46,6 +66,12 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
             return false;
 
         if (this.bar_code == null)
+            return false;
+
+        if (this.image == null)
+            return false;
+
+        if (this.description == null)
             return false;
 
         return true;
@@ -60,7 +86,9 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return new Product
         {
             name = product.name,
-            bar_code = product.bar_code
+            bar_code = product.bar_code,
+            image = product.image,
+            description = product.description
         };
     }
 
@@ -70,7 +98,9 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return new ProductDTO
         {
             name = this.name,
-            bar_code = this.bar_code
+            bar_code = this.bar_code,
+            image = this.image,
+            description = this.description
         };
     }
 
@@ -80,7 +110,9 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return new Product()
         {
             name = product.name,
-            bar_code = product.bar_code
+            bar_code = product.bar_code,
+            image = product.image,
+            description = product.description
         };
     }
 
@@ -97,7 +129,9 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
             var product = new DAO.Product
             {
                 name = this.name,
-                bar_code = this.bar_code
+                bar_code = this.bar_code,
+                image = this.image,
+                description = this.description
             };
 
             if (context.Product.FirstOrDefault(p => p.bar_code == product.bar_code) != null)
