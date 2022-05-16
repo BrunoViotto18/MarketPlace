@@ -2,6 +2,7 @@ namespace Model;
 using DAO;
 using Interfaces;
 using DTO;
+using Microsoft.EntityFrameworkCore;
 
 public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 {
@@ -184,20 +185,29 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 
     public ProductDTO findById()
     {
-
         return new ProductDTO();
     }
 
 
-    public static List<ProductDTO> getAllProducts()
+    public static List<object> getAllProducts()
     {
-        List<ProductDTO> produtos = new List<ProductDTO>();
+        List<object> produtos = new List<object>();
 
         using (var context = new DAOContext())
         {
-            var products = context.Product.ToList();
-            foreach (var prod in products)
-                produtos.Add(Product.convertDAOToModel(prod).convertModelToDTO());
+            var stocks = context.Stocks.Include(s => s.product). ToList();
+            foreach (var stock in stocks)
+            {
+                produtos.Add(new
+                {
+                    id = stock.product.id,
+                    name = stock.product.name,
+                    bar_code = stock.product.bar_code,
+                    image = stock.product.image,
+                    description = stock.product.description,
+                    price = stock.unit_price
+                });
+            }
         }
         return produtos;
     }
