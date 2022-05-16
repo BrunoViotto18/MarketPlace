@@ -172,6 +172,9 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		foreach (Product prod in this.products)
 			products.Add(prod.convertModelToDTO());
 
+		if (this.store == null)
+			this.store = new Store();
+
 		return new PurchaseDTO
 		{
 			data_purchase = this.date_purchase,
