@@ -10,9 +10,14 @@ public class ProductController : ControllerBase
 {
     [HttpGet]
     [Route("all")]
-    public List<ProductDTO> allProducts()
+    public IActionResult allProducts()
     {
-        return Product.getAllProducts();
+        var response = Product.getAllProducts();
+        var result = new ObjectResult(response);
+
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+        return result;
     }
 
     [HttpPost]
