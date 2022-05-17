@@ -33,7 +33,7 @@ public class StoreController : ControllerBase
     }
 
     [HttpGet]
-    [Route("information")]
+    [Route("information/{CNPJ}")]
     public StoreDTO getStoreInformation(String CNPJ)
     {
         return Store.findByCNPJ(CNPJ);

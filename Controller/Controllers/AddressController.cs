@@ -27,9 +27,9 @@ public class AddressController : ControllerBase
     }
 
     [HttpDelete]
-    public void removeAddress(AddressDTO address)
-    {
-
+    public void removeAddress(AddressDTO request)
+    { 
+            Address.convertDTOToModel(request).delete();    
     }
 
     [HttpPut]

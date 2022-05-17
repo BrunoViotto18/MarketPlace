@@ -2,6 +2,7 @@ namespace Model;
 using DTO;
 using DAO;
 using Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 {
@@ -110,8 +111,8 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
     public StoreDTO convertModelToDTO()
     {
         List<PurchaseDTO> purchases = new List<PurchaseDTO>();
-        foreach (Purchase prod in this.purchases)
-            purchases.Add(prod.convertModelToDTO());
+        foreach (Purchase purch in this.purchases)
+            purchases.Add(purch.convertModelToDTO());
 
         return new StoreDTO
         {
@@ -123,17 +124,22 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
     }
 
     // Converte um objeto DAO para Model
-    public static Store convertDAOToModel(DAO.Store store, bool purchase=false)
+    public static Store convertDAOToModel(DAO.Store store, bool purchaseStore=true)
     {
         List<Purchase> purchases = new List<Purchase>();
-        using (var context = new DAOContext())
+        if (purchaseStore)
         {
-            var purch = context.Purchase.Where(p => p.store.id == store.id);
-
-            if (!purchase)
+            using (var context = new DAOContext())
             {
+                var purch = context.Purchase
+                    .Include(p => p.client)
+                        .ThenInclude(c => c.address)
+                    .Include(p => p.product)
+                    .Include(p => p.store)
+                    .Where(p => p.store.id == store.id);
+
                 foreach (var p in purch)
-                    purchases.Add(Purchase.convertDAOToModel(p));
+                    purchases.Add(Purchase.convertDAOToModel(p, false));
             }
         }
 
@@ -218,8 +224,18 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
     {
         using (var context = new DAOContext())
         {
-            var store = context.Store.Where(s => s.CNPJ == CNPJ).Single();
-            return Store.convertDAOToModel(store).convertModelToDTO();
+            var store = context.Store
+                .Include(s => s.owner)
+                    .ThenInclude(o => o.address)
+                .FirstOrDefault(s => s.CNPJ == CNPJ);
+
+            return new StoreDTO
+            {
+                name = store.name,
+                CNPJ = store.CNPJ,
+                owner = Owner.convertDAOToModel(store.owner).convertModelToDTO(),
+                purchases = new List<PurchaseDTO>()
+            };
         }
     }
 
@@ -236,9 +252,14 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         List<StoreDTO> lojas = new List<StoreDTO>();
         using (var context = new DAOContext())
         {
-            var stores = context.Store.Where(p => true);
+            var stores = context.Store
+                .Include(s => s.owner)
+                    .ThenInclude(o => o.address)
+                .Include(s => s.owner)
+                    .ThenInclude(o => o.address);
+
             foreach (var store in stores)
-                lojas.Add(Store.convertDAOToModel(store).convertModelToDTO());
+                lojas.Add(Store.convertDAOToModel(store, false).convertModelToDTO());
         }
         return lojas;
     }

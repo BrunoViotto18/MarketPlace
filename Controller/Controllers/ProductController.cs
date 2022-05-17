@@ -10,9 +10,14 @@ public class ProductController : ControllerBase
 {
     [HttpGet]
     [Route("all")]
-    public List<ProductDTO> allProducts()
+    public IActionResult allProducts()
     {
-        return new Product().getAll();
+        var response = Product.getAllProducts();
+        var result = new ObjectResult(response);
+
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+        return result;
     }
 
     [HttpPost]
@@ -26,7 +31,9 @@ public class ProductController : ControllerBase
         {
             id = id,
             nome = product.name,
-            codigoDeBarra = product.bar_code
+            codigoDeBarra = product.bar_code,
+            imagem = product.image,
+            descricao = product.description
         };
     }
 

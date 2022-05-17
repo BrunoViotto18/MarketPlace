@@ -31,8 +31,15 @@ public class OwnerController : ControllerBase
 
     [HttpGet]
     [Route("informations/{document}")]
-    public object getInformations(String document)
+    public OwnerDTO getInformations(String document)
     {
         return Owner.findByDocument(document);
+    }
+
+    [HttpDelete]
+    [Route("removeOwner")]
+    public void removeOwner([FromBody] OwnerDTO request)
+    {
+        Owner.convertDTOToModel(request).delete();
     }
 }

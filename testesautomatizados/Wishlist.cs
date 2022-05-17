@@ -126,7 +126,10 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
             var productDao = context.Product.FirstOrDefault(p => p.id == productID);
 
             if (clientDao == null || productDao == null)
+            {
+                Console.WriteLine("A");
                 return -1;
+            }
 
             var wishlist = new DAO.WishList
             {

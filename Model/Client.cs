@@ -166,12 +166,25 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return id;
     }
 
-
     public void delete()
     {
+        using (var context = new DAOContext())
+        {
+            var client = context.Client.FirstOrDefault(s => s.document == this.document);
+            var address = context.Address.FirstOrDefault(a => a.street == this.address.getStreet() && a.country == this.address.getCountry() && this.address.getPostalCode() == a.postal_code && a.city == this.address.getCity() && a.state == this.address.getState());
 
+            if (client == null || address == null)
+            {
+                Console.WriteLine("Anulou :(");
+                return;
+
+            }
+
+            context.Address.Remove(address);
+            context.Client.Remove(client);
+            context.SaveChanges();
+        }
     }
-
 
     public void update()
     {

@@ -2,12 +2,15 @@ namespace Model;
 using DAO;
 using Interfaces;
 using DTO;
+using Microsoft.EntityFrameworkCore;
 
 public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 {
     // Atributos
     private String name;
     private String bar_code;
+    private String image;
+    private String description;
 
 
     // Construtor
@@ -36,6 +39,24 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         this.bar_code = bar_code;
     }
 
+    public String getImage()
+    {
+        return image;
+    }
+    public void setImage(String image)
+    {
+        this.image = image;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
 
     // Métodos
 
@@ -46,6 +67,12 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
             return false;
 
         if (this.bar_code == null)
+            return false;
+
+        if (this.image == null)
+            return false;
+
+        if (this.description == null)
             return false;
 
         return true;
@@ -60,7 +87,9 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return new Product
         {
             name = product.name,
-            bar_code = product.bar_code
+            bar_code = product.bar_code,
+            image = product.image,
+            description = product.description
         };
     }
 
@@ -70,7 +99,9 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return new ProductDTO
         {
             name = this.name,
-            bar_code = this.bar_code
+            bar_code = this.bar_code,
+            image = this.image,
+            description = this.description
         };
     }
 
@@ -80,7 +111,9 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return new Product()
         {
             name = product.name,
-            bar_code = product.bar_code
+            bar_code = product.bar_code,
+            image = product.image,
+            description = product.description
         };
     }
 
@@ -97,7 +130,9 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
             var product = new DAO.Product
             {
                 name = this.name,
-                bar_code = this.bar_code
+                bar_code = this.bar_code,
+                image = this.image,
+                description = this.description
             };
 
             if (context.Product.FirstOrDefault(p => p.bar_code == product.bar_code) != null)
@@ -150,8 +185,31 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 
     public ProductDTO findById()
     {
-
         return new ProductDTO();
+    }
+
+
+    public static List<object> getAllProducts()
+    {
+        List<object> produtos = new List<object>();
+
+        using (var context = new DAOContext())
+        {
+            var stocks = context.Stocks.Include(s => s.product). ToList();
+            foreach (var stock in stocks)
+            {
+                produtos.Add(new
+                {
+                    id = stock.product.id,
+                    name = stock.product.name,
+                    bar_code = stock.product.bar_code,
+                    image = stock.product.image,
+                    description = stock.product.description,
+                    price = stock.unit_price
+                });
+            }
+        }
+        return produtos;
     }
 
 

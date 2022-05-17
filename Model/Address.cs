@@ -175,8 +175,18 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 
     public void delete()
     {
+        using(var context = new DAOContext())
+        {
+            var address = context.Address.FirstOrDefault(a => a.street == this.street && a.country == this.country && this.poste_code == a.postal_code && a.city == this.city && a.state == this.state);
 
+            if (address == null)
+                return;
+            context.Address.Remove(address);
+            context.SaveChanges();
+        }
+        
     }
+
 
     public void update()
     {
