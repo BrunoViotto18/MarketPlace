@@ -1,0 +1,16 @@
+USE MASTER;
+GO
+DROP DATABASE Marketplace;
+GO
+
+USE Marketplace;
+GO
+
+SELECT * FROM Address
+SELECT * FROM Client
+SELECT * FROM Owner
+SELECT * FROM Product
+SELECT * FROM Purchase
+SELECT * FROM Stocks
+SELECT * FROM Store
+SELECT * FROM Wishlist

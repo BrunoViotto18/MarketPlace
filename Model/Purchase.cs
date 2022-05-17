@@ -192,7 +192,9 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		List<Product> products = new List<Product>();
 		using (var context = new DAOContext())
         {
-			var purch = context.Purchase.Include(p => p.product).Where(p => p.number_nf == purchase.number_nf); 
+			var purch = context.Purchase
+				.Include(p => p.product)
+				.Where(p => p.id == purchase.id); 
 			foreach (var p in purch)
 				products.Add(Product.convertDAOToModel(p.product));
         }
@@ -200,13 +202,13 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		return new Purchase
 		{
 			date_purchase = purchase.date_purchase,
-			number_confirmation =purchase.number_confirmation,
+			number_confirmation = purchase.number_confirmation,
 			number_nf = purchase.number_nf,
 			payment_type = purchase.payment_type,
 			purchase_status = purchase.purchase_status,
 			purchase_value = purchase.purchase_value,
 			client = Client.convertDAOToModel(purchase.client),
-			store = Store.convertDAOToModel(purchase.store),
+			store = Store.convertDAOToModel(purchase.store, true),
 			products = products
 		};
     }
@@ -296,8 +298,10 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
         {
 			var purchases = context.Purchase
 				.Include(p => p.store)
+					.ThenInclude(s => s.owner)
+						.ThenInclude(o => o.address)
 				.Include(p => p.client)
-				.Include(p => p.client.address)
+					.ThenInclude(c => c.address)
 				.Where(p => p.client.id == clientID);
 			foreach (var purch in purchases)
 				clientPurchases.Add(Purchase.convertDAOToModel(purch).convertModelToDTO());
