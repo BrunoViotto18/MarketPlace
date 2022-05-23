@@ -25,7 +25,7 @@ public class OwnerController : ControllerBase
             telefone = owner.phone,
             login = owner.login,
             senha = owner.passwd,
-            endereço = owner.address
+            endereco = owner.address
         };
     }
 
