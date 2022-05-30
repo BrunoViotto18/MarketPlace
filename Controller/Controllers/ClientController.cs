@@ -33,7 +33,6 @@ public class ClientController : ControllerBase
         };
     }
 
-    [Authorize]
     [HttpGet]
     [Route("informations/{document}")]
     public object getInformations(String document)
@@ -48,17 +47,21 @@ public class ClientController : ControllerBase
         Client.convertDTOToModel(request).delete();
     }
 
-     public IConfiguration _configuration;
 
-    public ClientController(IConfiguration config){
+
+    public IConfiguration _configuration;
+
+    public ClientController(IConfiguration config)
+    {
         _configuration = config;
     }
 
     [HttpPost]
-    [Route("api")]
+    [Route("login")]
     public IActionResult tokenGenerate([FromBody] ClientDTO login){
         if(login != null && login.login != null && login.passwd != null){
             var user = Model.Client.findLogin(login);
+            Response.Headers.Add("Access-Control-Allow-Origin", "*");
             if(user != null){
                 var claims = new[] {
                     new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
@@ -71,6 +74,7 @@ public class ClientController : ControllerBase
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
                 var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
                 var token = new JwtSecurityToken(
                     _configuration["Jwt:Issuer"],
                     _configuration["JwtAudience"],
