@@ -20,7 +20,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     });
 
 
-// Add services to the container.
+// Add services to the container.npm i
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,6 +36,13 @@ builder.Services.AddCors(options =>
             policy.WithOrigins("http://localhost:5164", "https://localhost:7141");
         });
 });
+
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
+
 
 var app = builder.Build();
 
