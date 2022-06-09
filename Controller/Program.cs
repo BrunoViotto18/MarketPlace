@@ -1,6 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using DAO;
+
+using var context = new DAOContext();
+context.Database.EnsureCreated();
+context.SaveChanges();
+
 
 var builder = WebApplication.CreateBuilder(args);
 
