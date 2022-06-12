@@ -207,10 +207,29 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return new ClientDTO();
     }
 
+    public static ClientDTO? findLogin(ClientDTO cliente){
+
+        using (var context = new DAOContext()){
+            var login = context.Client.Include(c => c.address).FirstOrDefault(c => c.login == cliente.login && c.passwd == cliente.passwd);
+            if(login == null)
+                return null;
+            return Client.convertDAOToModel(login).convertModelToDTO();
+        }
+        
+    }
 
     public List<ClientDTO> getAll()
     {
         List<ClientDTO> client = new List<ClientDTO>();
         return client;
+    }
+
+    public static int findId(string login){
+        using (var context = new DAOContext()){
+            var id = context.Client.FirstOrDefault(c => c.login == login);
+            if(id == null)
+                return -1;
+            return id.id;
+        }
     }
 }
