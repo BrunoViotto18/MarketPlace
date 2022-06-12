@@ -171,15 +171,14 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
     // Retorna o ID do objeto atual
     public int findId()
     {
-        using (var context = new DAOContext())
-        {
-            var product = context.Product.FirstOrDefault(p => p.bar_code == this.bar_code);
+        using var context = new DAOContext();
 
-            if (product == null)
-                return -1;
+        var product = context.Product.FirstOrDefault(p => p.bar_code == this.bar_code);
 
-            return product.id;
-        }
+        if (product == null)
+            return -1;
+
+        return product.id;
     }
 
 
@@ -193,24 +192,23 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
     {
         List<object> produtos = new List<object>();
 
-        using (var context = new DAOContext())
-        {
-            var stocks = context.Stocks
-                .Include(s => s.product)
-                .ToList();
+        using var context = new DAOContext();
 
-            foreach (var stock in stocks)
+        var stocks = context.Stocks
+            .Include(s => s.product)
+            .ToList();
+
+        foreach (var stock in stocks)
+        {
+            produtos.Add(new
             {
-                produtos.Add(new
-                {
-                    id = stock.product.id,
-                    name = stock.product.name,
-                    bar_code = stock.product.bar_code,
-                    image = stock.product.image,
-                    description = stock.product.description,
-                    price = stock.unit_price
-                });
-            }
+                id = stock.product.id,
+                name = stock.product.name,
+                bar_code = stock.product.bar_code,
+                image = stock.product.image,
+                description = stock.product.description,
+                price = stock.unit_price
+            });
         }
 
         return produtos;
@@ -233,12 +231,13 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 
     public static int FindId(string bar_code)
     {
-        using (var context = new DAOContext())
-        {
-            var product = context.Product.Where(s => s.bar_code == bar_code).Single();
-            return product.id;
+        using var context = new DAOContext();
 
+        var product = context.Product.FirstOrDefault(s => s.bar_code == bar_code);
 
-        }
+        if (product == null)
+            return -1;
+
+        return product.id;
     }
 }

@@ -242,25 +242,24 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
     public StoreDTO findById()
     {
-
         return new StoreDTO();
     }
 
     // Retorna todas as lojas
-    public static List<StoreDTO> getAllStores()
+    public static List<Store> getAllStores()
     {
-        List<StoreDTO> lojas = new List<StoreDTO>();
-        using (var context = new DAOContext())
-        {
-            var stores = context.Store
-                .Include(s => s.owner)
-                    .ThenInclude(o => o.address)
-                .Include(s => s.owner)
-                    .ThenInclude(o => o.address);
+        List<Store> lojas = new List<Store>();
+        using var context = new DAOContext();
 
-            foreach (var store in stores)
-                lojas.Add(Store.convertDAOToModel(store, false).convertModelToDTO());
-        }
+        var stores = context.Store
+            .Include(s => s.owner)
+                .ThenInclude(o => o.address)
+            .Include(s => s.owner)
+                .ThenInclude(o => o.address);
+
+        foreach (var store in stores)
+            lojas.Add(Store.convertDAOToModel(store, false));
+
         return lojas;
     }
 

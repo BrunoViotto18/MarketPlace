@@ -192,13 +192,11 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
     }
 
     // Retorna o cliente pelo documento
-    public static ClientDTO findByDocument(string document)
+    public static Client findByDocument(string document)
     {
-        using (var context = new DAO.DAOContext())
-        {
-            var client = context.Client.Include(c => c.address).Where(c => c.document == document).Single();
-            return Client.convertDAOToModel(client).convertModelToDTO();
-        }
+        using var context = new DAO.DAOContext();
+        
+        return Client.convertDAOToModel(context.Client.Include(c => c.address).Where(c => c.document == document).Single());
     }
 
 
@@ -207,14 +205,16 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return new ClientDTO();
     }
 
-    public static ClientDTO? findLogin(ClientDTO cliente){
+    public static Client? findByLogin(string login, string senha){
 
-        using (var context = new DAOContext()){
-            var login = context.Client.Include(c => c.address).FirstOrDefault(c => c.login == cliente.login && c.passwd == cliente.passwd);
-            if(login == null)
-                return null;
-            return Client.convertDAOToModel(login).convertModelToDTO();
-        }
+        using var context = new DAOContext();
+
+        var user = context.Client.Include(c => c.address).FirstOrDefault(c => c.login == login && c.passwd == senha);
+
+        if(user == null)
+            return null;
+
+        return Client.convertDAOToModel(user);
         
     }
 
@@ -224,12 +224,15 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return client;
     }
 
-    public static int findId(string login){
+    public static int findId(string login, string senha)
+    {
         using (var context = new DAOContext()){
-            var id = context.Client.FirstOrDefault(c => c.login == login);
-            if(id == null)
+            var user = context.Client.FirstOrDefault(c => c.login == login && c.passwd == senha);
+
+            if(user == null)
                 return -1;
-            return id.id;
+
+            return user.id;
         }
     }
 }

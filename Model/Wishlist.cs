@@ -175,7 +175,6 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 
     public WishListDTO findById()
     {
-
         return new WishListDTO();
     }
 

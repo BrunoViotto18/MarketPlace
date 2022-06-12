@@ -163,16 +163,6 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         return id;
     }
 
-    //    using (var context = new DAOContext())
-    //{
-    //    var store = context.Store.FirstOrDefault(s => s.CNPJ == this.CNPJ);
-
-    //    if (store == null)
-    //        return;
-
-    //    context.Store.Remove(store);
-    //    context.SaveChanges();
-    //}
 
     public void delete()
     {
@@ -182,18 +172,13 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
             var address = context.Address.FirstOrDefault(a => a.street == this.address.getStreet() && a.country == this.address.getCountry() && this.address.getPostalCode() == a.postal_code && a.city == this.address.getCity() && a.state == this.address.getState());
 
             if (owner == null || address == null)
-            {
-                Console.WriteLine("Anulou :(");
                 return;
-
-            }
                 
             context.Address.Remove(address);
             context.Owner.Remove(owner);
             context.SaveChanges();
         }
     }
-
 
     public void update()
     {
@@ -203,10 +188,9 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
     // Retorna o ID do objeto atual
     public int findId()
     {
-        using (var context = new DAOContext())
-        {
-            return context.Owner.Where(o => o.document == this.document).Single().id;
-        }
+        using var context = new DAOContext();
+        
+        return context.Owner.Where(o => o.document == this.document).Single().id;
     }
 
     // Retorna o dono por documento

@@ -184,7 +184,6 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
             context.Address.Remove(address);
             context.SaveChanges();
         }
-        
     }
 
 
@@ -195,7 +194,6 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 
     public AddressDTO findById()
     {
-
         return new AddressDTO();
     }
 
