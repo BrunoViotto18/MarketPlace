@@ -12,7 +12,7 @@ public class StoreController : ControllerBase
     [Route("all")]
     public List<StoreDTO> getAllStore()
     {
-        return Store.getAllStores();
+        return new List<StoreDTO>();
     }
 
     [HttpPost]

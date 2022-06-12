@@ -63,7 +63,7 @@ public class ClientController : ControllerBase
         if (login == null || login.login == null || login.passwd == null)
             return BadRequest("Empty credentials");
 
-        var user = Model.Client.findLogin(login);
+        var user = Model.Client.findByLogin(login.login, login.passwd);
         Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
         if(user == null)
@@ -73,9 +73,9 @@ public class ClientController : ControllerBase
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim("UserId", Model.Client.findId(login.login).ToString()),
-                new Claim("UserName", user.name),
-                new Claim("Email", user.email)
+                new Claim("UserId", Model.Client.findId(user.getLogin(), user.getPasswd()).ToString()),
+                new Claim("UserName", user.getName()),
+                new Claim("Email", user.getEmail())
             };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -88,12 +88,11 @@ public class ClientController : ControllerBase
             expires: DateTime.UtcNow.AddMinutes(10),
             signingCredentials: signIn);
 
-        return Ok(new ObjectResult(
+        return Ok(
             new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                id = Client.findId(user.login)
-            })
-        );
+                id = Model.Client.findId(user.getLogin(), user.getPasswd())
+            });
     }
 }
