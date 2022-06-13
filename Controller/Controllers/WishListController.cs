@@ -22,8 +22,8 @@ public class WishListController: ControllerBase
             ids.Add(id);
             products.Add(new
             {
-                nome = prod.getName(),
-                codigoDeBarras = prod.getBarCode()
+                nome = prod.getProduct().getName(),
+                codigoDeBarras = prod.getProduct().getBarCode()
             });
         }
 
