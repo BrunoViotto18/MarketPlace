@@ -8,7 +8,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 {
     // Atributos
     private Client client;
-    private List<Product> products = new List<Product>(); 
+    private List<Stocks> products = new List<Stocks>(); 
 
 
     // Construtor
@@ -33,7 +33,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         this.client = client;
     }
 
-    public List<Product> getProducts()
+    public List<Stocks> getProducts()
     {
         return products;
     }
@@ -42,7 +42,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     // Métodos
 
     // Adiciona um produto para a Wishlist
-    public void addProductToWishList(Product product)
+    public void addProductToWishList(Stocks product)
     {
         products.Add(product);
     }
@@ -67,11 +67,11 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     public static WishList convertDTOToModel(WishListDTO wishlist)
     {
         if (wishlist.products == null)
-            wishlist.products = new List<ProductDTO>();
+            wishlist.products = new List<StocksDTO>();
 
-        List<Product> products = new List<Product>();
-        foreach (ProductDTO prod in wishlist.products)
-            products.Add(Product.convertDTOToModel(prod));
+        List<Stocks> products = new List<Stocks>();
+        foreach (StocksDTO prod in wishlist.products)
+            products.Add(Stocks.convertDTOToModel(prod));
 
         return new WishList(Client.convertDTOToModel(wishlist.client))
         {
@@ -82,8 +82,8 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     // Converte um objeto Model para DTO
     public WishListDTO convertModelToDTO()
     {
-        List<ProductDTO> products = new List<ProductDTO>();
-        foreach (Product prod in this.products)
+        List<StocksDTO> products = new List<StocksDTO>();
+        foreach (Stocks prod in this.products)
             products.Add(prod.convertModelToDTO());
 
         return new WishListDTO
@@ -96,12 +96,12 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     // Converte um objeto DAO para Model
     public static WishList convertDAOToModel(DAO.WishList wishlist)
     {
-        List<Product> products = new List<Product>();
+        List<Stocks> products = new List<Stocks>();
         using (var context = new DAOContext())
         {
             var wishlists = context.WishList.Where(w => w.client == wishlist.client);
             foreach (var p in wishlists)
-                products.Add(Product.convertDAOToModel(p.product));
+                products.Add(Stocks.convertDAOToModel(p.product));
         }
 
         return new WishList
@@ -123,18 +123,18 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         using (var context = new DAOContext())
         {
             var clientDao = context.Client.FirstOrDefault(c => c.document == document);
-            var productDao = context.Product.FirstOrDefault(p => p.id == productID);
+            var stockDao = context.Stocks.FirstOrDefault(p => p.id == productID);
 
-            if (clientDao == null || productDao == null)
+            if (clientDao == null || stockDao == null)
                 return -1;
 
             var wishlist = new DAO.WishList
             {
                 client = clientDao,
-                product = productDao
+                product = stockDao
             };
 
-            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.product.bar_code == wishlist.product.bar_code) != null)
+            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.product.id == wishlist.product.id) != null)
                 return -1;
 
             context.WishList.Add(wishlist);
@@ -155,7 +155,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         {
             foreach (var prod in this.products)
             {
-                var wishlist = context.WishList.FirstOrDefault(w => w.client.document == this.client.getDocument() && w.product.bar_code == prod.getBarCode());
+                var wishlist = context.WishList.FirstOrDefault(w => w.client.document == this.client.getDocument() && w.product.product.bar_code == prod.getProduct().getBarCode());
 
                 if (wishlist == null)
                     continue;

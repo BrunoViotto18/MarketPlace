@@ -131,8 +131,11 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
             var storeDao = context.Store.FirstOrDefault(s => s.id == storeId);
             var productDao = context.Product.FirstOrDefault(p => p.id == productId);
 
-            if (storeDao == null || productDao == null)
+            if (storeDao == null)
                 return -1;
+
+            if (productDao == null)
+                return -2;
 
             DAO.Stocks stocks = new DAO.Stocks
             {
@@ -180,8 +183,20 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
 
     public StocksDTO findById()
     {
-
         return new StocksDTO();
+    }
+
+
+    public int findId()
+    {
+        using var context = new DAO.DAOContext();
+
+        var stock = context.Stocks.FirstOrDefault(s => s.product.bar_code == product.getBarCode() && s.store.CNPJ == store.getCNPJ());
+
+        if (stock == null)
+            return -1;
+
+        return stock.id;
     }
 
 
