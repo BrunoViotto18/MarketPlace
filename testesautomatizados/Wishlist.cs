@@ -66,11 +66,11 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     // Converte um objeto DTO para Model
     public static WishList convertDTOToModel(WishListDTO wishlist)
     {
-        if (wishlist.products == null)
-            wishlist.products = new List<ProductDTO>();
+        if (wishlist.stocks == null)
+            wishlist.stocks = new List<ProductDTO>();
 
         List<Product> products = new List<Product>();
-        foreach (ProductDTO prod in wishlist.products)
+        foreach (ProductDTO prod in wishlist.stocks)
             products.Add(Product.convertDTOToModel(prod));
 
         return new WishList(Client.convertDTOToModel(wishlist.client))
@@ -89,7 +89,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         return new WishListDTO
         {
             client = this.client.convertModelToDTO(),
-            products = products
+            stocks = products
         };
     }
 
@@ -134,15 +134,15 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
             var wishlist = new DAO.WishList
             {
                 client = clientDao,
-                product = productDao
+                stock = productDao
             };
 
-            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.product.bar_code == wishlist.product.bar_code) != null)
+            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.product.bar_code == wishlist.stock.bar_code) != null)
                 return -1;
 
             context.WishList.Add(wishlist);
             context.Entry(wishlist.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-            context.Entry(wishlist.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            context.Entry(wishlist.stock).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
             context.SaveChanges();
 
             id = wishlist.id;

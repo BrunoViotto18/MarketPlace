@@ -3,5 +3,5 @@
 public class WishListDTO
 {
     public ClientDTO client;
-    public List<StocksDTO> products;
+    public List<StocksDTO> stocks;
 }

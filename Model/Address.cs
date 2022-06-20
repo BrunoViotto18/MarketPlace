@@ -6,6 +6,7 @@ using DTO;
 public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 {
     // Atributos
+    private int id;
     private String street;
     private String city;
     private String state;
@@ -14,6 +15,16 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 
 
     // Construtor
+    public Address(int id, String street, String city, String state, String country, String poste_code)
+    {
+        this.id = id;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.country = country;
+        this.poste_code = poste_code;
+    }
+
     public Address(String street, String city, String state, String country, String poste_code)
     {
         this.street = street;
@@ -25,6 +36,11 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
 
 
     // GET & SET
+    public int getId()
+    {
+        return id;
+    }
+
     public String getStreet()
     {
         return street;
@@ -126,6 +142,7 @@ public class Address : IValidateDataObject, IDataController<AddressDTO, Address>
     public static Address convertDAOToModel(DAO.Address address)
     {
         return new Address(
+            address.id,
             address.street,
             address.city,
             address.state,

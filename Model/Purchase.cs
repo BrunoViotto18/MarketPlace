@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purchase>
 {
-    // Atributos
+	// Atributos
+	private int id;
     private DateTime date_purchase;
     private String number_confirmation;
     private String number_nf;
@@ -20,13 +21,24 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
     List<Product> products;
 
 
+	// Construtor
 	public Purchase()
     {
 
-    }
+	}
+
+	public Purchase(int id)
+	{
+		this.id = id;
+	}
 
 
 	// GET & SET
+	public int getId()
+	{
+		return id;
+	}
+
 	public DateTime getDataPurchase()
 	{
 		return date_purchase;
@@ -207,6 +219,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 
 		return new Purchase
 		{
+			id = purchase.id,
 			date_purchase = purchase.date_purchase,
 			number_confirmation =purchase.number_confirmation,
 			number_nf = purchase.number_nf,

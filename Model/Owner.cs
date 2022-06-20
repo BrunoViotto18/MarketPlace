@@ -110,6 +110,7 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
     {
         return new Owner(Address.convertDAOToModel(owner.address))
         {
+            id = owner.id,
             name = owner.name,
             date_of_birth = owner.date_of_birth,
             document = owner.document,

@@ -16,7 +16,7 @@ public class WishListController: ControllerBase
 
         List<object> products = new List<object>();
         List<int> ids = new List<int>();
-        foreach (var prod in wishlist.getProducts())
+        foreach (var prod in wishlist.getStocks())
         {
             var id = wishlist.save(wishlist.getClient().getDocument(), prod.findId());
             ids.Add(id);
@@ -33,6 +33,15 @@ public class WishListController: ControllerBase
             cliente = request.client,
             produtos = products
         };
+    }
+
+    [HttpGet]
+    [Route("getClientWishlist/{clientID}")]
+    public IActionResult getClientWishlist(int clientID)
+    {
+        var wishlists = WishList.getAllWishlists().Where(w => w.getId() == clientID);
+
+        return Ok(wishlists);
     }
 
     [HttpDelete]

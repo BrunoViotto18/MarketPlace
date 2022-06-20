@@ -7,6 +7,7 @@ using DAO;
 public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
 {
     // Atributos
+    private int id;
     private int quantity;
     private Double unit_price;
 
@@ -20,8 +21,27 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
 
     }
 
+    public Stocks(int id)
+    {
+        this.id = id;
+    }
+
+    public Stocks(int id, int quantity, Double unit_price, Product product, Store store)
+    {
+        this.id = id;
+        this.quantity = quantity;
+        this.unit_price = unit_price;
+        this.product = product;
+        this.store = store;
+    }
+
 
     // GET & SET
+    public int getId()
+    {
+        return id;
+    }
+
     public Store getStore()
     {
         return store;
@@ -111,6 +131,7 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
     {
         return new Stocks
         {
+            id = stocks.id,
             quantity = (int)stocks.quantity,
             unit_price = stocks.unit_price,
             product = Product.convertDAOToModel(stocks.product),

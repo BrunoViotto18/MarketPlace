@@ -15,7 +15,7 @@ public class DAOContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Data Source=JVLPC0524\\SQLEXPRESS;Initial Catalog=Marketplace;Integrated Security=True");
+        optionsBuilder.UseSqlServer("Data Source=BRUNOVIOTTO\\SQLEXPRESS;Initial Catalog=Marketplace;Integrated Security=True");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -75,7 +75,7 @@ public class DAOContext : DbContext
         {
             entity.HasKey(e => e.id);
             entity.HasOne(e => e.client);
-            entity.HasOne(e => e.product);
+            entity.HasOne(e => e.stock);
         }
         );
 

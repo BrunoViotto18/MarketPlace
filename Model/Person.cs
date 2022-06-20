@@ -4,6 +4,7 @@ using DTO;
 public class Person
 {
     // Atributos
+    protected int id;
     protected String name;
     protected DateTime date_of_birth;
     protected String document;
@@ -16,6 +17,12 @@ public class Person
 
 
     // Construtor
+    protected Person(int id, Address address)
+    {
+        this.id = id;
+        this.address = address;
+    }
+
     protected Person(Address address)
     {
         this.address = address;
@@ -23,6 +30,11 @@ public class Person
 
 
     // GET & SET
+    public int getId()
+    {
+        return id;
+    }
+
     public String getName()
     {
         return name;

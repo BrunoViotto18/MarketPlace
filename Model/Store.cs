@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 {
     // Atributos
+    private int id;
     private String name;
     private String CNPJ;
 
@@ -15,18 +16,36 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
 
     // Construtores
+    public Store()
+    {
+
+    }
+
+    public Store(int id, String name, String CNPJ)
+    {
+        this.id = id;
+        this.name = name;
+        this.CNPJ = CNPJ;
+    }
+
     private Store(Owner owner)
     {
         this.owner = owner;
     }
 
-    public Store()
+    private Store(int id, Owner owner)
     {
-    
+        this.id = id;
+        this.owner = owner;
     }
 
 
     // GET & SET
+    public int getId()
+    {
+        return id;
+    }
+
     public String getName()
     {
         return name;
@@ -145,6 +164,7 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
         return new Store
         {
+            id = store.id,
             name = store.name,
             CNPJ = store.CNPJ,
             owner = Owner.convertDAOToModel(store.owner),

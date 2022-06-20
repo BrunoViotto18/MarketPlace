@@ -4,5 +4,5 @@ public class WishList
 {
     public int id;
     public Client client;
-    public Stocks product;
+    public Stocks stock;
 }

@@ -111,6 +111,7 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
     {
         return new Client(Address.convertDAOToModel(client.address))
         {
+            id = client.id,
             name = client.name,
             date_of_birth = client.date_of_birth,
             document = client.document,

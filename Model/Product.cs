@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 {
     // Atributos
+    private int id;
     private String name;
     private String bar_code;
     private String image;
@@ -19,8 +20,18 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
 
     }
 
+    public Product(int id)
+    {
+        this.id = id;
+    }
+
 
     // GET & SET
+    public int getId()
+    {
+        return id;
+    }
+
     public String getName()
     {
         return name;
@@ -110,6 +121,7 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
     {
         return new Product()
         {
+            id = product.id,
             name = product.name,
             bar_code = product.bar_code,
             image = product.image,

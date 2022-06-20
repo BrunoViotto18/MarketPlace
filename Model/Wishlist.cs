@@ -1,5 +1,6 @@
 namespace Model;
 
+using Microsoft.EntityFrameworkCore;
 using Interfaces;
 using DTO;
 using DAO;
@@ -7,8 +8,9 @@ using DAO;
 public class WishList : IValidateDataObject, IDataController<WishListDTO, WishList>
 {
     // Atributos
+    private int id;
     private Client client;
-    private List<Stocks> products = new List<Stocks>(); 
+    private List<Stocks> stocks = new List<Stocks>(); 
 
 
     // Construtor
@@ -22,8 +24,18 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 
     }
 
+    public WishList(int id)
+    {
+        this.id = id;
+    }
+
 
     // GET & SET
+    public int getId()
+    {
+        return id;
+    }
+
     public Client getClient()
     {
         return client;
@@ -33,18 +45,18 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         this.client = client;
     }
 
-    public List<Stocks> getProducts()
+    public List<Stocks> getStocks()
     {
-        return products;
+        return stocks;
     }
 
 
     // Métodos
 
     // Adiciona um produto para a Wishlist
-    public void addProductToWishList(Stocks product)
+    public void addProductToWishList(Stocks stock)
     {
-        products.Add(product);
+        stocks.Add(stock);
     }
 
     // Valida se o objeto tem todos os seus campos diferente de nulo
@@ -53,7 +65,7 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         if (this.client == null)
             return false;
 
-        if (this.products == null)
+        if (this.stocks == null)
             return false;
 
         return true;
@@ -66,16 +78,16 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     // Converte um objeto DTO para Model
     public static WishList convertDTOToModel(WishListDTO wishlist)
     {
-        if (wishlist.products == null)
-            wishlist.products = new List<StocksDTO>();
+        if (wishlist.stocks == null)
+            wishlist.stocks = new List<StocksDTO>();
 
-        List<Stocks> products = new List<Stocks>();
-        foreach (StocksDTO prod in wishlist.products)
-            products.Add(Stocks.convertDTOToModel(prod));
+        List<Stocks> stocks = new List<Stocks>();
+        foreach (StocksDTO prod in wishlist.stocks)
+            stocks.Add(Stocks.convertDTOToModel(prod));
 
         return new WishList(Client.convertDTOToModel(wishlist.client))
         {
-            products = products
+            stocks = stocks
         };
     }
 
@@ -83,31 +95,41 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     public WishListDTO convertModelToDTO()
     {
         List<StocksDTO> products = new List<StocksDTO>();
-        foreach (Stocks prod in this.products)
+        foreach (Stocks prod in this.stocks)
             products.Add(prod.convertModelToDTO());
 
         return new WishListDTO
         {
             client = this.client.convertModelToDTO(),
-            products = products
+            stocks = products
         };
     }
 
     // Converte um objeto DAO para Model
     public static WishList convertDAOToModel(DAO.WishList wishlist)
     {
-        List<Stocks> products = new List<Stocks>();
+        List<Stocks> stocks = new List<Stocks>();
         using (var context = new DAOContext())
         {
-            var wishlists = context.WishList.Where(w => w.client == wishlist.client);
-            foreach (var p in wishlists)
-                products.Add(Stocks.convertDAOToModel(p.product));
+            var wishlists = context.WishList
+                .Include(w => w.client)
+                    .ThenInclude(c => c.address)
+                .Include(w => w.stock)
+                    .ThenInclude(s => s.product)
+                .Include(w => w.stock)
+                    .ThenInclude(s => s.store)
+                        .ThenInclude(s => s.owner)
+                            .ThenInclude(o => o.address)
+                .Where(w => w.client == wishlist.client);
+            foreach (var wish in wishlists)
+                stocks.Add(Stocks.convertDAOToModel(wish.stock));
         }
 
         return new WishList
         {
+            id = wishlist.id,
             client = Client.convertDAOToModel(wishlist.client),
-            products = products
+            stocks = stocks
         };
     }
 
@@ -131,15 +153,15 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
             var wishlist = new DAO.WishList
             {
                 client = clientDao,
-                product = stockDao
+                stock = stockDao
             };
 
-            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.product.id == wishlist.product.id) != null)
+            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.stock.id == wishlist.stock.id) != null)
                 return -1;
 
             context.WishList.Add(wishlist);
             context.Entry(wishlist.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-            context.Entry(wishlist.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+            context.Entry(wishlist.stock).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
             context.SaveChanges();
 
             id = wishlist.id;
@@ -153,9 +175,9 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     {
         using (var context = new DAOContext())
         {
-            foreach (var prod in this.products)
+            foreach (var prod in this.stocks)
             {
-                var wishlist = context.WishList.FirstOrDefault(w => w.client.document == this.client.getDocument() && w.product.product.bar_code == prod.getProduct().getBarCode());
+                var wishlist = context.WishList.FirstOrDefault(w => w.client.document == this.client.getDocument() && w.stock.product.bar_code == prod.getProduct().getBarCode());
 
                 if (wishlist == null)
                     continue;
@@ -173,16 +195,37 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     }
 
 
-    public WishListDTO findById()
+    public static List<WishList> getAllWishlists()
     {
-        return new WishListDTO();
+        using var context = new DAOContext();
+
+        var wishlistDAO = context.WishList
+            .Include(w => w.client)
+            .Include(w => w.stock)
+                .ThenInclude(s => s.product)
+            .Include(w => w.stock)
+                .ThenInclude(s => s.store)
+            .ToList();
+
+        List<WishList> wishlist = new List<WishList>();
+        foreach (var wish in wishlistDAO)
+            wishlist.Add(WishList.convertDAOToModel(wish));
+
+        return wishlist;
     }
 
 
+    /* Trash */
+
     public List<WishListDTO> getAll()
     {
-        List<WishListDTO> wishlist = new List<WishListDTO>();
-        return wishlist;
+        List<WishListDTO> list = new List<WishListDTO>();
+        return list;
+    }
+
+    public WishListDTO findById()
+    {
+        return new WishListDTO();
     }
 }
  
