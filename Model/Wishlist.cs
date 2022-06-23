@@ -24,6 +24,11 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 
     }
 
+    public WishList(List<Stocks> stocks)
+    {
+        this.stocks = stocks;
+    }
+
     public WishList(int id)
     {
         this.id = id;
@@ -194,24 +199,37 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 
     }
 
+    public void includeClient()
+    {
+        using var context = new DAOContext();
+
+        client = Client.convertDAOToModel(context.WishList.Include(w => w.client).ThenInclude(c => c.address).First(w => w.id == id).client);
+    }
+
+    public void includeStocks()
+    {
+        using var context = new DAOContext();
+
+        foreach (var wish in context.WishList.Include(w => w.client).Include(w => w.stock).Where(w => w.client.id == id))
+            stocks.Add(new Stocks(wish.stock.id,(int) wish.stock.quantity, wish.stock.unit_price));
+    }
 
     public static List<WishList> getAllWishlists()
     {
         using var context = new DAOContext();
 
-        var wishlistDAO = context.WishList
-            .Include(w => w.client)
-            .Include(w => w.stock)
-                .ThenInclude(s => s.product)
-            .Include(w => w.stock)
-                .ThenInclude(s => s.store)
-            .ToList();
+        var wishlist = context.WishList.ToList();
 
-        List<WishList> wishlist = new List<WishList>();
-        foreach (var wish in wishlistDAO)
-            wishlist.Add(WishList.convertDAOToModel(wish));
+        var wishlists = new List<WishList>();
+        foreach (var w in wishlist)
+        {
+            wishlists.Add(new WishList
+            {
+                id = w.id
+            });
+        }
 
-        return wishlist;
+        return wishlists;
     }
 
 

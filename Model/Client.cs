@@ -217,6 +217,17 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         
     }
 
+    public static List<Client> getAllClients()
+    {
+        using var context = new DAOContext();
+
+        var clients = new List<Client>();
+        foreach (var client in context.Client.Include(c => c.address))
+            clients.Add(Client.convertDAOToModel(client));
+
+        return clients;
+    }
+
     public List<ClientDTO> getAll()
     {
         List<ClientDTO> client = new List<ClientDTO>();

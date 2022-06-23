@@ -15,7 +15,18 @@ public class DAOContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Data Source=BRUNOVIOTTO\\SQLEXPRESS;Initial Catalog=Marketplace;Integrated Security=True");
+        switch (Environment.MachineName)
+        {
+            case "BRUNOVIOTTO":
+                optionsBuilder.UseSqlServer("Data Source=BRUNOVIOTTO\\SQLEXPRESS;Initial Catalog=Marketplace;Integrated Security=True");
+                break;
+            case "JVLPC0524":
+                optionsBuilder.UseSqlServer("Data Source=JVLPC0524\\SQLEXPRESS;Initial Catalog=Marketplace;Integrated Security=True");
+                break;
+            case "JVLPC0510":
+                optionsBuilder.UseSqlServer("Data Source=JVLPC0510\\SQLSERVER;Initial Catalog=Marketplace;Integrated Security=True");
+                break;
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

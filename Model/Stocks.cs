@@ -26,6 +26,15 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         this.id = id;
     }
 
+    public Stocks(int id, int quantity, Double unit_price)
+    {
+        this.id = id;
+        this.quantity = quantity;
+        this.unit_price = unit_price;
+        this.product = product;
+        this.store = store;
+    }
+
     public Stocks(int id, int quantity, Double unit_price, Product product, Store store)
     {
         this.id = id;
@@ -201,6 +210,22 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
 
     }
 
+    public static Stocks? findById(int stockId)
+    {
+        using var context = new DAOContext();
+
+        var stock = context.Stocks.FirstOrDefault(s => s.id == stockId);
+
+        if (stock == null)
+            return null;
+
+        return new Stocks
+        {
+            id = stockId,
+            quantity = (int)stock.quantity,
+            unit_price = stock.unit_price
+        };
+    }
 
     public StocksDTO findById()
     {

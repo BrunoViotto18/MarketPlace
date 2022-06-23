@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using DTO;
 using Model;
 
@@ -39,9 +40,16 @@ public class WishListController: ControllerBase
     [Route("getClientWishlist/{clientID}")]
     public IActionResult getClientWishlist(int clientID)
     {
-        var wishlists = WishList.getAllWishlists().Where(w => w.getId() == clientID);
+        var wishlists = WishList.getAllWishlists();
 
-        return Ok(wishlists);
+        foreach (var wish in wishlists)
+            wish.includeClient();
+
+        var wishlist = new WishList(wishlists.First().getId());
+        wishlist.setClient(wishlists.First().getClient());
+        wishlist.includeStocks();
+
+        return Ok(wishlist);
     }
 
     [HttpDelete]
