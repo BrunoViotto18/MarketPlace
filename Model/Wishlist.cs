@@ -210,26 +210,32 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     {
         using var context = new DAOContext();
 
-        foreach (var wish in context.WishList.Include(w => w.client).Include(w => w.stock).Where(w => w.client.id == id))
-            stocks.Add(new Stocks(wish.stock.id,(int) wish.stock.quantity, wish.stock.unit_price));
+        foreach (var wish in context.WishList.Include(w => w.client).Include(w => w.stock).Where(w => w.client.id == client.getId()))
+            stocks.Add(new Stocks(
+                wish.stock.id,
+                (int)wish.stock.quantity,
+                wish.stock.unit_price
+            ));
     }
 
     public static List<WishList> getAllWishlists()
     {
         using var context = new DAOContext();
 
-        var wishlist = context.WishList.ToList();
+        var wishlists = context.WishList.Include(w => w.client).ToList();
 
-        var wishlists = new List<WishList>();
-        foreach (var w in wishlist)
+        var wishlist = new List<WishList>();
+        foreach (var w in wishlists.GroupBy(w => w.client.id))
         {
-            wishlists.Add(new WishList
+            wishlist.Add(new WishList
             {
-                id = w.id
+                id = w.First().id
             });
+            if (wishlist.Last().id <= 0 || wishlist.Last().id == null)
+                throw new Exception();
         }
 
-        return wishlists;
+        return wishlist;
     }
 
 

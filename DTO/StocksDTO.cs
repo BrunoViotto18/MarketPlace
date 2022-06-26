@@ -2,6 +2,7 @@
 
 public class StocksDTO
 {
+    public int id;
     public int quantity;
     public Double unit_price;
 

@@ -40,14 +40,26 @@ public class WishListController: ControllerBase
     [Route("getClientWishlist/{clientID}")]
     public IActionResult getClientWishlist(int clientID)
     {
+        // Pega todas as wishlists
         var wishlists = WishList.getAllWishlists();
+        wishlists.ForEach(w => w.includeClient());
 
-        foreach (var wish in wishlists)
-            wish.includeClient();
+        // Pega a wishlist do cliente
+        var wishlistClient = wishlists.Where(w => w.getClient().getId() == clientID);
+        var wish = wishlistClient.FirstOrDefault();
+        if (wish == null)
+            return Ok(new WishListDTO());
 
-        var wishlist = new WishList(wishlists.First().getId());
-        wishlist.setClient(wishlists.First().getClient());
-        wishlist.includeStocks();
+        // Monta a WishlistDTO
+        wishlistClient.First().includeStocks();
+        var wishlist = new WishListDTO();
+        wishlist.id = wish.getId();
+        wishlist.stocks = new List<StocksDTO>();
+        foreach (var s in wishlistClient.First().getStocks())
+            wishlist.stocks.Add(new StocksDTO
+            {
+                id = s.getId()
+            });
 
         return Ok(wishlist);
     }
