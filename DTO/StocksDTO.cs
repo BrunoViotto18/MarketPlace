@@ -2,10 +2,10 @@
 
 public class StocksDTO
 {
-    public int id;
-    public int quantity;
-    public Double unit_price;
+    public int id { get; set; }
+    public int quantity { get; set; }
+    public Double unit_price { get; set; }
 
-    public StoreDTO store;
-    public ProductDTO product;
+    public StoreDTO store { get; set; }
+    public ProductDTO product { get; set; }
 }

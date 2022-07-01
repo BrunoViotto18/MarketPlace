@@ -34,7 +34,7 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
-    [Route("informations/{document}")]
+    [Route("informations")]
     public object getInformations(String document)
     {
         return Client.findByDocument(document);
@@ -73,9 +73,7 @@ public class ClientController : ControllerBase
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim("UserId", Model.Client.findId(user.getLogin(), user.getPasswd()).ToString()),
-                new Claim("UserName", user.getName()),
-                new Claim("Email", user.getEmail())
+                new Claim("Id", Model.Client.findId(user.getLogin(), user.getPasswd()).ToString())
             };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -85,14 +83,9 @@ public class ClientController : ControllerBase
             _configuration["Jwt:Issuer"],
             _configuration["JwtAudience"],
             claims,
-            expires: DateTime.UtcNow.AddMinutes(10),
+            expires: DateTime.UtcNow.AddYears(1),
             signingCredentials: signIn);
 
-        return Ok(
-            new
-            {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                id = Model.Client.findId(user.getLogin(), user.getPasswd())
-            });
+        return Ok(new JwtSecurityTokenHandler().WriteToken(token));
     }
 }

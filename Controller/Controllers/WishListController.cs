@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using DTO;
 using Model;
@@ -10,6 +11,7 @@ namespace Controller.Controllers;
 public class WishListController: ControllerBase
 {
     [HttpPost]
+    [Authorize]
     [Route("addProduct")]
     public object addProductToWishList ([FromBody] WishListDTO request)
     {
@@ -37,28 +39,32 @@ public class WishListController: ControllerBase
     }
 
     [HttpGet]
-    [Route("getClientWishlist/{clientID}")]
-    public IActionResult getClientWishlist(int clientID)
+    [Authorize]
+    [Route("getClientWishlist")]
+    public IActionResult getClientWishlist()
     {
+        var clientID = JWT.GetIdFromToken(Request.Headers["Authorization"].ToString());
+
         // Pega todas as wishlists
         var wishlists = WishList.getAllWishlists();
         wishlists.ForEach(w => w.includeClient());
 
         // Pega a wishlist do cliente
-        var wishlistClient = wishlists.Where(w => w.getClient().getId() == clientID);
-        var wish = wishlistClient.FirstOrDefault();
+        var wish = wishlists.FirstOrDefault(w => w.getClient().getId() == clientID);
         if (wish == null)
             return Ok(new WishListDTO());
 
         // Monta a WishlistDTO
-        wishlistClient.First().includeStocks();
+        wish.includeStocks();
+        wish.getStocks().ForEach(s => s.includeProducts());
         var wishlist = new WishListDTO();
         wishlist.id = wish.getId();
         wishlist.stocks = new List<StocksDTO>();
-        foreach (var s in wishlistClient.First().getStocks())
+        foreach (var s in wish.getStocks())
             wishlist.stocks.Add(new StocksDTO
             {
-                id = s.getId()
+                id = s.getId(),
+                product = s.getProduct().convertModelToDTO()
             });
 
         return Ok(wishlist);

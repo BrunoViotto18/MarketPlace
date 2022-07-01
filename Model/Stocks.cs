@@ -1,5 +1,6 @@
 namespace Model;
 
+using Microsoft.EntityFrameworkCore;
 using Interfaces;
 using DTO;
 using DAO;
@@ -227,11 +228,6 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         };
     }
 
-    public StocksDTO findById()
-    {
-        return new StocksDTO();
-    }
-
 
     public int findId()
     {
@@ -245,6 +241,39 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         return stock.id;
     }
 
+    public static List<Stocks> getAllStocks()
+    {
+        using var context = new DAOContext();
+
+        var stocks = context.Stocks.ToList();
+        var allStocks = new List<Stocks>();
+        foreach (var s in stocks)
+            allStocks.Add(new Stocks
+            {
+                id = s.id,
+                quantity = (int)s.quantity,
+                unit_price = s.unit_price
+            });
+
+        return allStocks;
+    }
+
+    public void includeProducts()
+    {
+        using var context = new DAOContext();
+
+        var prod = context.Stocks.Include(s => s.product).First(s => s.id == id).product;
+
+        product = Product.convertDAOToModel(prod);
+    }
+
+
+    /* Trash */
+
+    public StocksDTO findById()
+    {
+        return new StocksDTO();
+    }
 
     public List<StocksDTO> getAll()
     {
