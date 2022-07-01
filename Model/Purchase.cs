@@ -310,42 +310,35 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 	}
 
 	// Retorna todas as compras de um cliente
-	public static List<PurchaseDTO> getClientPurchases(int clientID)
+	public static List<Purchase> getAllPurchases()
     {
-		List<PurchaseDTO> clientPurchases = new List<PurchaseDTO>();
 		using var context = new DAOContext();
 
-		var purchases = context.Purchase
-			.Include(p => p.client)
-				.ThenInclude(c => c.address)
-			.Include(p => p.store)
-				.ThenInclude(s => s.owner)
-					.ThenInclude(o => o.address)
-			.Include(p => p.product)
-			.Where(p => p.client.id == clientID)
-			.ToList()
-			.GroupBy(p => p.number_nf);
+		var purchases = context.Purchase.ToList();
 
-		foreach (var purch in purchases)
-        {
-			if (purch == null)
-				continue;
+		var group = purchases.GroupBy(p => p.id);
 
-			List<ProductDTO> products = new List<ProductDTO>();
-			foreach (var p in purch)
-				products.Add(Product.convertDAOToModel(p.product).convertModelToDTO());
+		var purchase = new List<Purchase>();
+		foreach (var p in group)
+			purchase.Add(new Purchase
+			{
 
-			var compra = purch.FirstOrDefault();
-			if (compra == null)
-				continue;
+			});
+		/*
+		id;
+		date_purchase;
+		number_confirmation;
+		number_nf;
+		payment_type;
+		purchase_status;
+		purchase_value;
 
-			PurchaseDTO purchase = Purchase.convertDAOToModel(compra).convertModelToDTO();
-			purchase.productsDTO = products;
+		client;
+		store;
+		products;
+		*/
 
-			clientPurchases.Add(purchase);
-        }
-
-		return clientPurchases;
+		return purchase;
 	}
 
 	// Retorna todas as compras de uma loja
