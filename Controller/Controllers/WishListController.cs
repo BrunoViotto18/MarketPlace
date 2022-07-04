@@ -12,30 +12,14 @@ public class WishListController: ControllerBase
 {
     [HttpPost]
     [Authorize]
-    [Route("addProduct")]
-    public object addProductToWishList ([FromBody] WishListDTO request)
+    [Route("addProduct/{stockId}")]
+    public IActionResult addProductToWishList (int stockId)
     {
-        WishList wishlist = WishList.convertDTOToModel(request);
+        int clientId = JWT.GetIdFromToken(Request.Headers["Authorization"].ToString());
 
-        List<object> products = new List<object>();
-        List<int> ids = new List<int>();
-        foreach (var prod in wishlist.getStocks())
-        {
-            var id = wishlist.save(wishlist.getClient().getDocument(), prod.findId());
-            ids.Add(id);
-            products.Add(new
-            {
-                nome = prod.getProduct().getName(),
-                codigoDeBarras = prod.getProduct().getBarCode()
-            });
-        }
+        var wish = new WishList();
 
-        return new
-        {
-            id = ids,
-            cliente = request.client,
-            produtos = products
-        };
+        return Ok(wish.save(clientId, stockId));
     }
 
     [HttpGet]
@@ -70,10 +54,38 @@ public class WishListController: ControllerBase
         return Ok(wishlist);
     }
 
-    [HttpDelete]
-    [Route("removeProduct")]
-    public void removeProductToWishList([FromBody] WishListDTO request)
+    [HttpGet]
+    [Route("getWishlistState/{stockId}")]
+    public IActionResult GetWishlistState(int stockId)
     {
-        WishList.convertDTOToModel(request).delete();
+        int clientId = -1;
+        if (!String.IsNullOrWhiteSpace(Request.Headers["Authorization"].ToString()))
+            clientId = JWT.GetIdFromToken(Request.Headers["Authorization"].ToString());
+
+        var wish = WishList.getAllWishlists();
+        wish.ForEach(w => w.includeClient());
+        wish.ForEach(w => w.includeStocks());
+        var b = wish.FirstOrDefault(w => w.getClient().getId() == clientId && w.getStocks().FirstOrDefault(s => s.getId() == stockId) != null);
+
+        return Ok(b != null);
+    }
+
+    [HttpDelete]
+    [Route("removeProduct/{stockId}")]
+    public IActionResult removeProductToWishList(int stockId)
+    {
+        int clientId = JWT.GetIdFromToken(Request.Headers["Authorization"].ToString());
+
+        var wish = WishList.getAllWishlists();
+        wish.ForEach(w => w.includeClient());
+        var wishlist = wish.FirstOrDefault(w => w.getClient().getId() == clientId);
+
+        if (wishlist == null)
+            return BadRequest();
+
+        wishlist.includeStocks();
+        wishlist.delete();
+
+        return Ok(wishlist);
     }
 }

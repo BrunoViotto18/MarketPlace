@@ -12,7 +12,7 @@ public class PurchaseController : ControllerBase
     [Route("clientPurchase/{clientID}")]
     public List<PurchaseDTO> getClientPurchase(int clientID)
     {
-        return Purchase.getClientPurchases(clientID);
+        return new List<PurchaseDTO>();
     }
     
     [HttpGet]

@@ -199,10 +199,6 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
     }
 
 
-    public ClientDTO findById()
-    {
-        return new ClientDTO();
-    }
 
     public static Client? findByLogin(string login, string senha){
 
@@ -228,12 +224,6 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         return clients;
     }
 
-    public List<ClientDTO> getAll()
-    {
-        List<ClientDTO> client = new List<ClientDTO>();
-        return client;
-    }
-
     public static int findId(string login, string senha)
     {
         using (var context = new DAOContext()){
@@ -244,5 +234,40 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
 
             return user.id;
         }
+    }
+
+    public static Client? findById(int id)
+    {
+        using var context = new DAOContext();
+
+        var client = context.Client.Include(c => c.address).FirstOrDefault(c => c.id == id);
+
+        if (client == null)
+            return null;
+
+        return new Client(Address.convertDAOToModel(client.address))
+        {
+            id = client.id,
+            name = client.name,
+            date_of_birth = client.date_of_birth,
+            document = client.document,
+            email = client.email,
+            phone = client.phone,
+            login = client.login,
+            passwd = client.passwd
+        };
+    }
+
+    /* Trash */
+
+    public List<ClientDTO> getAll()
+    {
+        List<ClientDTO> client = new List<ClientDTO>();
+        return client;
+    }
+
+    public ClientDTO findById()
+    {
+        return new ClientDTO();
     }
 }
