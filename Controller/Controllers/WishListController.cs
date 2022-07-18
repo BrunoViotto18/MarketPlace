@@ -84,6 +84,13 @@ public class WishListController: ControllerBase
             return BadRequest();
 
         wishlist.includeStocks();
+        for (int i = 0; i < wishlist.getStocks().Count; i++)
+        {
+            if (wishlist.getStocks()[i].getId() == stockId)
+                continue;
+            wishlist.getStocks().RemoveAt(i);
+            i--;
+        }
         wishlist.delete();
 
         return Ok(wishlist);
