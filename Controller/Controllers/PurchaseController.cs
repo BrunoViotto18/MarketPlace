@@ -24,12 +24,25 @@ public class PurchaseController : ControllerBase
 
     [HttpPost]
     [Route("make")]
-    public object makePurchase(PurchaseDTO purchase)
+    public object makePurchase(PurchaseDTOPlus purchase)
     {
-        Purchase purchaseModel = Purchase.convertDTOToModel(purchase);
-        var id = purchaseModel.save();
+        List<Product> products = new List<Product>();
+        purchase.productIds.ForEach(p => products.Add(Product.findById(p)));
 
-        return new
+        Purchase purch = new Purchase();
+        purch.setDataPurchase(purchase.data_purchase);
+        purch.setNumberConfirmation(purchase.confirmation_number);
+        purch.setNumberNf(purchase.number_nf);
+        purch.setPaymentType((Enums.PaymentEnum)purchase.payment_type);
+        purch.setPurchaseStatus((Enums.PurchaseStatusEnum)purchase.purchase_status);
+        purch.setPurchaseValue(purchase.purchase_value);
+        purch.setClient(Client.findById(purchase.clientId));
+        purch.setStore(Store.findById(purchase.storeId));
+        purch.getProducts().AddRange(products);
+
+        var id = purch.save();
+
+        return Ok(new
         {
             id = id,
             dataCompra = purchase.data_purchase,
@@ -38,9 +51,9 @@ public class PurchaseController : ControllerBase
             statusCompra = purchase.purchase_status,
             numeroConfirmacao = purchase.confirmation_number,
             numeroNF = purchase.number_nf,
-            loja = purchase.store,
-            cliente = purchase.client,
-            produtos = purchase.productsDTO
-        };
+            loja = purch.getStore(),
+            cliente = purch.getClient(),
+            produtos = purchase.productIds
+        });
     }
 }
