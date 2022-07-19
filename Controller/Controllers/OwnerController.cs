@@ -36,6 +36,14 @@ public class OwnerController : ControllerBase
         return Owner.findByDocument(document);
     }
 
+    [HttpGet]
+    [Route("getById/{id}")]
+    public object getById(int id)
+    {
+        var owner = Owner.findID(id);
+        return owner;
+    }
+
     [HttpDelete]
     [Route("removeOwner")]
     public void removeOwner([FromBody] OwnerDTO request)

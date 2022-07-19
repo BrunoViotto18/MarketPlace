@@ -203,6 +203,14 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
     {
         return new ClientDTO();
     }
+    public static object findId(int id)
+    {
+        using var context = new DAOContext();
+
+        var client = context.Client.Where(c=> c.id == id).Include(c=> c.address).Single();
+
+        return client;
+    }
 
     public static Client? findByLogin(string login, string senha){
 
@@ -245,4 +253,16 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
             return user.id;
         }
     }
+    public static (int id, string name, string email)? findLogin(ClientDTO obj){
+            using (var context = new DAO.DAOContext()){
+                var client = context.Client.Single(d => d.login == obj.login && d.passwd == obj.passwd);
+
+                if(client != null){
+                    return (client.id, client.name, client.email);
+                }
+                else return null;
+            }
+        }
 }
+
+ 

@@ -342,6 +342,8 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 			PurchaseDTO purchase = Purchase.convertDAOToModel(compra).convertModelToDTO();
 			purchase.productsDTO = products;
 
+			purchase.store.owner = null;
+			purchase.client.address = null;
 			clientPurchases.Add(purchase);
         }
 
