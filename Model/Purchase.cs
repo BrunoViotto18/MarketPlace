@@ -240,8 +240,9 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		{
 			var clientDao = context.Client.FirstOrDefault(c => c.document == this.client.getDocument());
 			var storeDao = context.Store.FirstOrDefault(s => s.CNPJ == this.store.getCNPJ());
+			var nf = context.Purchase.FirstOrDefault(p => p.number_nf == this.number_nf);
 
-			if (clientDao == null || storeDao == null)
+			if (clientDao == null || storeDao == null || nf != null)
 				return -1;
 
 			foreach (var prod in products)
