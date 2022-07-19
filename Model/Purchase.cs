@@ -14,11 +14,11 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
     private String number_nf;
     private int payment_type;
     private int purchase_status;
-    public Double purchase_value;
+    private Double purchase_value;
 
     private Client client;
 	private Store store;
-    List<Product> products;
+    List<Product> products = new List<Product>();
 
 
 	// Construtor
@@ -240,14 +240,13 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		{
 			var clientDao = context.Client.FirstOrDefault(c => c.document == this.client.getDocument());
 			var storeDao = context.Store.FirstOrDefault(s => s.CNPJ == this.store.getCNPJ());
-			var nf = context.Purchase.FirstOrDefault(p => p.number_nf == this.number_nf);
 
-			if (clientDao == null || storeDao == null || nf != null)
+			if (clientDao == null || storeDao == null)
 				return -1;
 
 			foreach (var prod in products)
 			{
-				var productDao = context.Product.FirstOrDefault(p => p.bar_code == this.products.First().getBarCode());
+				var productDao = context.Product.FirstOrDefault(p => p.id == prod.getId());
 				if (productDao == null)
 					return -1;
 
@@ -264,13 +263,10 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 					product = productDao
 				};
 
-				if (context.Purchase.FirstOrDefault(p => p.number_nf == purchase.number_nf && p.product.bar_code == purchase.product.bar_code) != null)
-					continue;
-
 				context.Purchase.Add(purchase);
-				context.Entry(purchase.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-				context.Entry(purchase.store).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-				context.Entry(purchase.product).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+				context.Entry(purchase.client).State = EntityState.Unchanged;
+				context.Entry(purchase.store).State = EntityState.Unchanged;
+				context.Entry(purchase.product).State = EntityState.Unchanged;
 				context.SaveChanges();
 
 				id = purchase.id;
@@ -309,37 +305,32 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 		return new PurchaseDTO();
 	}
 
-	// Retorna todas as compras de um cliente
-	public static List<Purchase> getAllPurchases()
+	public static List<Purchase> getAllClientPurchases()
     {
 		using var context = new DAOContext();
 
-		var purchases = context.Purchase.ToList();
+		var purchases = context.Purchase.Include(p => p.client).ThenInclude(p => p.address).Include(p => p.store).Include(p => p.product).ToList();
+		var lista = new List<Purchase>();
 
-		var group = purchases.GroupBy(p => p.id);
-
-		var purchase = new List<Purchase>();
-		foreach (var p in group)
-			purchase.Add(new Purchase
+		foreach (var p in purchases)
+		{
+			lista.Add(new Purchase
 			{
-
+				id = p.id,
+				date_purchase = p.date_purchase,
+				number_confirmation = p.number_confirmation,
+				number_nf = p.number_nf,
+				payment_type = p.payment_type,
+				purchase_status = p.purchase_status,
+				purchase_value = p.purchase_value,
+				client = Client.convertDAOToModel(p.client),
+				store = new Store(p.store.id, p.store.name, p.store.CNPJ),
+				products = new List<Product>() { Product.convertDAOToModel(p.product) }
 			});
-		/*
-		id;
-		date_purchase;
-		number_confirmation;
-		number_nf;
-		payment_type;
-		purchase_status;
-		purchase_value;
+		}
 
-		client;
-		store;
-		products;
-		*/
-
-		return purchase;
-	}
+		return lista;
+    }
 
 	// Retorna todas as compras de uma loja
 	public static List<PurchaseDTO> getStorePurchases(int storeID)

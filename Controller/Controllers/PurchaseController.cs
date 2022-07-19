@@ -10,9 +10,30 @@ public class PurchaseController : ControllerBase
 {
     [HttpGet]
     [Route("clientPurchase/{clientID}")]
-    public List<PurchaseDTO> getClientPurchase(int clientID)
+    public IActionResult getClientPurchase(int clientId)
     {
-        return new List<PurchaseDTO>();
+        var purch = Purchase.getAllClientPurchases().Where(p => p.getClient().getId() == clientId);
+
+        var lista = new List<PurchaseDTOPlus>();
+        foreach (var p in purch)
+            lista.Add(new PurchaseDTOPlus
+            {
+                id = p.getId(),
+                data_purchase = p.getDataPurchase(),
+                purchase_value = p.getPurchaseValue(),
+                payment_type = p.getPaymentType(),
+                purchase_status = p.getPurchaseStatus(),
+                confirmation_number = p.getNumberConfirmation(),
+                number_nf = p.getNumberNf(),
+                storeId = p.getStore().getId(),
+                clientId = p.getClient().getId(),
+                product = new ProductDTO
+                {
+                    id = p.getProducts().First().getId()
+                }
+            });
+
+        return Ok(lista);
     }
     
     [HttpGet]
@@ -26,8 +47,7 @@ public class PurchaseController : ControllerBase
     [Route("make")]
     public object makePurchase(PurchaseDTOPlus purchase)
     {
-        List<Product> products = new List<Product>();
-        purchase.productIds.ForEach(p => products.Add(Product.findById(p)));
+        List<Product> products = new List<Product>() { Product.findById(purchase.product.id) };
 
         Purchase purch = new Purchase();
         purch.setDataPurchase(purchase.data_purchase);
@@ -53,7 +73,7 @@ public class PurchaseController : ControllerBase
             numeroNF = purchase.number_nf,
             loja = purch.getStore(),
             cliente = purch.getClient(),
-            produtos = purchase.productIds
+            produtos = purchase.product
         });
     }
 }

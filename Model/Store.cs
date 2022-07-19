@@ -260,9 +260,17 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
     }
 
 
-    public StoreDTO findById()
+    public static Store? findById(int id)
     {
-        return new StoreDTO();
+        using var context = new DAOContext();
+
+        var storeDao = context.Store.FirstOrDefault(s => s.id == id);
+
+        return new Store
+        {
+            name = storeDao.name,
+            CNPJ = storeDao.CNPJ
+        };
     }
 
     // Retorna todas as lojas
@@ -297,5 +305,13 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
             var store = context.Store.Where(s => s.CNPJ == CNPJ).Single();
             return store.id;
         }
+    }
+
+
+    // Trash
+
+    public StoreDTO findById()
+    {
+        return new StoreDTO();
     }
 }

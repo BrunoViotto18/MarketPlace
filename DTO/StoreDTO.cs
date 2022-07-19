@@ -2,9 +2,10 @@
 
 public class StoreDTO
 {
-    public String name;
-    public String CNPJ;
+    public int id { get; set; }
+    public string name { get; set; }
+    public string CNPJ { get; set; }
 
-    public OwnerDTO owner;
-    public List<PurchaseDTO> purchases;
+    public OwnerDTO owner { get; set; }
+    public List<PurchaseDTO> purchases { get; set; }
 }

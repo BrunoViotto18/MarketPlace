@@ -2,13 +2,14 @@
 
 public class ClientDTO
 {
-    public String name;
-    public DateTime date_of_birth;
-    public String document;
-    public String email;
-    public String phone;
-    public String login;
-    public String passwd;
+    public int id { get; set; }
+    public String name { get; set; }
+    public DateTime date_of_birth { get; set; }
+    public String document { get; set; }
+    public String email { get; set; }
+    public String phone { get; set; }
+    public String login { get; set; }
+    public String passwd { get; set; }
 
-    public AddressDTO address;
+    public AddressDTO address { get; set; }
 }

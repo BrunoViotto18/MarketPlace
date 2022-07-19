@@ -1,6 +1,6 @@
 ﻿namespace DTO;
 
-public class PurchaseDTO
+public class PurchaseDTOPlus
 {
     public int id { get; set; }
     public DateTime data_purchase { get; set; }
@@ -10,7 +10,7 @@ public class PurchaseDTO
     public String confirmation_number { get; set; }
     public String number_nf { get; set; }
 
-    public StoreDTO store { get; set; }
-    public ClientDTO client { get; set; }
-    public List<ProductDTO> productsDTO { get; set; } = new List<ProductDTO>();
+    public int storeId { get; set; }
+    public int clientId { get; set; }
+    public ProductDTO product { get; set; }
 }

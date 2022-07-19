@@ -199,6 +199,15 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         return new ProductDTO();
     }
 
+    public static Product? findById(int id)
+    {
+        using var context = new DAOContext();
+
+        var productDao = context.Product.FirstOrDefault(p => p.id == id);
+
+        return Product.convertDAOToModel(productDao);
+    }
+
 
     public static List<object> getAllProducts()
     {
