@@ -58,7 +58,7 @@ public class ClientController : ControllerBase
 
     [HttpPost]
     [Route("login")]
-    public IActionResult tokenGenerate([FromBody] ClientDTO login)
+    public IActionResult tokenGenerate([FromBody] LoginDTO login)
     {
         if (login == null || login.login == null || login.passwd == null)
             return BadRequest("Empty credentials");
