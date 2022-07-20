@@ -9,9 +9,11 @@ namespace Controller.Controllers;
 public class PurchaseController : ControllerBase
 {
     [HttpGet]
-    [Route("clientPurchase/{clientID}")]
-    public IActionResult getClientPurchase(int clientId)
+    [Route("clientPurchase")]
+    public IActionResult getClientPurchase()
     {
+        int clientId = JWT.GetIdFromToken(Request.Headers["Authorization"].ToString());
+
         var purch = Purchase.getAllClientPurchases().Where(p => p.getClient().getId() == clientId);
 
         var lista = new List<PurchaseDTOPlus>();
@@ -37,10 +39,33 @@ public class PurchaseController : ControllerBase
     }
     
     [HttpGet]
-    [Route("storePurchase/{storeID}")]
-    public List<PurchaseDTO> getStorePurchase(int storeID)
+    [Route("storePurchase")]
+    public IActionResult getStorePurchase()
     {
-        return Purchase.getStorePurchases(storeID);
+        int ownerId = JWT.GetIdFromToken(Request.Headers["Authorization"].ToString());
+
+        var purch = Purchase.getAllClientPurchases().Where(p => p.getStore().getOwner().getId() == ownerId);
+
+        var lista = new List<PurchaseDTOPlus>();
+        foreach (var p in purch)
+            lista.Add(new PurchaseDTOPlus
+            {
+                id = p.getId(),
+                data_purchase = p.getDataPurchase(),
+                purchase_value = p.getPurchaseValue(),
+                payment_type = p.getPaymentType(),
+                purchase_status = p.getPurchaseStatus(),
+                confirmation_number = p.getNumberConfirmation(),
+                number_nf = p.getNumberNf(),
+                storeId = p.getStore().getId(),
+                clientId = p.getClient().getId(),
+                product = new ProductDTO
+                {
+                    id = p.getProducts().First().getId()
+                }
+            });
+
+        return Ok(lista);
     }
 
     [HttpPost]
