@@ -61,7 +61,7 @@ public class OwnerController : ControllerBase
         if (login == null || login.login == null || login.passwd == null)
             return BadRequest("Empty credentials");
 
-        var user = Model.Client.findByLogin(login.login, login.passwd);
+        var user = Model.Owner.findByLogin(login.login, login.passwd);
         Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
         if (user == null)
@@ -71,7 +71,8 @@ public class OwnerController : ControllerBase
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim("Id", Model.Client.findId(user.getLogin(), user.getPasswd()).ToString())
+                new Claim("Id", Model.Client.findId(user.getLogin(), user.getPasswd()).ToString()),
+                new Claim("Client", "false")
             };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
