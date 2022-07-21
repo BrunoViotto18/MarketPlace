@@ -310,7 +310,14 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
     {
 		using var context = new DAOContext();
 
-		var purchases = context.Purchase.Include(p => p.client).ThenInclude(p => p.address).Include(p => p.store).Include(p => p.product).ToList();
+		var purchases = context.Purchase
+			.Include(p => p.client)
+				.ThenInclude(p => p.address)
+			.Include(p => p.store)
+				.ThenInclude(s => s.owner)
+					.ThenInclude(o => o.address)
+			.Include(p => p.product)
+			.ToList();
 		var lista = new List<Purchase>();
 
 		foreach (var p in purchases)
@@ -328,6 +335,7 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 				store = new Store(p.store.id, p.store.name, p.store.CNPJ),
 				products = new List<Product>() { Product.convertDAOToModel(p.product) }
 			});
+			lista.Last().store.setOwner(Owner.convertDAOToModel(p.store.owner));
 		}
 
 		return lista;

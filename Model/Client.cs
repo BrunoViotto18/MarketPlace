@@ -95,6 +95,7 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
     {
         return new ClientDTO
         {
+            id = this.id,
             name = this.name,
             date_of_birth = this.date_of_birth,
             document = this.document,
