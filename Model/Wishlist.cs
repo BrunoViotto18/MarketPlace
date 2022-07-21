@@ -175,18 +175,12 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
     // Deleta o objeto atual no banco de dados
     public void delete()
     {
-        using (var context = new DAOContext())
+        using var context = new DAOContext();
+
+        foreach (var stock in stocks)
         {
-            foreach (var prod in this.stocks)
-            {
-                var wishlist = context.WishList.FirstOrDefault(w => w.client.document == this.client.getDocument() && w.stock.product.bar_code == prod.getProduct().getBarCode());
-
-                if (wishlist == null)
-                    continue;
-
-                context.WishList.Remove(wishlist);
-                context.SaveChanges();
-            }
+            context.WishList.Remove(context.WishList.First(w => w.client.id == client.getId() && w.stock.id == stock.getId()));
+            context.SaveChanges();
         }
     }
 

@@ -94,6 +94,7 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
     {
         return new OwnerDTO
         {
+            id = this.id,
             name = this.name,
             date_of_birth = this.date_of_birth,
             document = this.document,
@@ -204,6 +205,14 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         }
     }
 
+    public static Owner findById(int id)
+    {
+        using var context = new DAOContext();
+
+        return Owner.convertDAOToModel(context.Owner.Include(o => o.address).FirstOrDefault(o => o.id == id));
+    }
+
+    // Trash
 
     public OwnerDTO findById()
     {
