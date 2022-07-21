@@ -214,13 +214,13 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         
     }
 
-    public List<ClientDTO> getAll()
+    public static List<Client> getAllClients()
     {
         using var context = new DAOContext();
 
-        var clients = new List<ClientDTO>();
-        // foreach (var client in context.Client.Include(c => c.address))
-            
+        var clients = new List<Client>();
+        foreach (var client in context.Client.Include(c => c.address))
+            clients.Add(Client.convertDAOToModel(client));
 
         return clients;
     }
@@ -237,16 +237,38 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
         }
     }
 
-    // public static Client? findById(int id)
-    // {
-    //     List<ClientDTO> client = new List<ClientDTO>();
-    //     return client;
-    // }
+    public static Client? findById(int id)
+    {
+        using var context = new DAOContext();
+
+        var client = context.Client.Include(c => c.address).FirstOrDefault(c => c.id == id);
+
+        if (client == null)
+            return null;
+
+        return new Client(Address.convertDAOToModel(client.address))
+        {
+            id = client.id,
+            name = client.name,
+            date_of_birth = client.date_of_birth,
+            document = client.document,
+            email = client.email,
+            phone = client.phone,
+            login = client.login,
+            passwd = client.passwd
+        };
+    }
+
+    /* Trash */
+
+    public List<ClientDTO> getAll()
+    {
+        List<ClientDTO> client = new List<ClientDTO>();
+        return client;
+    }
 
     public ClientDTO findById()
     {
         return new ClientDTO();
     }
 }
-
- 

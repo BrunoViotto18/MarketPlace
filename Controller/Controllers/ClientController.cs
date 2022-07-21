@@ -41,15 +41,6 @@ public class ClientController : ControllerBase
         return Ok(client.convertModelToDTO());
     }
 
-
-    // [HttpGet]
-    // [Route("getById/{id}")]
-    // public object getById(int id)
-    // {
-    //     var client = Client.findId(id);
-    //     return client;
-    // }
-
     [HttpDelete]
     [Route("removeClient")]
     public void removeOwner([FromBody] ClientDTO request)
@@ -96,48 +87,6 @@ public class ClientController : ControllerBase
             expires: DateTime.UtcNow.AddYears(1),
             signingCredentials: signIn);
 
-        Console.WriteLine(token);
         return Ok(new JwtSecurityTokenHandler().WriteToken(token));
-        
     }
-
-    // [HttpPost]
-    // [Route("login")]
-    // public IActionResult tokenGenerate([FromBody] ClientDTO login){
-    //     if(login != null && login.login != null && login.passwd != null){
-    //         var user = Model.Client.findLogin(login);
-    //         Console.WriteLine(user);
-    //         if(user.Value.id != 0){
-    //             var claims = new[] {
-    //                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
-    //                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-    //                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString())
-    //             };
-
-    //             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-    //             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-    //             var token = new JwtSecurityToken(
-    //                 _configuration["Jwt:Issuer"],
-    //                 _configuration["JwtAudience"],
-    //                 claims,
-    //                 expires: DateTime.UtcNow.AddMinutes(10),
-    //                 signingCredentials: signIn);
-    //             var clientResponse = new{
-    //                 id = user.Value.id,
-    //                 token = new JwtSecurityTokenHandler().WriteToken(token),
-    //                 name =  user.Value.name
-    //             };
-    //             return Ok(clientResponse);
-    //         }
-    //         else
-    //         {
-    //             return BadRequest("Invalid credentials");
-    //         }
-    //     }
-    //     else
-    //     {
-    //         return BadRequest("Empty credentials");
-    //     }
-
-    // }
 }
