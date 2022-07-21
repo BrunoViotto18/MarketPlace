@@ -12,7 +12,7 @@ public class PurchaseController : ControllerBase
     [Route("clientPurchase/{clientID}")]
     public List<PurchaseDTO> getClientPurchase(int clientID)
     {
-        return Purchase.getClientPurchases(clientID);
+        return new List<PurchaseDTO>();
     }
     
     [HttpGet]
@@ -22,25 +22,38 @@ public class PurchaseController : ControllerBase
         return Purchase.getStorePurchases(storeID);
     }
 
-    [HttpPost]
-    [Route("make")]
-    public object makePurchase(PurchaseDTO purchase)
-    {
-        Purchase purchaseModel = Purchase.convertDTOToModel(purchase);
-        var id = purchaseModel.save();
+    // [HttpPost]
+    // [Route("make")]
+    // public object makePurchase(PurchaseDTOPlus purchase)
+    // {
+    //     List<Product> products = new List<Product>();
+    //     purchase.productIds.ForEach(p => products.Add(Product.findById(p)));
 
-        return new
-        {
-            id = id,
-            dataCompra = purchase.data_purchase,
-            valorCompra = purchase.purchase_value,
-            tipoPagamento = purchase.payment_type,
-            statusCompra = purchase.purchase_status,
-            numeroConfirmacao = purchase.confirmation_number,
-            numeroNF = purchase.number_nf,
-            loja = purchase.store,
-            cliente = purchase.client,
-            produtos = purchase.productsDTO
-        };
-    }
+    //     Purchase purch = new Purchase();
+    //     purch.setDataPurchase(purchase.data_purchase);
+    //     purch.setNumberConfirmation(purchase.confirmation_number);
+    //     purch.setNumberNf(purchase.number_nf);
+    //     purch.setPaymentType((Enums.PaymentEnum)purchase.payment_type);
+    //     purch.setPurchaseStatus((Enums.PurchaseStatusEnum)purchase.purchase_status);
+    //     purch.setPurchaseValue(purchase.purchase_value);
+    //     purch.setClient(Client.findById(purchase.clientId));
+    //     purch.setStore(Store.findById(purchase.storeId));
+    //     purch.getProducts().AddRange(products);
+
+    //     var id = purch.save();
+
+    //     return Ok(new
+    //     {
+    //         id = id,
+    //         dataCompra = purchase.data_purchase,
+    //         valorCompra = purchase.purchase_value,
+    //         tipoPagamento = purchase.payment_type,
+    //         statusCompra = purchase.purchase_status,
+    //         numeroConfirmacao = purchase.confirmation_number,
+    //         numeroNF = purchase.number_nf,
+    //         loja = purch.getStore(),
+    //         cliente = purch.getClient(),
+    //         produtos = purchase.productIds
+    //     });
+    // }
 }

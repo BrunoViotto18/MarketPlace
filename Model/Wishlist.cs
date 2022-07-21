@@ -143,34 +143,31 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
 
 
     // Salva o objeto atual no banco de dados
-    public int save(String document, int productID)
+    public int save(int clientId, int stockId)
     {
-        int id;
+        using var context = new DAOContext();
 
-        using (var context = new DAOContext())
+        var clientDao = context.Client.FirstOrDefault(c => c.id == clientId);
+        var stockDao = context.Stocks.FirstOrDefault(p => p.id == stockId);
+
+        if (clientDao == null || stockDao == null)
+            return -1;
+
+        var wishlist = new DAO.WishList
         {
-            var clientDao = context.Client.FirstOrDefault(c => c.document == document);
-            var stockDao = context.Stocks.FirstOrDefault(p => p.id == productID);
+            client = clientDao,
+            stock = stockDao
+        };
 
-            if (clientDao == null || stockDao == null)
-                return -1;
+        if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.stock.id == wishlist.stock.id) != null)
+            return -1;
 
-            var wishlist = new DAO.WishList
-            {
-                client = clientDao,
-                stock = stockDao
-            };
+        context.WishList.Add(wishlist);
+        context.Entry(wishlist.client).State = EntityState.Unchanged;
+        context.Entry(wishlist.stock).State = EntityState.Unchanged;
+        context.SaveChanges();
 
-            if (context.WishList.FirstOrDefault(w => w.client == wishlist.client && w.stock.id == wishlist.stock.id) != null)
-                return -1;
-
-            context.WishList.Add(wishlist);
-            context.Entry(wishlist.client).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-            context.Entry(wishlist.stock).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
-            context.SaveChanges();
-
-            id = wishlist.id;
-        }
+        int id = wishlist.id;
 
         return id;
     }
@@ -236,6 +233,13 @@ public class WishList : IValidateDataObject, IDataController<WishListDTO, WishLi
         }
 
         return wishlist;
+    }
+
+    public static bool GetWishlistState(int? id)
+    {
+        using var context = new DAOContext();
+
+        return context.WishList.FirstOrDefault(w => w.id == id) != null;
     }
 
 
