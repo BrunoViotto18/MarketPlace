@@ -34,10 +34,11 @@ public class ClientController : ControllerBase
     }
 
     [HttpGet]
-    [Route("informations/{id}")]
-    public IActionResult getInformations(int id)
+    [Route("informations")]
+    public IActionResult getInformations()
     {
-        var client = Client.findById(id);
+        var clientID = JWT.GetIdFromToken(Request.Headers["Authorization"].ToString());
+        var client = Client.findById(clientID);
         return Ok(client.convertModelToDTO());
     }
 

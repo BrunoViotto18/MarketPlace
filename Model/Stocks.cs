@@ -153,7 +153,7 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
     /* Métodos SQL */
 
     // Salva o objeto atual no banco de dados
-    public int save(int storeId, int productId, int quantity, double unit_price)
+    public static int save(int storeId, int productId, int quantity, double unit_price)
     {
         int id;
 

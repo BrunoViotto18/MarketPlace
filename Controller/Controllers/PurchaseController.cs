@@ -31,7 +31,8 @@ public class PurchaseController : ControllerBase
                 clientId = p.getClient().getId(),
                 product = new ProductDTO
                 {
-                    id = p.getProducts().First().getId()
+                    id = p.getProducts().First().getId(),
+                    image = p.getProducts().First().getImage()
                 }
             });
 
@@ -39,8 +40,8 @@ public class PurchaseController : ControllerBase
     }
     
     [HttpGet]
-    [Route("storePurchase")]
-    public IActionResult getStorePurchase()
+    [Route("ownerPurchase")]
+    public IActionResult getOwnerPurchase()
     {
         int ownerId = JWT.GetIdFromToken(Request.Headers["Authorization"].ToString());
 

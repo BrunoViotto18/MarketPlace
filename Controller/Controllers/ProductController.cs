@@ -19,6 +19,16 @@ public class ProductController : ControllerBase
 
         return result;
     }
+    [HttpGet]
+    [Route("ById/{id}")]
+    public IActionResult getByid(int id)
+    {
+        Product response = Product.findById(id);
+        var result = new ObjectResult(response);
+    
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
+        return result;
+    }
 
     [HttpPost]
     [Route("create")]

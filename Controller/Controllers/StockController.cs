@@ -57,22 +57,12 @@ public class StockController : ControllerBase
 
     [HttpPost]
     [Route("addProduct")]
-    public object addProductToStock([FromBody] StocksDTO stocks)
+    public object addProductToStock([FromBody] StocksDTOII stocks)
     {
-        var stockModel = Stocks.convertDTOToModel(stocks);
-        var storeId = Store.findId(stockModel.getStore().getCNPJ());
-        var productid = Product.FindId(stockModel.getProduct().getBarCode());
-        var id = stockModel.save(storeId, productid, stockModel.getQuantity(), stockModel.getUnitPrice());
-        return new
-        {
-            id = id,
-            quantity = stocks.quantity,   
-            unit_price = stocks.unit_price, 
-            product = stocks.product,
-            store = stocks.store
-        };
-
-    }
+        var stockModel = new Stocks();    
+        Stocks.save(stocks.storeId,stocks.productId,stocks.quantity,stocks.unit_price);           
+        return stocks;
+    }   
 
     [HttpGet]
     [Route("info/{stockId}")]
