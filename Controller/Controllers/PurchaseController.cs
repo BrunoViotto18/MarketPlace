@@ -74,10 +74,21 @@ public class PurchaseController : ControllerBase
     {
         List<Product> products = new List<Product>() { Product.findById(purchase.product.id) };
 
+        var rand = new Random((int)DateTime.Now.Ticks);
+        string nums = "0123456789";
+        string nf = "";
+        string conf = "";
+
+        for (int i = 0; i < 6; i++)
+            conf += nums[rand.Next(0, 9)];
+
+        for (int i = 0; i < 20; i++)
+            nf += nums[rand.Next(0, 9)];
+
         Purchase purch = new Purchase();
         purch.setDataPurchase(purchase.data_purchase);
-        purch.setNumberConfirmation(purchase.confirmation_number);
-        purch.setNumberNf(purchase.number_nf);
+        purch.setNumberConfirmation(conf);
+        purch.setNumberNf(nf);
         purch.setPaymentType((Enums.PaymentEnum)purchase.payment_type);
         purch.setPurchaseStatus((Enums.PurchaseStatusEnum)purchase.purchase_status);
         purch.setPurchaseValue(purchase.purchase_value);
@@ -94,8 +105,8 @@ public class PurchaseController : ControllerBase
             valorCompra = purchase.purchase_value,
             tipoPagamento = purchase.payment_type,
             statusCompra = purchase.purchase_status,
-            numeroConfirmacao = purchase.confirmation_number,
-            numeroNF = purchase.number_nf,
+            numeroConfirmacao = conf,
+            numeroNF = nf,
             loja = purch.getStore(),
             cliente = purch.getClient(),
             produtos = purchase.product

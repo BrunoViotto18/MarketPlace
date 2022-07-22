@@ -71,7 +71,20 @@ public class StockController : ControllerBase
             product = stocks.product,
             store = stocks.store
         };
-                
+
+    }
+
+    [HttpGet]
+    [Route("info/{stockId}")]
+    public IActionResult info(int stockId)
+    {
+        var stock = Stocks.findById(stockId);
+
+        return Ok(new
+        {
+            storeId = stock.getStore().getId(),
+            productId = stock.getProduct().getId()
+        });
     }
 
     [HttpPut]
