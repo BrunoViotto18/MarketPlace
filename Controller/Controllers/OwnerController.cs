@@ -49,6 +49,9 @@ public class OwnerController : ControllerBase
         return owner;
     }
 
+
+    
+
     [HttpDelete]
     [Route("removeOwner")]
     public void removeOwner([FromBody] OwnerDTO request)
@@ -79,7 +82,7 @@ public class OwnerController : ControllerBase
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim("Id", Model.Client.findId(user.getLogin(), user.getPasswd()).ToString()),
+                new Claim("Id", Model.Owner.findByLogin(user.getLogin(), user.getPasswd()).getId().ToString()),
                 new Claim("Client", "false")
             };
 

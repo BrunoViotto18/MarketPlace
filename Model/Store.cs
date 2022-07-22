@@ -107,7 +107,17 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
     /* Conversores */
 
-    // Converte um objeto DTO para Model   // DETALHES A DISCUTIR //
+    // Converte um objeto DTO para Model   // DETALHES A DISCUTIR//
+    
+    public static Store convertDTOToModelRegister(StoreRegisterDTO store)
+    {
+        return new Store
+        {
+            name = store.name,
+            CNPJ = store.CNPJ
+        };
+    }
+
     public static Store convertDTOToModel(StoreDTO store)
     {
         if (store.purchases == null)
@@ -184,8 +194,10 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         {
             var ownerDao = context.Owner.FirstOrDefault(o => o.id == ownerId);
 
+            Console.Write("entrou");
+
             if (ownerDao == null)
-                return -1;
+                return -2;
 
             var store = new DAO.Store
             {
@@ -195,7 +207,7 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
             };
 
             if (context.Store.FirstOrDefault(s => s.CNPJ == store.CNPJ) != null)
-                return -1;
+                return -3;
 
             context.Store.Add(store);
             context.Entry(store.owner).State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
@@ -282,12 +294,27 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         var stores = context.Store
             .Include(s => s.owner)
                 .ThenInclude(o => o.address)
-            .Include(s => s.owner)
-                .ThenInclude(o => o.address);
+            .Include(s => s.owner);
 
         foreach (var store in stores)
             lojas.Add(Store.convertDAOToModel(store, false));
 
+        return lojas;
+    }
+    public static List<Store> getAllOwnerStores(int id)
+    {
+        Console.WriteLine("oi");
+        List<Store> lojas = new List<Store>();
+        using var context = new DAOContext();
+
+        var stores = context.Store
+            .Include(s => s.owner)
+                .ThenInclude(o => o.address).Where(s => s.owner.id == id);
+
+        foreach (var store in stores)
+            lojas.Add(Store.convertDAOToModel(store, false));
+
+        
         return lojas;
     }
 

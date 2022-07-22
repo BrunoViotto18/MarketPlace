@@ -40,8 +40,8 @@ public class PurchaseController : ControllerBase
     }
     
     [HttpGet]
-    [Route("storePurchase")]
-    public IActionResult getStorePurchase()
+    [Route("ownerPurchase")]
+    public IActionResult getOwnerPurchase()
     {
         int ownerId = JWT.GetIdFromToken(Request.Headers["Authorization"].ToString());
 
