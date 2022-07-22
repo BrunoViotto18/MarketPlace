@@ -187,6 +187,19 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
 
     }
 
+    public static Owner? findByLogin(string login, string senha)
+    {
+
+        using var context = new DAOContext();
+
+        var user = context.Owner.Include(o => o.address).FirstOrDefault(o => o.login == login && o.passwd == senha);
+
+        if (user == null)
+            return null;
+
+        return Owner.convertDAOToModel(user);
+    }
+
     // Retorna o ID do objeto atual
     public int findId()
     {

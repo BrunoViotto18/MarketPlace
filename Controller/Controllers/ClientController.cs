@@ -75,7 +75,8 @@ public class ClientController : ControllerBase
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim("Id", Model.Client.findId(user.getLogin(), user.getPasswd()).ToString())
+                new Claim("Id", Model.Client.findId(user.getLogin(), user.getPasswd()).ToString()),
+                new Claim("Client", "true")
             };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

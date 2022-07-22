@@ -200,7 +200,6 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
     }
 
 
-
     public static Client? findByLogin(string login, string senha){
 
         using var context = new DAOContext();
@@ -211,7 +210,6 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
             return null;
 
         return Client.convertDAOToModel(user);
-        
     }
 
     public static List<Client> getAllClients()
