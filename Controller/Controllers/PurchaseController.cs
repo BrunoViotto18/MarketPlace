@@ -73,6 +73,7 @@ public class PurchaseController : ControllerBase
     [Route("make")]
     public object makePurchase(PurchaseDTOPlus purchase)
     {
+        Console.WriteLine(purchase.purchase_value);
         List<Product> products = new List<Product>() { Product.findById(purchase.product.id) };
 
         var rand = new Random((int)DateTime.Now.Ticks);
