@@ -20,7 +20,8 @@ public class StockController : ControllerBase
             {
                 id = s.getId(),
                 quantity = s.getQuantity(),
-                unit_price = s.getUnitPrice()
+                unit_price = s.getUnitPrice(),
+                product = s.getProduct().convertModelToDTO()
             });
 
         return Ok(allStocks);

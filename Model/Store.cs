@@ -194,8 +194,6 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
         {
             var ownerDao = context.Owner.FirstOrDefault(o => o.id == ownerId);
 
-            Console.Write("entrou");
-
             if (ownerDao == null)
                 return -2;
 
@@ -280,6 +278,7 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
         return new Store
         {
+            id = storeDao.id,
             name = storeDao.name,
             CNPJ = storeDao.CNPJ
         };
@@ -303,7 +302,6 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
     }
     public static List<Store> getAllOwnerStores(int id)
     {
-        Console.WriteLine("oi");
         List<Store> lojas = new List<Store>();
         using var context = new DAOContext();
 
@@ -316,6 +314,13 @@ public class Store : IValidateDataObject, IDataController<StoreDTO, Store>
 
         
         return lojas;
+    }
+
+    public static int findByStockId(int stockId)
+    {
+        using var context = new DAOContext();
+
+        return context.Stocks.Include(s => s.store).FirstOrDefault(s => s.id == stockId)?.store.id ?? -1;
     }
 
     // Retorna todas as lojas

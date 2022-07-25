@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using DTO;
 using Model;
 
@@ -29,11 +30,7 @@ public class PurchaseController : ControllerBase
                 number_nf = p.getNumberNf(),
                 storeId = p.getStore().getId(),
                 clientId = p.getClient().getId(),
-                product = new ProductDTO
-                {
-                    id = p.getProducts().First().getId(),
-                    image = p.getProducts().First().getImage()
-                }
+                product = p.getProducts().First().convertModelToDTO()
             });
 
         return Ok(lista);
@@ -60,20 +57,19 @@ public class PurchaseController : ControllerBase
                 number_nf = p.getNumberNf(),
                 storeId = p.getStore().getId(),
                 clientId = p.getClient().getId(),
-                product = new ProductDTO
-                {
-                    id = p.getProducts().First().getId()
-                }
+                product = p.getProducts().First().convertModelToDTO()
             });
 
         return Ok(lista);
     }
 
+    [Authorize]
     [HttpPost]
     [Route("make")]
     public object makePurchase(PurchaseDTOPlus purchase)
     {
-        Console.WriteLine(purchase.purchase_value);
+        var clientId = JWT.GetIdFromToken(Request.Headers["Authorization"].ToString());
+        var storeId = Store.findByStockId(purchase.storeId);
         List<Product> products = new List<Product>() { Product.findById(purchase.product.id) };
 
         var rand = new Random((int)DateTime.Now.Ticks);
@@ -88,14 +84,14 @@ public class PurchaseController : ControllerBase
             nf += nums[rand.Next(0, 9)];
 
         Purchase purch = new Purchase();
-        purch.setDataPurchase(purchase.data_purchase);
+        purch.setDataPurchase(DateTime.Now);
         purch.setNumberConfirmation(conf);
         purch.setNumberNf(nf);
         purch.setPaymentType((Enums.PaymentEnum)purchase.payment_type);
         purch.setPurchaseStatus((Enums.PurchaseStatusEnum)purchase.purchase_status);
         purch.setPurchaseValue(purchase.purchase_value);
-        purch.setClient(Client.findById(purchase.clientId));
-        purch.setStore(Store.findById(purchase.storeId));
+        purch.setClient(Client.findById(clientId));
+        purch.setStore(Store.findById(storeId));
         purch.getProducts().AddRange(products);
 
         var id = purch.save();
