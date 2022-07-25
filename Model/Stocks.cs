@@ -153,7 +153,7 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
     /* Métodos SQL */
 
     // Salva o objeto atual no banco de dados
-    public int save(int storeId, int productId, int quantity, double unit_price)
+    public static int save(int storeId, int productId, int quantity, double unit_price)
     {
         int id;
 
@@ -215,7 +215,7 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
     {
         using var context = new DAOContext();
 
-        var stock = context.Stocks.FirstOrDefault(s => s.id == stockId);
+        var stock = context.Stocks.Include(s => s.store).Include(s => s.product).FirstOrDefault(s => s.id == stockId);
 
         if (stock == null)
             return null;
@@ -224,7 +224,9 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
         {
             id = stockId,
             quantity = (int)stock.quantity,
-            unit_price = stock.unit_price
+            unit_price = stock.unit_price,
+            store = new Store(stock.store.id, stock.store.name, stock.store.CNPJ),
+            product = Product.convertDAOToModel(stock.product)
         };
     }
 

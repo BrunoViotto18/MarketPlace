@@ -94,6 +94,7 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
     {
         return new OwnerDTO
         {
+            id = this.id,
             name = this.name,
             date_of_birth = this.date_of_birth,
             document = this.document,
@@ -186,6 +187,19 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
 
     }
 
+    public static Owner? findByLogin(string login, string senha)
+    {
+
+        using var context = new DAOContext();
+
+        var user = context.Owner.Include(o => o.address).FirstOrDefault(o => o.login == login && o.passwd == senha);
+
+        if (user == null)
+            return null;
+
+        return Owner.convertDAOToModel(user);
+    }
+
     // Retorna o ID do objeto atual
     public int findId()
     {
@@ -204,10 +218,26 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         }
     }
 
+    public static Owner findById(int id)
+    {
+        using var context = new DAOContext();
+
+        return Owner.convertDAOToModel(context.Owner.Include(o => o.address).FirstOrDefault(o => o.id == id));
+    }
+
+    // Trash
 
     public OwnerDTO findById()
     {
         return new OwnerDTO();
+    }
+    public static object findID(int id)
+    {
+        using var context = new DAOContext();
+
+        var owner = context.Owner.Where(c=> c.id == id).Include(c=> c.address).Single();
+
+        return owner;
     }
 
 
@@ -216,4 +246,17 @@ public class Owner : Person, IValidateDataObject, IDataController<OwnerDTO, Owne
         List<OwnerDTO> client = new List<OwnerDTO>();
         return client;
     }
+
+    public static (int id, string name, string email)? findLogin(OwnerDTO obj){
+            Owner.convertDTOToModel(obj);
+            using (var context = new DAO.DAOContext()){
+                var owner = context.Owner.Include(i => i.address).FirstOrDefault(d => d.login == obj.login && d.passwd == obj.passwd);
+
+                if(owner != null){
+                    return (owner.id, owner.name, owner.email);
+                }
+                else return null;
+            }
+        }
+
 }

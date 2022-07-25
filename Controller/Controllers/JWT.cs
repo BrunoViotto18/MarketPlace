@@ -9,6 +9,7 @@ public class JWT
         var handler = new JwtSecurityTokenHandler();
         var json = handler.ReadJwtToken(token.Replace("Bearer ", ""));
 
+        Console.WriteLine(json.Claims.First(c => c.Type == "Id").Value);
         return int.Parse(json.Claims.First(c => c.Type == "Id").Value);
     }
 }
