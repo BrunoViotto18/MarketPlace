@@ -238,8 +238,8 @@ public class Purchase : IValidateDataObject, IDataController<PurchaseDTO, Purcha
 
 		using (var context = new DAOContext())
 		{
-			var clientDao = context.Client.FirstOrDefault(c => c.document == this.client.getDocument());
-			var storeDao = context.Store.FirstOrDefault(s => s.CNPJ == this.store.getCNPJ());
+			var clientDao = context.Client.FirstOrDefault(c => c.id == this.client.getId());
+			var storeDao = context.Store.FirstOrDefault(s => s.id == this.store.getId());
 			var nf = context.Purchase.FirstOrDefault(p => p.number_nf == this.number_nf);
 
 			if (clientDao == null || storeDao == null || nf != null)

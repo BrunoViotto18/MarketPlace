@@ -247,14 +247,15 @@ public class Stocks : IValidateDataObject, IDataController<StocksDTO, Stocks>
     {
         using var context = new DAOContext();
 
-        var stocks = context.Stocks.ToList();
+        var stocks = context.Stocks.Include(s => s.product).ToList();
         var allStocks = new List<Stocks>();
         foreach (var s in stocks)
             allStocks.Add(new Stocks
             {
                 id = s.id,
                 quantity = (int)s.quantity,
-                unit_price = s.unit_price
+                unit_price = s.unit_price,
+                product = Product.convertDAOToModel(s.product)
             });
 
         return allStocks;

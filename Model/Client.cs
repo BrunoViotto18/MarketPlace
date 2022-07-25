@@ -174,11 +174,7 @@ public class Client : Person, IValidateDataObject, IDataController<ClientDTO, Cl
             var address = context.Address.FirstOrDefault(a => a.street == this.address.getStreet() && a.country == this.address.getCountry() && this.address.getPostalCode() == a.postal_code && a.city == this.address.getCity() && a.state == this.address.getState());
 
             if (client == null || address == null)
-            {
-                Console.WriteLine("Anulou :(");
                 return;
-
-            }
 
             context.Address.Remove(address);
             context.Client.Remove(client);

@@ -204,7 +204,6 @@ public class Product : IValidateDataObject, IDataController<ProductDTO, Product>
         using var context = new DAOContext();
 
         var productDao = context.Product.FirstOrDefault(p => p.id == id);
-        Console.WriteLine(productDao.name);
         return Product.convertDAOToModel(productDao);
     }
 
